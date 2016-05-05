@@ -20,9 +20,9 @@
 	
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"/>
-		<property name="loginUrl" value="login.html" />
+		<property name="loginUrl" value="/login.html" />
 		<property name="successUrl" value="/loginsuccess.html"></property>
-		<property name="unauthorizedUrl" value="error.html"></property>
+		<property name="unauthorizedUrl" value="/error.html"></property>
 		<property name="filterChainDefinitions">
 			<value>
 				/index.html = authc
