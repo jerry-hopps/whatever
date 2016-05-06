@@ -11,6 +11,8 @@ import javax.mail.Store;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 
+import net.nemo.whatever.util.MailMessageConverter;
+
 public class MailService {
 
 	private String mailServer;
@@ -28,28 +30,23 @@ public class MailService {
 	}
 	
 	public void connect() throws Exception{
-		// 创建一个有具体连接信息的Properties对象
 		Properties props = new Properties();
 		props.setProperty("mail.store.protocol", this.protocal);
 		props.setProperty("mail.pop3.host", this.mailServer);
 
-		// 使用Properties对象获得Session对象
 		Session session = Session.getInstance(props);
 		session.setDebug(false);
-
-		// 利用Session对象获得Store对象，并连接pop3服务器
+		
 		this.store = session.getStore();
 		this.store.connect(this.mailServer, user, pwd);
 	}
 
 	public Message[] receiveMessage() throws Exception{
-		// 获得邮箱内的邮件夹Folder对象，以"读-写"打开
 		Folder folder = this.store.getFolder("inbox");
 		try{
-			folder.open(Folder.READ_WRITE);
-			// 搜索发件人为主题为"测试1"的邮件
-			SearchTerm st = new SubjectTerm("聊天记录");
+			folder.open(Folder.READ_WRITE);	
 			int count = folder.getMessageCount();
+			SearchTerm st = new SubjectTerm("聊天记录");
 			return folder.search(st, folder.getMessages(count-100>0?count-50:0,count));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -73,17 +70,9 @@ public class MailService {
 			service.connect();
 			
 			Message[] msgs = service.receiveMessage();
-			for(int i =0; i< msgs.length; i++){
-				Part part = (Part) msgs[i];
-				if(part.isMimeType("multipart/*")){
-					Multipart multipart = (Multipart) part.getContent();   
-		            int counts = multipart.getCount();   
-		            for (int j = 0; j < counts; j++) {   
-		                System.out.println(multipart.getBodyPart(j).getContent());   
-		            }
-				}
-				System.out.println("----------");
-			}
+			//for(int i =0; i< msgs.length; i++){
+				MailMessageConverter.fromMailMessages(msgs[0]);
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
