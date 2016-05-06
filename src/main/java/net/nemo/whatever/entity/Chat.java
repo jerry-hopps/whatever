@@ -3,19 +3,15 @@ package net.nemo.whatever.entity;
 import java.util.Date;
 import java.util.List;
 
+import net.nemo.whatever.util.DateUtil;
+
 public class Chat {
-	private String id;
 	private Date time;
 	private String chatOwner;
-	private String receiver;
+	private String receiverName;
+	private String receiverEmail;
 	private boolean groupChat = false;
 	private List<ChatMessage> chatMessages;
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public Date getDateTime() {
 		return time;
 	}
@@ -28,11 +24,17 @@ public class Chat {
 	public void setChatOwner(String chatOwner) {
 		this.chatOwner = chatOwner;
 	}
-	public String getReceiver() {
-		return receiver;
+	public String getReceiverName() {
+		return receiverName;
 	}
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+	public String getReceiverEmail() {
+		return receiverEmail;
+	}
+	public void setReceiverEmail(String receiverEmail) {
+		this.receiverEmail = receiverEmail;
 	}
 	public boolean isGroupChat() {
 		return groupChat;
@@ -45,5 +47,15 @@ public class Chat {
 	}
 	public void setChatMessages(List<ChatMessage> chatMessages) {
 		this.chatMessages = chatMessages;
+	}
+	@Override
+	public String toString() {
+		return "Time: " + DateUtil.formatDate(this.time) + System.getProperty("line.separator") +
+				"Chat Owner: " + this.chatOwner + System.getProperty("line.separator") +
+				"Receiver's Name: " + this.receiverName + System.getProperty("line.separator") +
+				"Receiver's Email: " + this.receiverEmail + System.getProperty("line.separator") +
+				"Group Chat?: " + this.groupChat + System.getProperty("line.separator") +
+				"Chat Messages: " + this.chatMessages + System.getProperty("line.separator") +
+				"--------------------------------" + System.getProperty("line.separator");
 	}
 }

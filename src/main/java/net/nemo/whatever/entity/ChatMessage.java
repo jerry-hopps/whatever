@@ -2,13 +2,13 @@ package net.nemo.whatever.entity;
 
 import java.util.Date;
 
+import net.nemo.whatever.util.DateUtil;
 import net.nemo.whatever.util.MailMessageConverter;
 
 public class ChatMessage {
 	private String id;
 	private Date time;
 	private String sender;
-	private String receiver;
 	private ChatMessageType type;
 	private String content;
 	public String getId() {
@@ -29,12 +29,6 @@ public class ChatMessage {
 	public String getSender() {
 		return sender;
 	}
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
-	public String getReceiver() {
-		return receiver;
-	}
 	public ChatMessageType getType() {
 		return type;
 	}
@@ -49,6 +43,6 @@ public class ChatMessage {
 	}
 	@Override
 	public String toString() {
-		return this.sender + "/" + this.receiver + "/" + MailMessageConverter.formatDate(this.time) + "/" + this.type + "/" + this.content;
+		return this.sender + "/" + DateUtil.formatDate(this.time) + "/" + this.type + "/" + this.content;
 	}
 }
