@@ -8,10 +8,9 @@ import net.nemo.whatever.util.DateUtil;
 public class Chat {
 	private Date time;
 	private String chatOwner;
-	private String receiverName;
-	private String receiverEmail;
+	private User receiver;
 	private boolean groupChat = false;
-	private List<ChatMessage> chatMessages;
+	private List<Message> messages;
 	public Date getDateTime() {
 		return time;
 	}
@@ -24,38 +23,31 @@ public class Chat {
 	public void setChatOwner(String chatOwner) {
 		this.chatOwner = chatOwner;
 	}
-	public String getReceiverName() {
-		return receiverName;
-	}
-	public void setReceiverName(String receiverName) {
-		this.receiverName = receiverName;
-	}
-	public String getReceiverEmail() {
-		return receiverEmail;
-	}
-	public void setReceiverEmail(String receiverEmail) {
-		this.receiverEmail = receiverEmail;
-	}
 	public boolean isGroupChat() {
 		return groupChat;
 	}
 	public void setGroupChat(boolean groupChat) {
 		this.groupChat = groupChat;
 	}
-	public List<ChatMessage> getChatMessages() {
-		return chatMessages;
+	public List<Message> getMessages() {
+		return messages;
 	}
-	public void setChatMessages(List<ChatMessage> chatMessages) {
-		this.chatMessages = chatMessages;
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}
+	public User getReceiver() {
+		return receiver;
 	}
 	@Override
 	public String toString() {
 		return "Time: " + DateUtil.formatDate(this.time) + System.getProperty("line.separator") +
 				"Chat Owner: " + this.chatOwner + System.getProperty("line.separator") +
-				"Receiver's Name: " + this.receiverName + System.getProperty("line.separator") +
-				"Receiver's Email: " + this.receiverEmail + System.getProperty("line.separator") +
+				"Receiver: " + this.receiver.toString() + System.getProperty("line.separator") +
 				"Group Chat?: " + this.groupChat + System.getProperty("line.separator") +
-				"Chat Messages: " + this.chatMessages + System.getProperty("line.separator") +
+				"Chat Messages: " + this.messages + System.getProperty("line.separator") +
 				"--------------------------------" + System.getProperty("line.separator");
 	}
 }

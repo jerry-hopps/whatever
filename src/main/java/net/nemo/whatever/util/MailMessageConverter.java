@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.BodyPart;
-import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
 import net.nemo.whatever.entity.Chat;
-import net.nemo.whatever.entity.ChatMessage;
+import net.nemo.whatever.entity.Message;
 import net.nemo.whatever.entity.ChatMessageType;
+import net.nemo.whatever.entity.User;
 
 public class MailMessageConverter {
 	
@@ -22,16 +22,15 @@ public class MailMessageConverter {
 	public final static String GROUP_CHAT_TITLE_PATTERN = "微信群\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	public final static String DIALOG_CHAT_TITLE_PATTERN = "\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"和\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	
-	public static Chat fromMailMessage(Message message) {
+	public static Chat fromMailMessage(javax.mail.Message message) {
 		Chat chat = new Chat();
 		try {
 			chat.setDateTime(message.getSentDate());
 			chat.setGroupChat(isGroupChat(message.getSubject()));
 			chat.setChatOwner(getMessageOwner(message.getSubject()));
-			chat.setReceiverName(getMessageReceiverName(message.getSubject()));
-			chat.setReceiverEmail(((InternetAddress)message.getFrom()[0]).getAddress().toString());
+			chat.setReceiver(getMessageReceiver(message.getSubject(), (InternetAddress)message.getFrom()[0]));
 
-			List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
+			List<Message> messages = new ArrayList<Message>();
 			List<String> attachementPaths = new ArrayList<String>();
 			
 			Part part = (Part) message;
@@ -43,11 +42,11 @@ public class MailMessageConverter {
 					if (bodyPart.isMimeType("multipart/*")) {
 						saveAttachments(attachementPaths, bodyPart);
 					} else {
-						chatMessages.addAll(parseMessageBody(bodyPart.getContent()));
+						messages.addAll(parseMessageBody(bodyPart.getContent()));
 					}
 				}
 			}
-			chat.setChatMessages(chatMessages);
+			chat.setMessages(messages);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -55,8 +54,8 @@ public class MailMessageConverter {
 		return chat;
 	}
 
-	private static List<ChatMessage> parseMessageBody(Object content) {
-		List<ChatMessage> messages = new ArrayList<ChatMessage>();
+	private static List<Message> parseMessageBody(Object content) {
+		List<Message> messages = new ArrayList<Message>();
 
 		String[] lines = content.toString().split(System.getProperty("line.separator"));
 		String sender = null, date = null, time = null;
@@ -76,7 +75,7 @@ public class MailMessageConverter {
 				}
 				//Image content of the message
 				else if(null != (matches = StringUtil.findFirstMatch(IMAGE_MSG_PATTERN, line))){
-					ChatMessage chatMessage = new ChatMessage();
+					Message chatMessage = new Message();
 					chatMessage.setContent(matches.get(0));
 					chatMessage.setType(ChatMessageType.IMAGE);
 					chatMessage.setSender(sender);
@@ -91,7 +90,7 @@ public class MailMessageConverter {
 				else{
 					if(time==null && sender == null) continue;
 					
-					ChatMessage chatMessage = new ChatMessage();
+					Message chatMessage = new Message();
 					chatMessage.setContent(line);
 					chatMessage.setType(ChatMessageType.TEXT);
 					chatMessage.setSender(sender);
@@ -148,8 +147,10 @@ public class MailMessageConverter {
 		return groupMatches == null ? dialogMatches.get(0): groupMatches.get(0);
 	}
 
-	private static String getMessageReceiverName(String messageSubject) {
+	private static User getMessageReceiver(String messageSubject, InternetAddress from) {
 		List<String> dialogMatches = StringUtil.findFirstMatch(DIALOG_CHAT_TITLE_PATTERN, messageSubject);
-		return dialogMatches != null ? dialogMatches.get(1) : "";
+		String name = dialogMatches != null ? dialogMatches.get(1) : "";
+		String email = from.getAddress().toString();
+		return new User(name, email);
 	}
 }

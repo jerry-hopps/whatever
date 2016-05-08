@@ -3,9 +3,8 @@ package net.nemo.whatever.entity;
 import java.util.Date;
 
 import net.nemo.whatever.util.DateUtil;
-import net.nemo.whatever.util.MailMessageConverter;
 
-public class ChatMessage {
+public class Message {
 	private String id;
 	private Date time;
 	private String sender;
