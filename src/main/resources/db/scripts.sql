@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `chats` (
-  `id` int(8) DEFAULT NULL,
+  `id` int(8) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `owner_name` varchar(50) DEFAULT NULL,
   `receiver_id` int(8) DEFAULT NULL,
   `is_group_chat` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,13 +47,14 @@ DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `messages` (
-  `id` int(8) DEFAULT NULL,
+  `id` int(8) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `timestamp` datetime DEFAULT NULL,
-  `sender_id` int(8) DEFAULT NULL,
+  `chat_id` int(8) DEFAULT NULL,
+  `sender` varchar(50) DEFAULT NULL,
+  `receiver_id` int(8) DEFAULT NULL,
   `content` text,
-  `type` int(1) DEFAULT NULL,
-  `chat_id` int(8) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `type` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,13 +74,13 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(8) DEFAULT NULL,
+  `id` int(8) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   `contact_of` int(8) DEFAULT NULL,
   `enabled` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -6,11 +6,26 @@ import java.util.List;
 import net.nemo.whatever.util.DateUtil;
 
 public class Chat {
+	private Integer id;
 	private Date time;
 	private String chatOwner;
 	private User receiver;
 	private boolean groupChat = false;
 	private List<Message> messages;
+	
+	public Chat(){}
+	public Chat(Integer id, String chatOwner, Boolean groupChat) {
+		super();
+		this.id = id;
+		this.chatOwner = chatOwner;
+		this.groupChat = groupChat;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Date getDateTime() {
 		return time;
 	}

@@ -1,16 +1,26 @@
 package net.nemo.whatever.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import net.nemo.whatever.db.mapper.UserMapper;
 import net.nemo.whatever.entity.User;
 
 public class UserService {
 
-	@Autowired
 	private UserMapper userMapper;
 	
+	public void setUserMapper(UserMapper userMapper) {
+		this.userMapper = userMapper;
+	}
+	
+	public UserMapper getUserMapper() {
+		return userMapper;
+	}
+	
 	public int addUser(User user){
-		return this.userMapper.insert(user);
+		User u = userMapper.findByEmail(user.getEmail());
+		return u==null ? this.userMapper.insert(user) : u.getId();
+	}
+	
+	public User findUserById(Integer id){
+		return this.userMapper.findById(id);
 	}
 }

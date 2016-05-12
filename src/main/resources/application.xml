@@ -20,10 +20,6 @@
 		<property name="pwd" value="${mail.pwd}"/>
 	</bean>
 	
-	<bean id="convertionService" class="net.nemo.whatever.service.ConvertionService">
-		<property name="mailService" ref="mailService"/>
-	</bean>
-
 	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${db.driverClassName}" />
 		<property name="url" value="${db.url}" />
@@ -34,5 +30,39 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath*:db/config/mappers/*.xml" />
+	</bean>
+	
+	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+       <property name="mapperInterface" value="net.nemo.whatever.db.mapper.UserMapper" />  
+       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean>
+    
+    <bean id="messageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+       <property name="mapperInterface" value="net.nemo.whatever.db.mapper.MessageMapper" />  
+       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean>
+    
+    <bean id="chatMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+       <property name="mapperInterface" value="net.nemo.whatever.db.mapper.ChatMapper" />  
+       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean>
+    
+    <bean id="userService" class="net.nemo.whatever.service.UserService">
+    	<property name="userMapper" ref="userMapper"/>
+    </bean>
+    
+    <bean id="messageService" class="net.nemo.whatever.service.MessageService">
+    	<property name="messageMapper" ref="messageMapper"/>
+    </bean>
+    
+    <bean id="chatService" class="net.nemo.whatever.service.ChatService">
+    	<property name="chatMapper" ref="chatMapper"/>
+    </bean>
+	
+	<bean id="convertionService" class="net.nemo.whatever.service.ConvertionService">
+		<property name="mailService" ref="mailService"/>
+		<property name="userService" ref="userService"/>
+		<property name="messageService" ref="messageService"/>
+		<property name="chatService" ref="chatService"/>
 	</bean>
 </beans>

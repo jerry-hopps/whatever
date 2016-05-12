@@ -2,18 +2,22 @@ package net.nemo.whatever.entity;
 
 import java.util.Date;
 
+import javax.sql.rowset.Predicate;
+
 import net.nemo.whatever.util.DateUtil;
 
 public class Message {
-	private String id;
+	private Integer id;
 	private Date time;
+	private Chat chat;
 	private String sender;
+	private User receiver;
 	private ChatMessageType type;
 	private String content;
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public Date getTime() {
@@ -22,11 +26,23 @@ public class Message {
 	public void setTime(Date time) {
 		this.time = time;
 	}
+	public Chat getChat() {
+		return chat;
+	}
+	public void setChat(Chat chat) {
+		this.chat = chat;
+	}
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
 	public String getSender() {
 		return sender;
+	}
+	public User getReceiver() {
+		return receiver;
+	}
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 	public ChatMessageType getType() {
 		return type;

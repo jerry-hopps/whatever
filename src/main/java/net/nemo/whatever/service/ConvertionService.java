@@ -2,18 +2,16 @@ package net.nemo.whatever.service;
 
 import javax.mail.Message;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import net.nemo.whatever.db.mapper.UserMapper;
 import net.nemo.whatever.entity.Chat;
+import net.nemo.whatever.entity.User;
 import net.nemo.whatever.util.MailMessageConverter;
 
 public class ConvertionService {
 
 	private MailService mailService;
-	
-	@Autowired(required=true)
-	private UserMapper userMapper;
+	private UserService userService;
+	private MessageService messageService;
+	private ChatService chatService;
 	
 	public MailService getMailService() {
 		return mailService;
@@ -23,14 +21,30 @@ public class ConvertionService {
 		this.mailService = mailService;
 	}
 
-	public UserMapper getUserMapper() {
-		return userMapper;
+	public UserService getUserService() {
+		return userService;
 	}
 
-	public void setUserMapper(UserMapper userMapper) {
-		this.userMapper = userMapper;
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
+	public MessageService getMessageService() {
+		return messageService;
+	}
+	
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
+	
+	public void setChatService(ChatService chatService) {
+		this.chatService = chatService;
+	}
+	
+	public ChatService getChatService() {
+		return chatService;
+	}
+	
 	public void convert(){
 		try{
 			mailService.connect();
@@ -39,7 +53,18 @@ public class ConvertionService {
 				Message message = messages[i];
 				Chat chat = MailMessageConverter.fromMailMessage(message);
 				
-				System.out.println(userMapper.insert(chat.getReceiver()));
+				int receiverId = this.userService.addUser(chat.getReceiver());
+				User receiver = this.userService.findUserById(receiverId);
+				chat.setReceiver(receiver);
+				
+				int chatId = this.chatService.addChat(chat);
+				chat.setId(chatId);
+				
+				for(net.nemo.whatever.entity.Message msg : chat.getMessages()){
+					msg.setReceiver(receiver);
+					msg.setChat(chat);
+					this.messageService.addMessage(msg);
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
