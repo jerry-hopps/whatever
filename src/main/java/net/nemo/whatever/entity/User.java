@@ -1,5 +1,7 @@
 package net.nemo.whatever.entity;
 
+import net.nemo.whatever.util.DateUtil;
+
 public class User {
 
 	private String id;
@@ -50,4 +52,10 @@ public class User {
 		this.enabled = enabled;
 	}
 	
+	@Override
+	public String toString() {
+		return "－－Name: " + this.name + System.getProperty("line.separator") +
+				"－－Email: " + this.email + System.getProperty("line.separator") +
+				"－－Enabled: " + this.enabled + System.getProperty("line.separator");
+	}
 }

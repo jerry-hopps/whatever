@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:aop="http://www.springframework.org/schema/aop"
-        xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/aop
            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-	
+
+	<context:property-placeholder location="classpath:*.properties" />
+	<context:component-scan base-package="net.nemo.whatever" />
+
 	<bean id="mailService" class="net.nemo.whatever.service.MailService">
-		<property name="mailServer"><value>pop.163.com</value></property>
-		<property name="protocal"><value>pop3</value></property>
-		<property name="user"><value>still0007</value></property>
-		<property name="pwd"><value>tonyshi1A</value></property>
+		<property name="mailServer" value="${mail.server}"/>
+		<property name="protocal" value="${mail.protocal}"/>
+		<property name="user" value="${mail.user}"/>
+		<property name="pwd" value="${mail.pwd}"/>
+	</bean>
+	
+	<bean id="convertionService" class="net.nemo.whatever.service.ConvertionService">
+		<property name="mailService" ref="mailService"/>
+	</bean>
+
+	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${db.driverClassName}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:db/config/mappers/*.xml" />
 	</bean>
 </beans>

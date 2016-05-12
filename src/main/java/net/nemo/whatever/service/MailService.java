@@ -8,6 +8,8 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
+import net.nemo.whatever.entity.*;
+import net.nemo.whatever.util.*;
 
 public class MailService {
 
@@ -19,10 +21,44 @@ public class MailService {
 	private Store store;
 	private Folder folder;
 
+	public MailService(){}
+	
 	public MailService(String mailServer, String protocal, String user, String pwd) {
 		this.mailServer = mailServer;
 		this.protocal = protocal;
 		this.user = user;
+		this.pwd = pwd;
+	}
+
+	public String getMailServer() {
+		return mailServer;
+	}
+
+	public void setMailServer(String mailServer) {
+		this.mailServer = mailServer;
+	}
+
+	public String getProtocal() {
+		return protocal;
+	}
+
+	public void setProtocal(String protocal) {
+		this.protocal = protocal;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
 		this.pwd = pwd;
 	}
 
@@ -59,20 +95,20 @@ public class MailService {
 		}
 	}
 
-//	public static void main(String[] args) {
-//		MailService service = new MailService("pop.163.com", "pop3", "still0007", "tonyshi1A");
-//		try {
-//			service.connect();
-//			
-//			Message[] msgs = service.receiveMessage();
-//			for(int i = 0; i< msgs.length; i++){
-//				Chat chat = MailMessageConverter.fromMailMessage(msgs[i]);
-//				System.out.println(chat);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}finally {
-//			service.disconnect();
-//		}
-//	}
+	public static void main(String[] args) {
+		MailService service = new MailService("pop.163.com", "pop3", "still0007", "tonyshi1A");
+		try {
+			service.connect();
+			
+			Message[] msgs = service.receiveMessage();
+			for(int i = 0; i< msgs.length; i++){
+				Chat chat =  MailMessageConverter.fromMailMessage(msgs[i]);
+				System.out.println(chat);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			service.disconnect();
+		}
+	}
 }
