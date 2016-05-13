@@ -13,14 +13,29 @@
 	<context:property-placeholder location="classpath:*.properties" />
 	<context:component-scan base-package="net.nemo.whatever" />
 
-	<bean id="mailService" class="net.nemo.whatever.service.MailService">
-		<property name="mailServer" value="${mail.server}"/>
-		<property name="protocal" value="${mail.protocal}"/>
-		<property name="user" value="${mail.user}"/>
-		<property name="pwd" value="${mail.pwd}"/>
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.server.smtp}"/>
+		<property name="username" value="${mail.user}"/>
+		<property name="password" value="${mail.pwd}"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.timeout">25000</prop>
+			</props>
+		</property>
 	</bean>
-	
-	<bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+	<bean id="mailService" class="net.nemo.whatever.service.MailService">
+		<property name="mailServer" value="${mail.server.pop3}" />
+		<property name="protocal" value="${mail.protocal}" />
+		<property name="user" value="${mail.user}" />
+		<property name="pwd" value="${mail.pwd}" />
+		<property name="mailSender" ref="mailSender"/>
+	</bean>
+
+	<bean name="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${db.driverClassName}" />
 		<property name="url" value="${db.url}" />
 		<property name="username" value="${db.username}" />
@@ -31,38 +46,38 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath*:db/config/mappers/*.xml" />
 	</bean>
-	
-	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
-       <property name="mapperInterface" value="net.nemo.whatever.db.mapper.UserMapper" />  
-       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
-    </bean>
-    
-    <bean id="messageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
-       <property name="mapperInterface" value="net.nemo.whatever.db.mapper.MessageMapper" />  
-       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
-    </bean>
-    
-    <bean id="chatMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
-       <property name="mapperInterface" value="net.nemo.whatever.db.mapper.ChatMapper" />  
-       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
-    </bean>
-    
-    <bean id="userService" class="net.nemo.whatever.service.UserService">
-    	<property name="userMapper" ref="userMapper"/>
-    </bean>
-    
-    <bean id="messageService" class="net.nemo.whatever.service.MessageService">
-    	<property name="messageMapper" ref="messageMapper"/>
-    </bean>
-    
-    <bean id="chatService" class="net.nemo.whatever.service.ChatService">
-    	<property name="chatMapper" ref="chatMapper"/>
-    </bean>
-	
+
+	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.UserMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="messageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.MessageMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="chatMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.ChatMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="userService" class="net.nemo.whatever.service.UserService">
+		<property name="userMapper" ref="userMapper" />
+	</bean>
+
+	<bean id="messageService" class="net.nemo.whatever.service.MessageService">
+		<property name="messageMapper" ref="messageMapper" />
+	</bean>
+
+	<bean id="chatService" class="net.nemo.whatever.service.ChatService">
+		<property name="chatMapper" ref="chatMapper" />
+	</bean>
+
 	<bean id="convertionService" class="net.nemo.whatever.service.ConvertionService">
-		<property name="mailService" ref="mailService"/>
-		<property name="userService" ref="userService"/>
-		<property name="messageService" ref="messageService"/>
-		<property name="chatService" ref="chatService"/>
+		<property name="mailService" ref="mailService" />
+		<property name="userService" ref="userService" />
+		<property name="messageService" ref="messageService" />
+		<property name="chatService" ref="chatService" />
 	</bean>
 </beans>

@@ -24,7 +24,7 @@ $('#loginbtn').click(function() {
                 alert(data.errorMsg);
             }else{
                 //登录成功
-                window.location.href = "<%=request.getContextPath()%>/loginsuccess.html";
+                window.location.href = "<%=request.getContextPath()%>/chat/list.html";
             }
         },
         error: function(data) { 

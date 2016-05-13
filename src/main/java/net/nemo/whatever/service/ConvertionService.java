@@ -55,6 +55,11 @@ public class ConvertionService {
 				
 				int receiverId = this.userService.addUser(chat.getReceiver());
 				User receiver = this.userService.findUserById(receiverId);
+				
+				if(!receiver.isEnabled()){
+					this.sendRegisterEmail(receiver.getEmail());
+				}
+				
 				chat.setReceiver(receiver);
 				
 				int chatId = this.chatService.addChat(chat);
@@ -70,6 +75,18 @@ public class ConvertionService {
 			e.printStackTrace();
 		}finally {
 			mailService.disconnect();
+		}
+	}
+	
+	private void sendRegisterEmail(String to){
+		
+		String from = "still0007@163.com";
+		String subject = "Welcome to Cunle.me";
+		String content = "Welcome to Cunle.me";
+		try{
+			mailService.sendMessage(from, to, subject, content);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 }

@@ -33,4 +33,6 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/view/" p:suffix=".jsp" />
 
+	<bean class="net.nemo.whatever.controller.exceptionresolver.MySimpleMappingExceptionResolver"/>
+
 </beans>

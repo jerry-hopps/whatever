@@ -3,8 +3,6 @@ package net.nemo.whatever.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -18,22 +16,10 @@ import net.nemo.whatever.exception.BusinessException;
 
 @Controller
 public class UserController {
-
-	@RequestMapping("/index.html")
-	public ModelAndView getIndex(HttpServletRequest request) throws Exception{
-		ModelAndView mav = new ModelAndView("index");
-		return mav;
-	}
 	
 	@RequestMapping("/login.html")
 	public ModelAndView login() throws Exception{
 		ModelAndView mav = new ModelAndView("login");
-		return mav;
-	}
-	
-	@RequestMapping("/loginsuccess.html")
-	public ModelAndView loginsuccess() throws Exception{
-		ModelAndView mav = new ModelAndView("loginsuccess");
 		return mav;
 	}
 	

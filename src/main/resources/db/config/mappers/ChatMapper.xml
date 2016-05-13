@@ -2,15 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="net.nemo.whatever.db.mapper.ChatMapper">
-	<insert id="insert" parameterType="net.nemo.whatever.entity.Chat" useGeneratedKeys="true" keyProperty="id">
-		insert into chats (owner_name,receiver_id,is_group_chat)
-		values (#{chatOwner},#{receiver.id},#{groupChat})
+	<insert id="insert" parameterType="net.nemo.whatever.entity.Chat"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into chats
+		(owner_name,receiver_id,is_group_chat)
+		values
+		(#{chatOwner},#{receiver.id},#{groupChat})
 	</insert>
-	
+
 	<select id="findBySenderAndReceiver" resultType="net.nemo.whatever.entity.Chat">
 		select id, owner_name, is_group_chat
-		from chats 
+		from chats
 		where owner_name = #{sender} and receiver_id = #{receiver.id}
+	</select>
+
+	<select id="selectChats" parameterType="int" resultType="net.nemo.whatever.entity.Chat">
+		select id, owner_name, is_group_chat
+		from chats
+		where receiver_id = #{receiver_id}
 	</select>
 </mapper>
 

@@ -1,5 +1,8 @@
 package net.nemo.whatever.service;
 
+
+import java.util.List;
+
 import net.nemo.whatever.db.mapper.ChatMapper;
 import net.nemo.whatever.entity.Chat;
 
@@ -18,5 +21,9 @@ public class ChatService {
 	public int addChat(Chat chat){
 		Chat c = this.chatMapper.findBySenderAndReceiver(chat.getChatOwner(), chat.getReceiver());
 		return c==null ? this.chatMapper.insert(chat) : c.getId();
+	}
+	
+	public List<Chat> listChats(int receiverId){
+		return chatMapper.selectChats(receiverId);
 	}
 }
