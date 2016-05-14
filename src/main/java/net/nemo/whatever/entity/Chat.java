@@ -1,13 +1,9 @@
 package net.nemo.whatever.entity;
 
-import java.util.Date;
 import java.util.List;
-
-import net.nemo.whatever.util.DateUtil;
 
 public class Chat {
 	private Integer id;
-	private Date time;
 	private String chatOwner;
 	private User receiver;
 	private boolean groupChat = false;
@@ -25,12 +21,6 @@ public class Chat {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public Date getDateTime() {
-		return time;
-	}
-	public void setDateTime(Date time) {
-		this.time = time;
 	}
 	public String getChatOwner() {
 		return chatOwner;
@@ -58,11 +48,10 @@ public class Chat {
 	}
 	@Override
 	public String toString() {
-		return "Time: " + DateUtil.formatDate(this.time) + System.getProperty("line.separator") +
-				"Chat Owner: " + this.chatOwner + System.getProperty("line.separator") +
-				"Receiver: " + this.receiver.toString() + System.getProperty("line.separator") +
+		return "Chat Owner: " + this.chatOwner + System.getProperty("line.separator") +
+				//"Receiver: " + this.receiver.toString() + System.getProperty("line.separator") +
 				"Group Chat?: " + this.groupChat + System.getProperty("line.separator") +
-				"Chat Messages: " + this.messages + System.getProperty("line.separator") +
+				//"Chat Messages: " + this.messages + System.getProperty("line.separator") +
 				"--------------------------------" + System.getProperty("line.separator");
 	}
 }

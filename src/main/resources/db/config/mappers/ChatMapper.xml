@@ -17,7 +17,7 @@
 	</select>
 
 	<select id="selectChats" parameterType="int" resultType="net.nemo.whatever.entity.Chat">
-		select id, owner_name, is_group_chat
+		select id, owner_name as "chatOwner", is_group_chat as "groupChat"
 		from chats
 		where receiver_id = #{receiver_id}
 	</select>

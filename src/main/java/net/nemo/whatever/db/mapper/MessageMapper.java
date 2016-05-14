@@ -13,4 +13,5 @@ public interface MessageMapper {
 	int insert(Message message);
 	void insertList(List<Message> messages);
 	Message findBy(@Param("time") Date timestamp, @Param("sender") String sender, @Param("receiver") User receiver, @Param("content") String content);
+	List<Message> findMessages(@Param("receiver_id") Integer receiver_id, @Param("chat_id") Integer chat_id);
 }

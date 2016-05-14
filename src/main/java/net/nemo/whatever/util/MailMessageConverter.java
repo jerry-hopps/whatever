@@ -25,7 +25,6 @@ public class MailMessageConverter {
 	public static Chat fromMailMessage(javax.mail.Message message) {
 		Chat chat = new Chat();
 		try {
-			chat.setDateTime(message.getSentDate());
 			chat.setGroupChat(isGroupChat(message.getSubject()));
 			chat.setChatOwner(getMessageOwner(message.getSubject()));
 			chat.setReceiver(getMessageReceiver(message.getSubject(), (InternetAddress)message.getFrom()[0]));
