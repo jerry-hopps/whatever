@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.nemo.whatever.entity.Chat;
@@ -32,10 +34,13 @@ public class ChatController {
 		return mav;
 	}
 	
-	public ModelAndView messages(){
+	@RequestMapping(value="/{chat_id}.html",method=RequestMethod.GET)
+	public ModelAndView messages(@PathVariable("chat_id") Integer chatId){
 		ModelAndView mav = new ModelAndView("message/list");
-		List<Message> messages = this.messageSercice.findMessages(3, 1);
+		List<Message> messages = this.messageSercice.findMessages(chatId, 1);
 		mav.addObject("messages", messages);
+		mav.addObject("receiver", "Tony");
+		mav.addObject("chat", this.chatService.findById(chatId));
 		return mav;
 	}
 }

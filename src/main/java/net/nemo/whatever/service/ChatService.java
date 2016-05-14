@@ -1,6 +1,5 @@
 package net.nemo.whatever.service;
 
-
 import java.util.List;
 
 import net.nemo.whatever.db.mapper.ChatMapper;
@@ -25,5 +24,9 @@ public class ChatService {
 	
 	public List<Chat> listChats(int receiverId){
 		return chatMapper.selectChats(receiverId);
+	}
+	
+	public Chat findById(int id){
+		return this.chatMapper.findById(id);
 	}
 }

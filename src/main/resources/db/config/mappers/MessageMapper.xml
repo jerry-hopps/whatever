@@ -13,7 +13,7 @@
 	</select>
 	
 	<select id="findMessages" resultType="net.nemo.whatever.entity.Message">
-		select id, time, sender, type, content
+		select id, timestamp, sender, content
 		from messages
 		where chat_id = #{chat_id} and receiver_id = #{receiver_id}
 	</select>

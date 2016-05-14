@@ -12,4 +12,5 @@ public interface ChatMapper {
 	int insert(Chat chat);
 	Chat findBySenderAndReceiver(@Param("sender") String sender,@Param("receiver") User receiver);
 	List<Chat> selectChats(@Param("receiver_id")int receiver_id);
+	Chat findById(Integer id);
 }
