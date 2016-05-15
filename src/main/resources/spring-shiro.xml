@@ -26,6 +26,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/index.html = authc
+				/register/** = anon
 				/login.html = anon
 				/checkLogin.json = anon
 				/loginsuccess.html = anon

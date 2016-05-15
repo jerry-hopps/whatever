@@ -12,17 +12,24 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import net.nemo.whatever.entity.User;
+import net.nemo.whatever.service.UserService;
 
 public class MyShiroRealm extends AuthorizingRealm{
 
-	private static final String USER_NAME = "tony";
-	private static final String PASSWORD = "123456";
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authToken;
-		if(token.getUsername().equals(USER_NAME)){
-			return new SimpleAuthenticationInfo(USER_NAME, PASSWORD, getName());
+		
+		User user = userService.findByEmail(token.getUsername());
+		
+		if(token.getUsername().equals(user.getEmail())){
+			return new SimpleAuthenticationInfo(user.getEmail(), user.getPassword(), getName());
 		}else{
 			throw new AuthenticationException();
 		}

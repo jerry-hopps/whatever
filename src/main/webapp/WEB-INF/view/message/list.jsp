@@ -91,8 +91,8 @@ body {
 </head>
 <body style="overflow:hidden;">
 	<div style="width:100％;height:40px;color:white;background-color:black;text-align:center;padding:10px 0 0 10px;">
-	<a href="<%=request.getContextPath()%>/chat/list.html" class="weui_btn weui_btn_mini weui_btn_default" style="background-color:black;color:white;float:left;">返回</a>
-	<span style="margin-left:-30px;">与<c:out value="${chat.chatOwner}" />的聊天记录</span>
+		<a href="<%=request.getContextPath()%>/chat/list.html" class="weui_btn weui_btn_mini weui_btn_default" style="background-color:black;color:white;float:left;">返回</a>
+		<span style="margin-left:-30px;">与<c:out value="${chat.chatOwner}" />的聊天记录</span>
 	</div>
 	<div id="container" style="overflow:auto;">
 		<c:forEach items="${messages}" var="message">

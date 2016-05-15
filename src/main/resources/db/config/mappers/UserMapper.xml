@@ -3,15 +3,27 @@
 
 <mapper namespace="net.nemo.whatever.db.mapper.UserMapper">
 	<insert id="insert" parameterType="net.nemo.whatever.entity.User" useGeneratedKeys="true" keyProperty="id">
-		insert into users (name,email,password,enabled)
-		values (#{name},#{email},#{password}, #{enabled})
+		insert into users (name,email,password,status)
+		values (#{name},#{email},#{password}, #{status})
 	</insert>
 	
 	<select id="findById" parameterType="int" resultType="net.nemo.whatever.entity.User">
-		select id, name, email, password, enabled from users where id=#{id}
+		select id, name, email, password, status from users where id=#{id}
 	</select>
 	
 	<select id="findByEmail" parameterType="string" resultType="net.nemo.whatever.entity.User">
-		select id, name, email, password, enabled from users where email=#{email}
+		select id, name, email, password, status from users where email=#{email}
 	</select>
+	
+	<update id="updatePassword" parameterType="net.nemo.whatever.entity.User">
+		update users
+		set password = #{password}
+		where id = #{id}
+	</update>
+	
+	<update id="updateStatus" parameterType="net.nemo.whatever.entity.User">
+		update users
+		set status = #{status}
+		where id = #{id}
+	</update>
 </mapper>

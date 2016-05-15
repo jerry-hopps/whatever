@@ -7,20 +7,20 @@ public class User {
 	private String email;
 	private String password;
 	private User contact_of;
-	private boolean enabled = false;
+	private Integer status = 0;
 
 	public User(String name, String email) {
 		this.email = email;
 		this.name = name;
 	}
 	
-	public User(Integer id, String name, String email, String password, Boolean enabled) {
+	public User(Integer id, String name, String email, String password, Integer status) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		this.enabled = enabled;
+		this.status = status;
 	}
 
 	public Integer getId() {
@@ -62,19 +62,19 @@ public class User {
 	public void setContact_of(User contact_of) {
 		this.contact_of = contact_of;
 	}
-
-	public boolean isEnabled() {
-		return enabled;
+	
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	
+	public Integer getStatus() {
+		return status;
 	}
 
 	@Override
 	public String toString() {
 		return "－－Name: " + this.name + System.getProperty("line.separator") + "－－Email: " + this.email
-				+ System.getProperty("line.separator") + "－－Enabled: " + this.enabled
+				+ System.getProperty("line.separator") + "－－Status: " + this.status
 				+ System.getProperty("line.separator");
 	}
 }

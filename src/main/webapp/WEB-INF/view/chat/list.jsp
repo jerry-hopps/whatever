@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
@@ -15,7 +14,10 @@ body {
 </style>
 </head>
 <body>
-	<div style="width:100％;height:40px;background-color:black;color:white;text-align:center;padding-top:10px;">Cunle.me</div>
+	<div style="width:100％;height:40px;color:white;background-color:black;text-align:center;padding:10px 0 0 10px;">
+		<span style="margin-left:30px;">Cunle.me</span>
+		<a href="<%=request.getContextPath()%>/logout.html" class="weui_btn weui_btn_mini weui_btn_default" style="background-color:black;color:white;float:right;">登出</a>
+	</div>
 	<div class="weui_panel weui_panel_access">
 		<div class="weui_panel_bd">
 			<c:forEach items="${chats}" var="chat">

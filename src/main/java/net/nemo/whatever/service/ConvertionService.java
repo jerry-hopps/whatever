@@ -4,6 +4,7 @@ import javax.mail.Message;
 
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
+import net.nemo.whatever.util.DESCoder;
 import net.nemo.whatever.util.MailMessageConverter;
 
 public class ConvertionService {
@@ -56,8 +57,16 @@ public class ConvertionService {
 				int receiverId = this.userService.addUser(chat.getReceiver());
 				User receiver = this.userService.findUserById(receiverId);
 				
-				if(!receiver.isEnabled()){
-					this.sendRegisterEmail(receiver.getEmail());
+				if(0 == receiver.getStatus()){
+					String key = DESCoder.initKey();
+					byte[] inputData = receiver.getEmail().getBytes();  
+			        inputData = DESCoder.encrypt(inputData, key);
+					this.sendRegisterEmail(receiver.getEmail(), receiverId, DESCoder.encryptBASE64(inputData));
+					
+					receiver.setStatus(1);
+					this.userService.updateStatus(receiver);
+					receiver.setPassword(key);
+					this.userService.updatePassword(receiver);
 				}
 				
 				chat.setReceiver(receiver);
@@ -78,11 +87,10 @@ public class ConvertionService {
 		}
 	}
 	
-	private void sendRegisterEmail(String to){
-		
+	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
 		String from = "still0007@163.com";
 		String subject = "Welcome to Cunle.me";
-		String content = "Welcome to Cunle.me";
+		String content = "http://localhost:8080/whatever/register/" + id + "/" + encryptedStr + ".html";
 		try{
 			mailService.sendMessage(from, to, subject, content);
 		}catch(Exception e){

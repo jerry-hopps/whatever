@@ -23,4 +23,16 @@ public class UserService {
 	public User findUserById(Integer id){
 		return this.userMapper.findById(id);
 	}
+	
+	public User findByEmail(String email){
+		return this.userMapper.findByEmail(email);
+	}
+	
+	public void updatePassword(User user){
+		this.userMapper.updatePassword(user);
+	}
+	
+	public void updateStatus(User user){
+		this.userMapper.updateStatus(user);
+	}
 }
