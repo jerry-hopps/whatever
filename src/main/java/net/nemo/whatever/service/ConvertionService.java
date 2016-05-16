@@ -59,7 +59,7 @@ public class ConvertionService {
 				
 				if(0 == receiver.getStatus()){
 					String key = DESCoder.initKey();
-					byte[] inputData = receiver.getEmail().getBytes();  
+					byte[] inputData = receiver.getEmail().getBytes();
 			        inputData = DESCoder.encrypt(inputData, key);
 					this.sendRegisterEmail(receiver.getEmail(), receiverId, DESCoder.encryptBASE64(inputData));
 					

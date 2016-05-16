@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/weui.min.css" />
@@ -29,7 +30,7 @@
 		            <label class="weui_label">确认密码</label>
 		        </div>
 		        <div class="weui_cell_bd weui_cell_primary">
-		            <input class="weui_input" type="password2" id="password">
+		            <input class="weui_input" type="password" id="password2">
 		        </div>
 		    </div>
 		</div>

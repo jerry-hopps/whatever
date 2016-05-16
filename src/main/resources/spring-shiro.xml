@@ -25,10 +25,10 @@
 		<property name="unauthorizedUrl" value="/error.html"></property>
 		<property name="filterChainDefinitions">
 			<value>
-				/index.html = authc
-				/register/** = anon
+				/register/*/*.html = anon
 				/login.html = anon
 				/checkLogin.json = anon
+				/setPassword.json = anon
 				/loginsuccess.html = anon
 				/logout.json = anon
 				/** = authc

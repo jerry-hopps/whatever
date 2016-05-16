@@ -7,14 +7,50 @@
 <body>
 	<div style="width:100％;height:40px;background-color:black;color:white;text-align:center;padding-top:10px;">Cunle.me</div>
 	<div class="container" style="padding:10px;">
-		<div class="weui_msg">
-		    <div class="weui_icon_area"><i class="weui_icon_msg weui_icon_warn"></i></div>
-		    <div class="weui_text_area">
-		        <h2 class="weui_msg_title">操作失败</h2>
-		        <p class="weui_msg_desc">不正确的Token</p>
+		<div class="weui_cells weui_cells_form">
+		    <div class="weui_cell">
+		        <div class="weui_cell_hd">
+		            <label class="weui_label">电子邮件</label>
+		        </div>
+		        <div class="weui_cell_bd weui_cell_primary">
+		            <input class="weui_input" type="tel" id="username" placeholder="请输入电子邮件">
+		        </div>
+		    </div>
+		    <div class="weui_cell">
+		        <div class="weui_cell_hd">
+		            <label class="weui_label">密码</label>
+		        </div>
+		        <div class="weui_cell_bd weui_cell_primary">
+		            <input class="weui_input" type="password" id="password">
+		        </div>
 		    </div>
 		</div>
-		<a href="<%=request.getContextPath()%>/login.html">登录</a>
+		<a href="javascript:;" class="weui_btn weui_btn_primary" id="loginbtn">登录</a>
 	</div>
 </body>
+<script type="text/javascript">
+$('#loginbtn').click(function() {
+    var param = {
+        username : $("#username").val(),
+        password : $("#password").val()
+    };
+    $.ajax({ 
+        type: "post", 
+        url: "<%=request.getContextPath()%>/checkLogin.json", 
+        data: param, 
+        dataType: "json", 
+        success: function(data) { 
+            if(data.success == false){
+                alert(data.errorMsg);
+            }else{
+                //登录成功
+                window.location.href = "<%=request.getContextPath()%>/chat/list.html";
+            }
+        },
+        error: function(data) { 
+            alert("调用失败...."+data.responseText); 
+        }
+    });
+});
+</script>
 </html>
