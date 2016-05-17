@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/weui.min.css" />
 <script src="<%=request.getContextPath()%>/static/js/jquery-1.8.1.min.js"></script>
 </head>
@@ -13,7 +14,7 @@
 		            <label class="weui_label">电子邮件</label>
 		        </div>
 		        <div class="weui_cell_bd weui_cell_primary">
-		            <input class="weui_input" type="tel" id="username" placeholder="请输入电子邮件">
+		            <input class="weui_input" type="email" id="username" placeholder="请输入电子邮件">
 		        </div>
 		    </div>
 		    <div class="weui_cell">

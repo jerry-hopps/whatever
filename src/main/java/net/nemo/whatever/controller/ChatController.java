@@ -43,6 +43,7 @@ public class ChatController {
 		List<Message> messages = this.messageSercice.findMessages(chatId, currentUser.getId());
 		mav.addObject("messages", messages);
 		mav.addObject("receiver", currentUser.getName());
+		mav.addObject("receiver_id", currentUser.getId());
 		mav.addObject("chat", this.chatService.findById(chatId));
 		return mav;
 	}

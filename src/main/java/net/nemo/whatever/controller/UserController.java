@@ -27,7 +27,7 @@ public class UserController {
 
 	@RequestMapping("/login.html")
 	public ModelAndView login() throws Exception {
-		ModelAndView mav = new ModelAndView("user/login");
+		ModelAndView  mav = new ModelAndView("user/login");
 		return mav;
 	}
 

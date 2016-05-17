@@ -19,7 +19,11 @@ public class ChatService {
 	
 	public int addChat(Chat chat){
 		Chat c = this.chatMapper.findBySenderAndReceiver(chat.getChatOwner(), chat.getReceiver());
-		return c==null ? this.chatMapper.insert(chat) : c.getId();
+		if(c==null){
+			this.chatMapper.insert(chat);
+			c = chat;
+		}
+		return c.getId();
 	}
 	
 	public List<Chat> listChats(int receiverId){

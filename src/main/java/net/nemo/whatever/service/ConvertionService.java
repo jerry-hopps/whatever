@@ -1,6 +1,10 @@
 package net.nemo.whatever.service;
 
+import java.util.Date;
+
 import javax.mail.Message;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
@@ -9,9 +13,13 @@ import net.nemo.whatever.util.MailMessageConverter;
 
 public class ConvertionService {
 
+	@Autowired
 	private MailService mailService;
+	@Autowired
 	private UserService userService;
+	@Autowired
 	private MessageService messageService;
+	@Autowired
 	private ChatService chatService;
 	
 	public MailService getMailService() {
@@ -47,6 +55,9 @@ public class ConvertionService {
 	}
 	
 	public void convert(){
+		System.out.println(new Date());
+		System.out.println("--------------------------------------");
+		
 		try{
 			mailService.connect();
 			Message[] messages = mailService.receiveMessage();
@@ -85,6 +96,8 @@ public class ConvertionService {
 		}finally {
 			mailService.disconnect();
 		}
+
+		System.out.println("--------------------------------------");
 	}
 	
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
