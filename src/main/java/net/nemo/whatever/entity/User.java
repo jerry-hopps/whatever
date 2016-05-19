@@ -73,8 +73,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "－－Name: " + this.name + System.getProperty("line.separator") + "－－Email: " + this.email
-				+ System.getProperty("line.separator") + "－－Status: " + this.status
-				+ System.getProperty("line.separator");
+		return "Name: " + this.name + ", Email: " + this.email + ", Status: " + this.status;
 	}
 }

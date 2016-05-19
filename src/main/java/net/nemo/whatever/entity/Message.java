@@ -58,6 +58,6 @@ public class Message {
 	}
 	@Override
 	public String toString() {
-		return this.sender + "/" + DateUtil.formatDate(this.time) + "/" + this.type + "/" + this.content;
+		return String.format("Sender: %s, Time: %s, Type: %s, Content: %s", this.sender, DateUtil.formatDate(this.time), this.type, this.content);
 	}
 }

@@ -1,17 +1,20 @@
 package net.nemo.whatever.service;
 
-import java.util.Date;
-
 import javax.mail.Message;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
 import net.nemo.whatever.util.DESCoder;
 import net.nemo.whatever.util.MailMessageConverter;
 
+@PropertySource("classpath:mail.properties")
 public class ConvertionService {
+	
+	private static Logger logger = Logger.getLogger(ConvertionService.class);
 
 	@Autowired
 	private MailService mailService;
@@ -55,60 +58,56 @@ public class ConvertionService {
 	}
 	
 	public void convert(){
-		System.out.println(new Date());
-		System.out.println("--------------------------------------");
+		logger.info("*****Begin conversion of message*****");
 		
 		try{
 			mailService.connect();
 			Message[] messages = mailService.receiveMessage();
-			System.out.println("------Received " + messages.length + " Messages.");
+			logger.info(String.format("Found %d messages in mail box", messages.length));
 			for(int i = 0; i < messages.length; i++){
+				logger.info(String.format("***Begin processing message : %d of %d", i+1, messages.length));
+				
 				Message message = messages[i];
 				Chat chat = MailMessageConverter.fromMailMessage(message);
-				
-				int receiverId = this.userService.addUser(chat.getReceiver());
-				User receiver = this.userService.findUserById(receiverId);
+				User receiver = this.userService.findUserById(this.userService.addUser(chat.getReceiver()));
 				
 				if(0 == receiver.getStatus()){
-					System.out.println("------This is the first time receiving this user's messages.");
-					String key = "f1s7XT6zdac=";
-					byte[] inputData = receiver.getEmail().getBytes();
-			        inputData = DESCoder.encrypt(inputData, key);
-					this.sendRegisterEmail(receiver.getEmail(), receiverId, DESCoder.encryptBASE64(inputData));
+					logger.info(String.format("This is the first time receiving this user's messages, sending registration email to this user(%s)", receiver.getEmail()));
+					
+					byte[] inputData = DESCoder.encrypt(receiver.getEmail().getBytes(), DESCoder.KEY);
+					this.sendRegisterEmail(receiver.getEmail(), receiver.getId(), DESCoder.encryptBASE64(inputData));
+					logger.info(String.format("Email sent successfully"));
 					
 					receiver.setStatus(1);
 					this.userService.updateStatus(receiver);
-					receiver.setPassword(key);
+					receiver.setPassword(DESCoder.KEY);
 					this.userService.updatePassword(receiver);
 				}
 				
-				chat.setReceiver(receiver);
-				
-				int chatId = this.chatService.addChat(chat);
-				chat.setId(chatId);
-				
+				logger.info(String.format("Inserting chat data into DB: [%s]", chat.toString()));
+				this.chatService.addChat(chat);
 				for(net.nemo.whatever.entity.Message msg : chat.getMessages()){
 					msg.setReceiver(receiver);
 					msg.setChat(chat);
 					this.messageService.addMessage(msg);
 				}
+				logger.info(String.format("***End processing message : %d of %d", i+1, messages.length));
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally {
 			mailService.disconnect();
 		}
-
-		System.out.println("--------------------------------------");
+		
+		logger.info("*****End conversion of message*****");
 	}
 	
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
-		String from = "still0007@aliyun.com";
+		String from = this.mailService.getUser();
 		String subject = "Welcome to Cunle.me";
-		String content = "<a href='http://localhost:8080/whatever/register/" + id + "/" + encryptedStr.trim() + ".html'>Register</a>";
+		String content = "Click to <a href='http://localhost:8080/whatever/register/" + id + "/" + encryptedStr.trim() + ".html'>register</a>.";
 		try{
 			mailService.sendMessage(from, to, subject, content);
-			System.out.println("------Has sent registration email to user.");
 		}catch(Exception e){
 			e.printStackTrace();
 		}

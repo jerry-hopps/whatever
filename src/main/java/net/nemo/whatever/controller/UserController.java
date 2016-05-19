@@ -3,6 +3,7 @@ package net.nemo.whatever.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -21,6 +22,8 @@ import net.nemo.whatever.util.DESCoder;
 
 @Controller
 public class UserController {
+	
+	private Logger logger = Logger.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
@@ -75,8 +78,9 @@ public class UserController {
 	@RequestMapping(value = "/checkLogin.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> checkLogin(String username, String password) throws Exception {
+		logger.info(String.format("Clien is trying to log in with username: %s, password: %s", username, password));
+		
 		Map<String, Object> result = new HashMap<String, Object>();
-
 		try {
 			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			Subject currentUser = SecurityUtils.getSubject();
@@ -85,8 +89,9 @@ public class UserController {
 			currentUser.login(token);
 			User loginUser = userService.findByEmail(username);
 			currentUser.getSession().setAttribute("currentUser", loginUser);
-			System.out.println("****************User logged in: " + loginUser);
+			logger.info(String.format("User logged in: ", loginUser));
 		} catch (Exception ex) {
+			logger.error(String.format("User failed logging in "), ex);
 			throw new BusinessException(ex.getMessage());
 		}
 

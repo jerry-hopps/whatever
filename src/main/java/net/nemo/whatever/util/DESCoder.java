@@ -15,6 +15,7 @@ import sun.misc.BASE64Encoder;
 public abstract class DESCoder{  
     
     public static final String ALGORITHM = "DES";  
+    public static final String KEY = "f1s7XT6zdac=";
   
     /** 
      * BASE64解密 

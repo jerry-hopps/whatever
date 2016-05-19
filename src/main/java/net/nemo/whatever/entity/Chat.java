@@ -48,10 +48,6 @@ public class Chat {
 	}
 	@Override
 	public String toString() {
-		return "Chat Owner: " + this.chatOwner + System.getProperty("line.separator") +
-				//"Receiver: " + this.receiver.toString() + System.getProperty("line.separator") +
-				"Group Chat?: " + this.groupChat + System.getProperty("line.separator") +
-				//"Chat Messages: " + this.messages + System.getProperty("line.separator") +
-				"--------------------------------" + System.getProperty("line.separator");
+		return String.format("Owner: %s, Group Chat? : %s", this.chatOwner, String.valueOf(this.groupChat));
 	}
 }

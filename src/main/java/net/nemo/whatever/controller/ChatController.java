@@ -2,6 +2,7 @@ package net.nemo.whatever.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,8 @@ import net.nemo.whatever.service.MessageService;
 @RequestMapping("/chat")
 public class ChatController {
 	
+	private Logger logger = Logger.getLogger(ChatController.class);
+	
 	@Autowired
 	private ChatService chatService;
 	
@@ -28,6 +31,8 @@ public class ChatController {
 
 	@RequestMapping("/list.html")
 	public ModelAndView chatList(){
+		logger.info("Request /list.html");
+		
 		ModelAndView mav = new ModelAndView("chat/list");
 		User currentUser = (User)SecurityUtils.getSubject().getSession().getAttribute("currentUser");
 		List<Chat> chats = this.chatService.listChats(currentUser.getId());
