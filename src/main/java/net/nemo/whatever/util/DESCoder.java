@@ -92,8 +92,8 @@ public abstract class DESCoder{
     }  
     
     public static void main(String[] args) throws Exception {
-    	String inputStr = "still0007@163.com";  
-        String key = "lKH+TKv4mL8=";
+    	String inputStr = "tuo.shi@oracle.com";  
+        String key = "f1s7XT6zdac=";
         System.err.println("原文:\t" + inputStr);  
         System.err.println("密钥:\t" + key);  
   
@@ -103,8 +103,6 @@ public abstract class DESCoder{
         String encryptedStr = DESCoder.encryptBASE64(inputData);
         
         System.err.println("加密后:\t" + encryptedStr);
-        
-        System.out.println("加密后bytes:\t" + inputData);
   
         byte[] outputData = DESCoder.decrypt(inputData, key);  
         String outputStr = new String(outputData);  

@@ -81,11 +81,11 @@ public class UserController {
 			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			Subject currentUser = SecurityUtils.getSubject();
 
-			if (!currentUser.isAuthenticated()) {
-				token.setRememberMe(true);
-				currentUser.login(token);
-				currentUser.getSession().setAttribute("currentUser", userService.findByEmail(username));
-			}
+			token.setRememberMe(true);
+			currentUser.login(token);
+			User loginUser = userService.findByEmail(username);
+			currentUser.getSession().setAttribute("currentUser", loginUser);
+			System.out.println("****************User logged in: " + loginUser);
 		} catch (Exception ex) {
 			throw new BusinessException(ex.getMessage());
 		}

@@ -44,7 +44,6 @@ $('#loginbtn').click(function() {
             if(data.success == false){
                 alert(data.errorMsg);
             }else{
-                //登录成功
                 window.location.href = "<%=request.getContextPath()%>/chat/list.html";
             }
         },

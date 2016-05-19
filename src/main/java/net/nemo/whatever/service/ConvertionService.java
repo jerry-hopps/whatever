@@ -61,6 +61,7 @@ public class ConvertionService {
 		try{
 			mailService.connect();
 			Message[] messages = mailService.receiveMessage();
+			System.out.println("------Received " + messages.length + " Messages.");
 			for(int i = 0; i < messages.length; i++){
 				Message message = messages[i];
 				Chat chat = MailMessageConverter.fromMailMessage(message);
@@ -69,7 +70,8 @@ public class ConvertionService {
 				User receiver = this.userService.findUserById(receiverId);
 				
 				if(0 == receiver.getStatus()){
-					String key = DESCoder.initKey();
+					System.out.println("------This is the first time receiving this user's messages.");
+					String key = "f1s7XT6zdac=";
 					byte[] inputData = receiver.getEmail().getBytes();
 			        inputData = DESCoder.encrypt(inputData, key);
 					this.sendRegisterEmail(receiver.getEmail(), receiverId, DESCoder.encryptBASE64(inputData));
@@ -101,11 +103,12 @@ public class ConvertionService {
 	}
 	
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
-		String from = "still0007@163.com";
+		String from = "still0007@aliyun.com";
 		String subject = "Welcome to Cunle.me";
-		String content = "http://localhost:8080/whatever/register/" + id + "/" + encryptedStr + ".html";
+		String content = "<a href='http://localhost:8080/whatever/register/" + id + "/" + encryptedStr.trim() + ".html'>Register</a>";
 		try{
 			mailService.sendMessage(from, to, subject, content);
+			System.out.println("------Has sent registration email to user.");
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -19,7 +19,13 @@ public class MessageService {
 	
 	public int addMessage(Message message){
 		Message m = this.messageMapper.findBy(message.getTime(), message.getSender(), message.getReceiver(), message.getContent());		
-		return m==null ? this.messageMapper.insert(message) : m.getId();
+		if(m==null){
+			System.out.println("------Has inserted one message to Database： "+ message.getContent());
+			this.messageMapper.insert(message);
+			m = message;
+		}
+		
+		return m.getId();
 	}
 	
 	public List<Message> findMessages(Integer chatId, Integer receiverId){

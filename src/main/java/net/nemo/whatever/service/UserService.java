@@ -17,7 +17,11 @@ public class UserService {
 	
 	public int addUser(User user){
 		User u = userMapper.findByEmail(user.getEmail());
-		return u==null ? this.userMapper.insert(user) : u.getId();
+		if(u==null){
+			this.userMapper.insert(user);
+			u = user;
+		}
+		return u.getId();
 	}
 	
 	public User findUserById(Integer id){

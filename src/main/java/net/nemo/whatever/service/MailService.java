@@ -93,7 +93,7 @@ public class MailService {
 			this.folder.open(Folder.READ_WRITE);
 			int count = this.folder.getMessageCount();
 			SearchTerm st = new SubjectTerm("聊天记录");
-			return folder.search(st, this.folder.getMessages(count - 100 > 0 ? count - 50 : 0, count));
+			return folder.search(st, this.folder.getMessages(count - 50 > 0 ? count - 50 : 1, count));
 		} catch (Exception e) {
 			return new Message[] {};
 		}

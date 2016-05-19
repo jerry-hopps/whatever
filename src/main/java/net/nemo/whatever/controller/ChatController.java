@@ -29,8 +29,8 @@ public class ChatController {
 	@RequestMapping("/list.html")
 	public ModelAndView chatList(){
 		ModelAndView mav = new ModelAndView("chat/list");
-		
-		List<Chat> chats = this.chatService.listChats(1);
+		User currentUser = (User)SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+		List<Chat> chats = this.chatService.listChats(currentUser.getId());
 		mav.addObject("chats", chats);
 		
 		return mav;

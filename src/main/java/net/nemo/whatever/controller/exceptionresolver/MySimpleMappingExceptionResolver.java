@@ -17,8 +17,7 @@ import net.nemo.whatever.exception.BusinessException;
 
 public class MySimpleMappingExceptionResolver implements HandlerExceptionResolver {
 
-	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-			Exception exception) {
+	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
 		if (!(request.getHeader("accept").indexOf("application/json") > -1
 				|| (request.getHeader("X-Requested-With") != null
 						&& request.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1))) {
@@ -27,7 +26,7 @@ public class MySimpleMappingExceptionResolver implements HandlerExceptionResolve
 			if (exception instanceof BusinessException) {
 				map.put("errorMsg", exception.getMessage());
 			} else {
-				map.put("errorMsg", "ϵͳ�쳣��");
+				map.put("errorMsg","");
 			}
 			exception.printStackTrace();
 			return new ModelAndView("/error", map);
@@ -40,7 +39,7 @@ public class MySimpleMappingExceptionResolver implements HandlerExceptionResolve
 				if (exception instanceof BusinessException) {
 					map.put("errorMsg", exception.getMessage());
 				} else {
-					map.put("errorMsg", "ϵͳ�쳣��");
+					map.put("errorMsg", "");
 				}
 				writer.write(JSONUtils.toJSONString(map));
 				writer.flush();
@@ -50,6 +49,5 @@ public class MySimpleMappingExceptionResolver implements HandlerExceptionResolve
 			}
 		}
 		return null;
-
 	}
 }
