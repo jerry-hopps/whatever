@@ -25,7 +25,7 @@ public class MessageService {
 		Message m = this.messageMapper.findBy(message.getTime(), message.getSender(), message.getReceiver(), message.getContent());		
 		if(m==null){
 			this.messageMapper.insert(message);
-			logger.info(String.format("Inserted message to DB： [%s]"+ message.toString()));
+			logger.info(String.format("Inserted message into DB： [%s]", message.toString()));
 			m = message;
 		}
 		

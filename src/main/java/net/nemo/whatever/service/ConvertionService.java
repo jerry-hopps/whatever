@@ -70,6 +70,7 @@ public class ConvertionService {
 				Message message = messages[i];
 				Chat chat = MailMessageConverter.fromMailMessage(message);
 				User receiver = this.userService.findUserById(this.userService.addUser(chat.getReceiver()));
+				chat.setReceiver(receiver);
 				
 				if(0 == receiver.getStatus()){
 					logger.info(String.format("This is the first time receiving this user's messages, sending registration email to this user(%s)", receiver.getEmail()));
@@ -84,8 +85,7 @@ public class ConvertionService {
 					this.userService.updatePassword(receiver);
 				}
 				
-				logger.info(String.format("Inserting chat data into DB: [%s]", chat.toString()));
-				this.chatService.addChat(chat);
+				chat.setId(this.chatService.addChat(chat));
 				for(net.nemo.whatever.entity.Message msg : chat.getMessages()){
 					msg.setReceiver(receiver);
 					msg.setChat(chat);
