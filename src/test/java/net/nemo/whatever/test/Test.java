@@ -1,3 +1,4 @@
+package net.nemo.whatever.test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import net.nemo.whatever.service.ConvertionService;
