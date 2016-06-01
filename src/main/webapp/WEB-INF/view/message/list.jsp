@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -140,13 +141,24 @@ body {
 			    </c:choose>
 				</div>
 				<div class="arrow-<c:out value="${direction}"/>"></div>
-				<div class="<c:out value="${direction}"/>"><c:out value="${message.content}" /></div>
+				<div class="<c:out value="${direction}"/>">
+					<c:choose>
+						<c:when test="${message.type == 0}">
+							<c:out value="${message.content}" />
+						</c:when>
+						<c:when test="${message.type == 1}">
+							<c:out value="${message.content}" />
+						</c:when>
+						<c:otherwise>
+							<a target="_BLANK" href="<c:out value="${fn:substringAfter(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ':')}" />"><c:out value="${fn:split(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ': ')[0]}" /></a>
+						</c:otherwise>
+					</c:choose>
+				</div>
 				<div style="clear:both"></div>
 			</div>
 			<div style="clear:both"></div>
 		</c:forEach>
 	</div>
-	
 </body>
 <script type="text/javascript">
 	

@@ -12,7 +12,7 @@ public class Message {
 	private Chat chat;
 	private String sender;
 	private User receiver;
-	private ChatMessageType type;
+	private Integer type;
 	private String content;
 	public Integer getId() {
 		return id;
@@ -44,10 +44,10 @@ public class Message {
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
-	public ChatMessageType getType() {
+	public Integer getType() {
 		return type;
 	}
-	public void setType(ChatMessageType type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 	public String getContent() {

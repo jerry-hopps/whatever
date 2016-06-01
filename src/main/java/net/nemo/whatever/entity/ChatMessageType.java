@@ -1,11 +1,7 @@
 package net.nemo.whatever.entity;
 
-public enum ChatMessageType {
-	TEXT(0), IMAGE(1), LINK(2);
-	
-	private int code;
-	
-	private ChatMessageType(int code){
-		this.code = code;
-	}
+public class ChatMessageType {
+	public final static int TEXT = 0;
+	public final static int IMAGE = 1;
+	public final static int LINK = 2;
 }
