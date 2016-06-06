@@ -8,6 +8,7 @@ public class Chat {
 	private User receiver;
 	private boolean groupChat = false;
 	private List<Message> messages;
+	private List<Attachment> attachments;
 	
 	public Chat(){}
 	public Chat(Integer id, String chatOwner, Boolean groupChat) {
@@ -45,6 +46,12 @@ public class Chat {
 	}
 	public User getReceiver() {
 		return receiver;
+	}
+	public List<Attachment> getAttachments() {
+		return attachments;
+	}
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
 	}
 	@Override
 	public String toString() {

@@ -14,7 +14,11 @@ public class DateUtil {
 	}
 	
 	public static String formatDate(Date date){
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-M-dd HH:mm");
+		return formatDate(date, "yyyy-M-dd HH:mm");
+	}
+	
+	public static String formatDate(Date date, String format){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
 		try{
 			return simpleDateFormat.format(date);
 		}catch(Exception e){

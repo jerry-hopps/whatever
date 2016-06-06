@@ -4,7 +4,7 @@
 <mapper namespace="net.nemo.whatever.db.mapper.MessageMapper">
 	<insert id="insert" parameterType="net.nemo.whatever.entity.Message" useGeneratedKeys="true" keyProperty="id">
 		insert into messages (sender, receiver_id, timestamp, chat_id, type, content)
-		values (#{sender}, #{receiver.id}, #{time}, #{chat.id}, #{type.code}, #{content})
+		values (#{sender}, #{receiver.id}, #{time}, #{chat.id}, #{type}, #{content})
 	</insert>
 	
 	<select id="findBy" resultType="net.nemo.whatever.entity.Message">

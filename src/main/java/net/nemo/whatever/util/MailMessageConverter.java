@@ -1,6 +1,13 @@
 package net.nemo.whatever.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.BodyPart;
@@ -9,9 +16,12 @@ import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
+import org.apache.commons.lang.StringUtils;
+
+import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
-import net.nemo.whatever.entity.Message;
 import net.nemo.whatever.entity.ChatMessageType;
+import net.nemo.whatever.entity.Message;
 import net.nemo.whatever.entity.User;
 
 public class MailMessageConverter {
@@ -23,16 +33,27 @@ public class MailMessageConverter {
 	public final static String GROUP_CHAT_TITLE_PATTERN = "微信群\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	public final static String DIALOG_CHAT_TITLE_PATTERN = "\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"和\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	
+	public static String FILE_STORE_PATH = null;
+	
+	static{
+		try{
+			String rootPath = new File(MailMessageConverter.class.getResource("").toURI()).getParent().replace("WEB-INF/classes/net/nemo/whatever", "");
+			FILE_STORE_PATH = StringUtils.join(new String[]{rootPath, "static", "images"}, System.getProperty("file.separator"));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	public static Chat fromMailMessage(javax.mail.Message message) {
 		Chat chat = new Chat();
 		try {
 			chat.setGroupChat(isGroupChat(message.getSubject()));
 			chat.setChatOwner(getMessageOwner(message.getSubject()));
-			chat.setReceiver(getMessageReceiver(message.getSubject(), (InternetAddress)message.getFrom()[0]));
+			chat.setReceiver(getMessageReceiver(message.getSubject(), (InternetAddress) message.getFrom()[0]));
 
 			List<Message> messages = new ArrayList<Message>();
-			List<String> attachementPaths = new ArrayList<String>();
-			
+			List<Attachment> attachments = new ArrayList<Attachment>();
+
 			Part part = (Part) message;
 			if (part.isMimeType("multipart/*")) {
 				Multipart multipart = (Multipart) part.getContent();
@@ -40,12 +61,13 @@ public class MailMessageConverter {
 				for (int j = 0; j < counts; j++) {
 					BodyPart bodyPart = multipart.getBodyPart(j);
 					if (bodyPart.isMimeType("multipart/*")) {
-						saveAttachments(attachementPaths, bodyPart);
+						saveAttachments(attachments, bodyPart);
 					} else {
 						messages.addAll(parseMessageBody(bodyPart.getContent()));
 					}
 				}
 			}
+			chat.setAttachments(attachments);
 			chat.setMessages(messages);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,55 +85,55 @@ public class MailMessageConverter {
 			String line = lines[i].replaceAll("\\r", "");
 			if (!"".equals(line)) {
 				List<String> matches = null;
-				
-				//Date of the chat
-				if(null != (matches = StringUtil.findFirstMatch(CHAT_DATE_PATTERN, line))){
+
+				// Date of the chat
+				if (null != (matches = StringUtil.findFirstMatch(CHAT_DATE_PATTERN, line))) {
 					date = matches.get(0);
 				}
-				//Name:Time of the message
-				else if(null != (matches = StringUtil.findFirstMatch(SENDER_TIME_PATTERN, line))){
+				// Name:Time of the message
+				else if (null != (matches = StringUtil.findFirstMatch(SENDER_TIME_PATTERN, line))) {
 					sender = matches.get(0);
 					time = matches.get(1);
 				}
-				//Image content of the message
-				else if(null != (matches = StringUtil.findFirstMatch(IMAGE_MSG_PATTERN, line))){
+				// Image content of the message
+				else if (null != (matches = StringUtil.findFirstMatch(IMAGE_MSG_PATTERN, line))) {
 					Message chatMessage = new Message();
 					chatMessage.setContent(matches.get(0));
 					chatMessage.setType(ChatMessageType.IMAGE);
 					chatMessage.setSender(sender);
-					chatMessage.setTime(DateUtil.parseDate(date+" "+time));
-					
+					chatMessage.setTime(DateUtil.parseDate(date + " " + time));
+
 					messages.add(chatMessage);
-					
-					time=null;
-					sender=null;
-				}
-				else if(null != (matches = StringUtil.findFirstMatch(LINK_MSG_PATTERN, line))){
+
+					time = null;
+					sender = null;
+				} else if (null != (matches = StringUtil.findFirstMatch(LINK_MSG_PATTERN, line))) {
 					Message chatMessage = new Message();
 					chatMessage.setContent(line);
 					chatMessage.setType(ChatMessageType.LINK);
 					chatMessage.setSender(sender);
-					chatMessage.setTime(DateUtil.parseDate(date+" "+time));
-					
+					chatMessage.setTime(DateUtil.parseDate(date + " " + time));
+
 					messages.add(chatMessage);
-					
-					time=null;
-					sender=null;
+
+					time = null;
+					sender = null;
 				}
-				//Text content of the message
-				else{
-					if(time==null && sender == null) continue;
-					
+				// Text content of the message
+				else {
+					if (time == null && sender == null)
+						continue;
+
 					Message chatMessage = new Message();
 					chatMessage.setContent(line);
 					chatMessage.setType(ChatMessageType.TEXT);
 					chatMessage.setSender(sender);
-					chatMessage.setTime(DateUtil.parseDate(date+" "+time));
-					
+					chatMessage.setTime(DateUtil.parseDate(date + " " + time));
+
 					messages.add(chatMessage);
-					
-					time=null;
-					sender=null;
+
+					time = null;
+					sender = null;
 				}
 			}
 		}
@@ -119,7 +141,7 @@ public class MailMessageConverter {
 		return messages;
 	}
 
-	private static void saveAttachments(List<String> fileNames, Part part) throws Exception {
+	private static void saveAttachments(List<Attachment> attachements, Part part) throws Exception {
 		String fileName = "";
 		if (part.isMimeType("multipart/*")) {
 			Multipart mp = (Multipart) part.getContent();
@@ -132,19 +154,55 @@ public class MailMessageConverter {
 					if (fileName.toLowerCase().indexOf("gb2312") != -1) {
 						fileName = MimeUtility.decodeText(fileName);
 					}
-					fileNames.add(fileName);
+					Attachment attachment = new Attachment(fileName, getAttachmentPath(fileName));
+					attachements.add(attachment);
+					saveFile(attachment, mPart.getInputStream());
 				} else if (mPart.isMimeType("multipart/*")) {
-					saveAttachments(fileNames, mPart);
+					saveAttachments(attachements, mPart);
 				} else {
 					fileName = mPart.getFileName();
 					if ((fileName != null) && (fileName.toLowerCase().indexOf("GB2312") != -1)) {
 						fileName = MimeUtility.decodeText(fileName);
-						fileNames.add(fileName);
+						Attachment attachment = new Attachment(fileName, getAttachmentPath(fileName));
+						attachements.add(attachment);
+						saveFile(attachment, mPart.getInputStream());
 					}
 				}
 			}
 		} else if (part.isMimeType("message/rfc822")) {
-			saveAttachments(fileNames, (Part) part.getContent());
+			saveAttachments(attachements, (Part) part.getContent());
+		}
+	}
+
+	private static String getAttachmentPath(String fileName) {
+		Date now = new Date();
+		return String.format("%s%s%d_%s", DateUtil.formatDate(now, "yyyyMMdd"), System.getProperty("file.separator"), now.getTime(), fileName);
+	}
+
+	private static void saveFile(Attachment attachment, InputStream stream) throws Exception{
+		File dir = new File(FILE_STORE_PATH + System.getProperty("file.separator") + DateUtil.formatDate(new Date(), "yyyyMMdd"));
+		if(!dir.exists()){
+			dir.mkdir();
+		}
+		
+		File storefile = new File(FILE_STORE_PATH + System.getProperty("file.separator") + getAttachmentPath(attachment.getName()));
+		BufferedOutputStream bos = null;
+		BufferedInputStream bis = null;
+		try {
+			bos = new BufferedOutputStream(new FileOutputStream(storefile));
+			bis = new BufferedInputStream(stream);
+			int c;
+			while ((c = bis.read()) != -1) {
+				bos.write(c);
+				bos.flush();
+			}
+			System.out.println("File saved to : " + storefile.getAbsolutePath());
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw new Exception("文件保存失败!");
+		} finally {
+			bos.close();
+			bis.close();
 		}
 	}
 
@@ -156,7 +214,7 @@ public class MailMessageConverter {
 	private static String getMessageOwner(String messageSubject) {
 		List<String> groupMatches = StringUtil.findFirstMatch(GROUP_CHAT_TITLE_PATTERN, messageSubject);
 		List<String> dialogMatches = StringUtil.findFirstMatch(DIALOG_CHAT_TITLE_PATTERN, messageSubject);
-		return groupMatches == null ? dialogMatches.get(0): groupMatches.get(0);
+		return groupMatches == null ? dialogMatches.get(0) : groupMatches.get(0);
 	}
 
 	private static User getMessageReceiver(String messageSubject, InternetAddress from) {
@@ -165,9 +223,15 @@ public class MailMessageConverter {
 		String email = from.getAddress().toString();
 		return new User(name, email);
 	}
-	
-	public static void main(String[] args) {
-		String linkText = "[我用滴滴打车,一触即达，送你券，为每一次及时出发买单 : http://pay.xiaojukeji.com/veyron/market_entry/hbrob/gethongbao?id=VLJJvSCE201606011804513239319813&sign=9561b6ab044407ffd50e599a95f1837f]";
-		System.out.println(StringUtil.findFirstMatch("\\[(.*) : (http[s]?://.*)]", linkText));
+
+	public static void main(String[] args) throws Exception{
+		// String linkText = "[我用滴滴打车,一触即达，送你券，为每一次及时出发买单 :
+		// http://pay.xiaojukeji.com/veyron/market_entry/hbrob/gethongbao?id=VLJJvSCE201606011804513239319813&sign=9561b6ab044407ffd50e599a95f1837f]";
+		// System.out.println(StringUtil.findFirstMatch("\\[(.*) :
+		// (http[s]?://.*)]", linkText));
+
+		//System.out.println(getAttachmentPath("ssss.jpg"));
+		
+		System.out.println(new File(ClassLoader.getSystemResource("").toURI()).getParent());
 	}
 }
