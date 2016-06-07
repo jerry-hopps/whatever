@@ -4,11 +4,11 @@ public class Attachment {
 
 	private Integer id;
 	private Chat chat;
-	private String name;
+	private String fileName;
 	private String path;
 	
 	public Attachment(String name, String path) {
-		this.name = name;
+		this.fileName = name;
 		this.path = path;
 	}
 	
@@ -24,11 +24,11 @@ public class Attachment {
 	public void setChat(Chat chat) {
 		this.chat = chat;
 	}
-	public String getName() {
-		return name;
+	public String getFileName() {
+		return fileName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	public String getPath() {
 		return path;

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 
+import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
 import net.nemo.whatever.util.DESCoder;
@@ -24,6 +25,8 @@ public class ConvertionService {
 	private MessageService messageService;
 	@Autowired
 	private ChatService chatService;
+	@Autowired
+	private AttachmentService attachmentService;
 	
 	public MailService getMailService() {
 		return mailService;
@@ -55,6 +58,14 @@ public class ConvertionService {
 	
 	public ChatService getChatService() {
 		return chatService;
+	}
+	
+	public void setAttachmentService(AttachmentService attachmentService) {
+		this.attachmentService = attachmentService;
+	}
+	
+	public AttachmentService getAttachmentService() {
+		return attachmentService;
 	}
 	
 	public void convert(){
@@ -90,6 +101,10 @@ public class ConvertionService {
 					msg.setReceiver(receiver);
 					msg.setChat(chat);
 					this.messageService.addMessage(msg);
+				}
+				for(Attachment attachment : chat.getAttachments()){
+					attachment.setChat(chat);
+					this.attachmentService.addAttachement(attachment);
 				}
 				logger.info(String.format("***End processing message : %d of %d", i+1, messages.length));
 			}

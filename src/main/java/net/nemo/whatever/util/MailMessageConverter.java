@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -98,7 +97,7 @@ public class MailMessageConverter {
 				// Image content of the message
 				else if (null != (matches = StringUtil.findFirstMatch(IMAGE_MSG_PATTERN, line))) {
 					Message chatMessage = new Message();
-					chatMessage.setContent(matches.get(0));
+					chatMessage.setContent(String.format("__%s.png", matches.get(0)));
 					chatMessage.setType(ChatMessageType.IMAGE);
 					chatMessage.setSender(sender);
 					chatMessage.setTime(DateUtil.parseDate(date + " " + time));
@@ -185,7 +184,7 @@ public class MailMessageConverter {
 			dir.mkdir();
 		}
 		
-		File storefile = new File(FILE_STORE_PATH + System.getProperty("file.separator") + getAttachmentPath(attachment.getName()));
+		File storefile = new File(FILE_STORE_PATH + System.getProperty("file.separator") + getAttachmentPath(attachment.getFileName()));
 		BufferedOutputStream bos = null;
 		BufferedInputStream bis = null;
 		try {

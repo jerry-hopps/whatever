@@ -147,7 +147,7 @@ body {
 							<c:out value="${message.content}" />
 						</c:when>
 						<c:when test="${message.type == 1}">
-							<c:out value="${message.content}" />
+							<img src="http://localhost:8080/whatever/static/images/20160607/1465287872256_<c:out value="${message.content}" />" width="100px" height="100px"/>
 						</c:when>
 						<c:otherwise>
 							<a target="_BLANK" href="<c:out value="${fn:substringAfter(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ':')}" />"><c:out value="${fn:split(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ': ')[0]}" /></a>

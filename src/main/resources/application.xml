@@ -13,7 +13,7 @@
 	<context:property-placeholder location="classpath:mail.properties, classpath:db.properties" />
 	<context:component-scan base-package="net.nemo.whatever" />
 	
-	<!-- <import resource="spring-job.xml"/> -->
+	<import resource="spring-job.xml"/>
 	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${mail.server.smtp}"/>
@@ -63,6 +63,11 @@
 		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.ChatMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
+	<bean id="attachmentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.AttachmentMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 
 	<bean id="userService" class="net.nemo.whatever.service.UserService">
 		<property name="userMapper" ref="userMapper" />
@@ -74,6 +79,10 @@
 
 	<bean id="chatService" class="net.nemo.whatever.service.ChatService">
 		<property name="chatMapper" ref="chatMapper" />
+	</bean>
+	
+	<bean id="attachmentService" class="net.nemo.whatever.service.AttachmentService">
+		<property name="attachmentMapper" ref="attachmentMapper" />
 	</bean>
 
 	<bean id="convertionService" class="net.nemo.whatever.service.ConvertionService">

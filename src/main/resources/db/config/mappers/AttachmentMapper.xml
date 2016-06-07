@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="net.nemo.whatever.db.mapper.AttachmentMapper">
+	<insert id="insert" parameterType="net.nemo.whatever.entity.Attachment" useGeneratedKeys="true" keyProperty="id">
+		insert into attachments (chat_id, file_name, path)
+		values(#{chat.id}, #{fileName}, #{path})
+	</insert>
+	
+	<select id="findByChat" resultType="net.nemo.whatever.entity.Attachment">
+		select id from attachments
+		where file_name=#{fileName} and chat_id = #{chatId}
+	</select>
+</mapper>
