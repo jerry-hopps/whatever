@@ -113,7 +113,7 @@ public class MailService {
 
 	public void disconnect() {
 		try {
-			this.folder.close(false);
+			this.folder.close(true);
 			this.store.close();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -12,6 +12,7 @@ import java.util.List;
 import javax.mail.BodyPart;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.Flags;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
@@ -67,7 +68,20 @@ public class MailMessageConverter {
 				}
 			}
 			chat.setAttachments(attachments);
+			
+			for(Message msg : messages){
+				if(ChatMessageType.IMAGE == msg.getType()){
+					for(Attachment att : attachments){
+						if(att.getFileName().endsWith(msg.getContent())){
+							msg.setContent(att.getFileName());
+							break;
+						}
+					}
+				}
+			}
 			chat.setMessages(messages);
+			
+			message.setFlag(Flags.Flag.DELETED, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -153,7 +167,8 @@ public class MailMessageConverter {
 					if (fileName.toLowerCase().indexOf("gb2312") != -1) {
 						fileName = MimeUtility.decodeText(fileName);
 					}
-					Attachment attachment = new Attachment(fileName, getAttachmentPath(fileName));
+					String timestampedName = getTimestampedName(fileName);
+					Attachment attachment = new Attachment(timestampedName, String.format("%s%s%s", DateUtil.formatDate(new Date(), "yyyyMMdd"), System.getProperty("file.separator"), timestampedName));
 					attachements.add(attachment);
 					saveFile(attachment, mPart.getInputStream());
 				} else if (mPart.isMimeType("multipart/*")) {
@@ -162,7 +177,8 @@ public class MailMessageConverter {
 					fileName = mPart.getFileName();
 					if ((fileName != null) && (fileName.toLowerCase().indexOf("GB2312") != -1)) {
 						fileName = MimeUtility.decodeText(fileName);
-						Attachment attachment = new Attachment(fileName, getAttachmentPath(fileName));
+						String timestampedName = getTimestampedName(fileName);
+						Attachment attachment = new Attachment(timestampedName, String.format("%s%s%s", DateUtil.formatDate(new Date(), "yyyyMMdd"), System.getProperty("file.separator"), timestampedName));
 						attachements.add(attachment);
 						saveFile(attachment, mPart.getInputStream());
 					}
@@ -173,9 +189,9 @@ public class MailMessageConverter {
 		}
 	}
 
-	private static String getAttachmentPath(String fileName) {
+	private static String getTimestampedName(String fileName) {
 		Date now = new Date();
-		return String.format("%s%s%d_%s", DateUtil.formatDate(now, "yyyyMMdd"), System.getProperty("file.separator"), now.getTime(), fileName);
+		return String.format("%d_%s", now.getTime(), fileName);
 	}
 
 	private static void saveFile(Attachment attachment, InputStream stream) throws Exception{
@@ -184,7 +200,7 @@ public class MailMessageConverter {
 			dir.mkdir();
 		}
 		
-		File storefile = new File(FILE_STORE_PATH + System.getProperty("file.separator") + getAttachmentPath(attachment.getFileName()));
+		File storefile = new File(FILE_STORE_PATH + System.getProperty("file.separator") + attachment.getPath());
 		BufferedOutputStream bos = null;
 		BufferedInputStream bis = null;
 		try {
@@ -221,16 +237,5 @@ public class MailMessageConverter {
 		String name = dialogMatches != null ? dialogMatches.get(1) : "";
 		String email = from.getAddress().toString();
 		return new User(name, email);
-	}
-
-	public static void main(String[] args) throws Exception{
-		// String linkText = "[我用滴滴打车,一触即达，送你券，为每一次及时出发买单 :
-		// http://pay.xiaojukeji.com/veyron/market_entry/hbrob/gethongbao?id=VLJJvSCE201606011804513239319813&sign=9561b6ab044407ffd50e599a95f1837f]";
-		// System.out.println(StringUtil.findFirstMatch("\\[(.*) :
-		// (http[s]?://.*)]", linkText));
-
-		//System.out.println(getAttachmentPath("ssss.jpg"));
-		
-		System.out.println(new File(ClassLoader.getSystemResource("").toURI()).getParent());
 	}
 }

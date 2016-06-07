@@ -1,6 +1,7 @@
 package net.nemo.whatever.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -47,6 +48,8 @@ public class ChatController {
 		User currentUser = (User)SecurityUtils.getSubject().getSession().getAttribute("currentUser");
 		List<Message> messages = this.messageSercice.findMessages(chatId, currentUser.getId());
 		mav.addObject("messages", messages);
+		Map<String, String> attachments = this.messageSercice.findAttachmentPaths(chatId, messages);
+		mav.addObject("attachments", attachments);
 		mav.addObject("receiver", currentUser.getName());
 		mav.addObject("receiver_id", currentUser.getId());
 		mav.addObject("chat", this.chatService.findById(chatId));

@@ -75,6 +75,7 @@
 
 	<bean id="messageService" class="net.nemo.whatever.service.MessageService">
 		<property name="messageMapper" ref="messageMapper" />
+		<property name="attachmentMapper" ref="attachmentMapper" />
 	</bean>
 
 	<bean id="chatService" class="net.nemo.whatever.service.ChatService">

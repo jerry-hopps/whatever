@@ -8,7 +8,8 @@
 	</insert>
 	
 	<select id="findByChat" resultType="net.nemo.whatever.entity.Attachment">
-		select id from attachments
+		select file_name, path 
+		from attachments
 		where file_name=#{fileName} and chat_id = #{chatId}
 	</select>
 </mapper>

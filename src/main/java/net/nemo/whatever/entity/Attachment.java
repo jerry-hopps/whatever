@@ -7,6 +7,9 @@ public class Attachment {
 	private String fileName;
 	private String path;
 	
+	public Attachment(Integer id) {
+		this.id = id;
+	}
 	public Attachment(String name, String path) {
 		this.fileName = name;
 		this.path = path;
