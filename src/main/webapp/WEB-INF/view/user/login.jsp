@@ -6,7 +6,9 @@
 <script src="<%=request.getContextPath()%>/static/js/jquery-1.8.1.min.js"></script>
 </head>
 <body>
+	<!-- 
 	<div style="width:100％;height:40px;background-color:black;color:white;text-align:center;padding-top:10px;">Cunle.me</div>
+	 -->
 	<div class="container" style="padding:10px;">
 		<div class="weui_cells weui_cells_form">
 		    <div class="weui_cell">

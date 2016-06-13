@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
+<title>Memories</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/weui.min.css" />
 <script src="<%=request.getContextPath()%>/static/js/jquery-1.8.1.min.js"></script>
@@ -31,10 +32,12 @@ body {
 </style>
 </head>
 <body>
+<!-- 
 	<div style="width:100％;height:40px;color:white;background-color:black;text-align:center;padding:10px 0 0 10px;">
 		<span style="margin-left:30px;">Cunle.me</span>
 		<a href="<%=request.getContextPath()%>/logout.html" class="weui_btn weui_btn_mini weui_btn_default" style="background-color:black;color:white;float:right;">登出</a>
 	</div>
+ -->
 	<div id="container" class="weui_panel weui_panel_access" style="width:100%;overflow:auto;-webkit-overflow-scrolling: touch;">
 			<c:forEach items="${chats}" var="chat">
 				<a href="<%=request.getContextPath()%>/chat/<c:out value="${chat.id}"/>.html" class="weui_media_box weui_media_appmsg">

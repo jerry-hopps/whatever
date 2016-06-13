@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <html>
 <head>
+<title>与<c:out value="${chat.chatOwner}" />的聊天记录</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/weui.min.css" />
 <script src="<%=request.getContextPath()%>/static/js/jquery-1.8.1.min.js"></script>
@@ -114,10 +115,12 @@ body {
 </style>
 </head>
 <body style="overflow:hidden;">
+<!-- 
 	<div style="width:100％;height:40px;color:white;background-color:black;text-align:center;padding:10px 0 0 10px;">
 		<a href="<%=request.getContextPath()%>/chat/list.html" class="weui_btn weui_btn_mini weui_btn_default" style="background-color:black;color:white;float:left;">返回</a>
 		<span style="margin-left:-30px;">与<c:out value="${chat.chatOwner}" />的聊天记录</span>
 	</div>
+ -->
 	<div id="container" style="overflow:auto;-webkit-overflow-scrolling: touch;">
 		<c:forEach items="${messages}" var="message">
 			<c:choose>

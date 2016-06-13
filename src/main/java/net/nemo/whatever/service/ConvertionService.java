@@ -120,7 +120,7 @@ public class ConvertionService {
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
 		String from = this.mailService.getUser();
 		String subject = "Welcome to Cunle.me";
-		String content = "Click to <a href='http://123.206.51.224:8080/whatever/register/" + id + "/" + encryptedStr.trim() + ".html'>register</a>.";
+		String content = "Click to <a href='http://www.ileqi.com.cn/whatever/register/" + id + "/" + encryptedStr.trim() + ".html'>register</a>.";
 		try{
 			mailService.sendMessage(from, to, subject, content);
 		}catch(Exception e){
