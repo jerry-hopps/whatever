@@ -55,7 +55,7 @@ body {
 	background: #09BB07;
 	border-radius: 5px; /* 圆角 */
 	background: #09BB07;
-	padding: 8px;
+	padding: 5px;
 	margin: 0 0 0 auto;
 	float: right;
 	max-width:200px;
@@ -98,7 +98,7 @@ body {
 	background: white;
 	border-radius: 5px; /* 圆角 */
 	margin: 0 auto 0 0;
-	padding: 8px;
+	padding: 5px;
 	float: left;
 	max-width:200px;
 }
@@ -150,7 +150,7 @@ body {
 							<c:out value="${message.content}" />
 						</c:when>
 						<c:when test="${message.type == 1}">
-							<img src="http://localhost:8080/whatever/static/images/<c:out value="${attachments[message.content]}" />" width="100px" height="100px"/>
+							<img src="<%=request.getContextPath()%>/static/images/<c:out value="${attachments[message.content]}" />" width="100px" height="100px"/>
 						</c:when>
 						<c:otherwise>
 							<a target="_BLANK" href="<c:out value="${fn:substringAfter(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ':')}" />"><c:out value="${fn:split(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ': ')[0]}" /></a>

@@ -27,6 +27,12 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@RequestMapping("/")
+	public ModelAndView index() throws Exception {
+		ModelAndView  mav = new ModelAndView("redirect:/chat/list.html");
+		return mav;
+	}
 
 	@RequestMapping("/login.html")
 	public ModelAndView login() throws Exception {
