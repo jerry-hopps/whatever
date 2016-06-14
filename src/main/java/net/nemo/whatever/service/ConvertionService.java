@@ -1,5 +1,8 @@
 package net.nemo.whatever.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.mail.Message;
 
 import org.apache.log4j.Logger;
@@ -120,9 +123,11 @@ public class ConvertionService {
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
 		String from = this.mailService.getUser();
 		String subject = "Welcome to Cunle.me";
-		String content = "Click to <a href='http://www.ileqi.com.cn/whatever/register/" + id + "/" + encryptedStr.trim() + ".html'>register</a>.";
 		try{
-			mailService.sendMessage(from, to, subject, content);
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("email", to);
+			model.put("url", "http://www.ileqi.com.cn/whatever/register/" + id + "/" + encryptedStr.trim() + ".html");
+			mailService.sendMessageWithTemplate(from, to, subject, "mail/registration.vm", model);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

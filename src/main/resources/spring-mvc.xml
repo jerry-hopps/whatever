@@ -28,11 +28,15 @@
 	<!-- 扫描controller（controller层注入） -->
 	<context:component-scan base-package="net.nemo.whatever.controller" />
 
+    <!-- 
+	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="suffix" value=".vm" />
+		<property name="contentType" value="text/html;charset=utf-8" />
+	</bean>
+ 	-->
+ 	
 	<!-- 对模型视图添加前后缀 -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
 		p:prefix="/WEB-INF/view/" p:suffix=".jsp" />
-
-	<bean class="net.nemo.whatever.controller.exceptionresolver.MySimpleMappingExceptionResolver"/>
-
+	<bean class="net.nemo.whatever.controller.exceptionresolver.MySimpleMappingExceptionResolver" />
 </beans>

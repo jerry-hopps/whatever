@@ -1,5 +1,6 @@
 package net.nemo.whatever.service;
 
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Folder;
@@ -10,8 +11,12 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
 public class MailService {
 
@@ -21,6 +26,8 @@ public class MailService {
 	private String pwd;
 
 	private JavaMailSender mailSender;
+	
+	private VelocityConfigurer velocityConfigurer;
 
 	private Store store;
 	private Folder folder;
@@ -33,6 +40,14 @@ public class MailService {
 		this.protocal = protocal;
 		this.user = user;
 		this.pwd = pwd;
+	}
+	
+	public void setVelocityConfigurer(VelocityConfigurer velocityConfigurer) {
+		this.velocityConfigurer = velocityConfigurer;
+	}
+	
+	public VelocityConfigurer getVelocityConfigurer() {
+		return velocityConfigurer;
 	}
 
 	public String getMailServer() {
@@ -109,6 +124,16 @@ public class MailService {
 		messageHelper.setText(content, true);
 
 		mailSender.send(mailMessage);
+	}
+	
+	public void sendMessageWithTemplate(String from, String to, String subject, String template, Map<String, Object> model) throws Exception {
+		String result = null;  
+        try {  
+            result = VelocityEngineUtils.mergeTemplateIntoString(this.velocityConfigurer.getVelocityEngine(), template, "GBK", model);  
+        } catch (Exception e) {
+        	throw e;
+        }  
+        sendMessage(from, to, subject, result);
 	}
 
 	public void disconnect() {

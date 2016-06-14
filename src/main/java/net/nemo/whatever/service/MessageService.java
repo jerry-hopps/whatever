@@ -1,6 +1,5 @@
 package net.nemo.whatever.service;
 
-import java.awt.TrayIcon.MessageType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

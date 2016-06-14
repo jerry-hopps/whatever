@@ -9,16 +9,17 @@
            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-           
-	<context:property-placeholder location="classpath:mail.properties, classpath:db.properties" />
+
+	<context:property-placeholder
+		location="classpath:mail.properties, classpath:db.properties" />
 	<context:component-scan base-package="net.nemo.whatever" />
-	
-	<import resource="spring-job.xml"/>
-	
+
+	<import resource="spring-job.xml" />
+
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="${mail.server.smtp}"/>
-		<property name="username" value="${mail.user}"/>
-		<property name="password" value="${mail.pwd}"/>
+		<property name="host" value="${mail.server.smtp}" />
+		<property name="username" value="${mail.user}" />
+		<property name="password" value="${mail.pwd}" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
@@ -28,12 +29,24 @@
 		</property>
 	</bean>
 
+	<bean id="velocityConfigurer"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="WEB-INF/velocity" />
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">utf-8</prop>
+				<prop key="output.encoding">utf-8</prop>
+			</props>
+		</property>
+	</bean>
+
 	<bean id="mailService" class="net.nemo.whatever.service.MailService">
 		<property name="mailServer" value="${mail.server.pop3}" />
 		<property name="protocal" value="${mail.protocal}" />
 		<property name="user" value="${mail.user}" />
 		<property name="pwd" value="${mail.pwd}" />
-		<property name="mailSender" ref="mailSender"/>
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityConfigurer" ref="velocityConfigurer" />
 	</bean>
 
 	<bean name="dataSource"
@@ -63,7 +76,7 @@
 		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.ChatMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	
+
 	<bean id="attachmentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="net.nemo.whatever.db.mapper.AttachmentMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
@@ -81,7 +94,7 @@
 	<bean id="chatService" class="net.nemo.whatever.service.ChatService">
 		<property name="chatMapper" ref="chatMapper" />
 	</bean>
-	
+
 	<bean id="attachmentService" class="net.nemo.whatever.service.AttachmentService">
 		<property name="attachmentMapper" ref="attachmentMapper" />
 	</bean>
@@ -92,4 +105,5 @@
 		<property name="messageService" ref="messageService" />
 		<property name="chatService" ref="chatService" />
 	</bean>
+
 </beans>
