@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -11,6 +12,14 @@
 	 -->
 	<div class="container" style="padding:10px;">
 		<div class="weui_cells weui_cells_form">
+			<div class="weui_cell">
+		        <div class="weui_cell_hd">
+		            <label class="weui_label">openid</label>
+		        </div>
+		        <div class="weui_cell_bd weui_cell_primary">
+		            <input class="weui_input" type="text" id="openid" value="<c:out value="${openid}"/>">
+		        </div>
+		    </div>
 		    <div class="weui_cell">
 		        <div class="weui_cell_hd">
 		            <label class="weui_label">电子邮件</label>
@@ -34,6 +43,7 @@
 <script type="text/javascript">
 $('#loginbtn').click(function() {
     var param = {
+    	openid: $("#openid").val(),
         username : $("#username").val(),
         password : $("#password").val()
     };

@@ -2,8 +2,11 @@ package net.nemo.whatever.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.alibaba.fastjson.JSON;
 
 public class StringUtil {
 	
@@ -20,5 +23,10 @@ public class StringUtil {
 			}
 		}
 		return matches;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> json2Map(String jsonStr){
+		return (Map<String, Object>)JSON.parse(jsonStr);
 	}
 }

@@ -78,7 +78,7 @@ CREATE TABLE `users` (
   `name` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
-  `contact_of` int(8) DEFAULT NULL,
+  `openid` varchar(50) DEFAULT NULL,
   `status` int(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
