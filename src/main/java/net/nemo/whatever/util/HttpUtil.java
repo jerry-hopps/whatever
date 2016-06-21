@@ -85,12 +85,4 @@ public class HttpUtil {
 		}
 		return httpost;
 	}
-
-	public static void main(String args[]) {
-		String url = "https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token=DrJMoeFLyXneoxDl7x-Ef76wPUJqZ_kBGqJF1QEwox03y7NpK6X98DbMVSCEhehu";
-		Map<String, String> params = new HashMap<String, String>(){{
-			put("userid", "00001");
-		}};
-		System.out.println(StringUtil.json2Map(post(url, params)).get("openid").toString());
-	}
 }

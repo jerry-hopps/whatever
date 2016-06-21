@@ -85,6 +85,8 @@
 	<bean id="userService" class="net.nemo.whatever.service.UserService">
 		<property name="userMapper" ref="userMapper" />
 	</bean>
+	
+	<bean id="wechatService" class="net.nemo.whatever.service.WechatService"></bean>
 
 	<bean id="messageService" class="net.nemo.whatever.service.MessageService">
 		<property name="messageMapper" ref="messageMapper" />

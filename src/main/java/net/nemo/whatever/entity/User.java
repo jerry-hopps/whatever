@@ -6,7 +6,7 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
-	private User contact_of;
+	private String openId;
 	private Integer status = 0;
 
 	public User(String name, String email) {
@@ -55,12 +55,12 @@ public class User {
 		this.password = password;
 	}
 
-	public User getContact_of() {
-		return contact_of;
+	public String getOpenId() {
+		return this.openId;
 	}
 
-	public void setContact_of(User contact_of) {
-		this.contact_of = contact_of;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 	
 	public void setStatus(Integer status) {

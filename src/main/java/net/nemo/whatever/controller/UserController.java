@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.print.attribute.standard.Copies;
+import javax.security.auth.login.LoginContext;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import net.nemo.whatever.entity.User;
 import net.nemo.whatever.exception.BusinessException;
 import net.nemo.whatever.service.UserService;
+import net.nemo.whatever.service.WechatService;
 import net.nemo.whatever.util.DESCoder;
 import net.nemo.whatever.util.HttpUtil;
 import net.nemo.whatever.util.StringUtil;
@@ -32,6 +34,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private WechatService wechatService;
 	
 	@RequestMapping("/")
 	public ModelAndView index() throws Exception {
@@ -56,17 +61,18 @@ public class UserController {
 	
 	@RequestMapping("/wechat_callback.html")
 	public ModelAndView wechatCallback(@RequestParam(value="code", required=false) String code) throws Exception {
-		String url = String.format("https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=%s&code=%s", "DrJMoeFLyXneoxDl7x-Ef76wPUJqZ_kBGqJF1QEwox03y7NpK6X98DbMVSCEhehu", code);
-		final String userid = (String)StringUtil.json2Map(HttpUtil.get(url)).get("UserId");
+		ModelAndView  mav = new ModelAndView();
 		
-		url = String.format("https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token=%s", "DrJMoeFLyXneoxDl7x-Ef76wPUJqZ_kBGqJF1QEwox03y7NpK6X98DbMVSCEhehu");
-		Map<String, String> params = new HashMap<String, String>(){{
-			put("userid", userid);
-		}};
-		String openid = StringUtil.json2Map(HttpUtil.post(url, params)).get("openid").toString();
-		
-		ModelAndView  mav = new ModelAndView("user/login");
-		mav.addObject("openid", openid);
+		String openId = this.wechatService.getOpenId(code);
+		User user = this.userService.findByOpenId(openId);
+		if(user!=null){
+			login(user.getEmail(), user.getPassword());
+			mav.setViewName("redirect:/chat/list.html");
+		}
+		else{
+			mav.setViewName("user/login");
+			mav.addObject("openid", openId);
+		}
 		return mav;
 	}
 
@@ -103,9 +109,8 @@ public class UserController {
 
 		User user = this.userService.findByEmail(username);
 		user.setPassword(password);
-		this.userService.updatePassword(user);
 		user.setStatus(2);
-		this.userService.updateStatus(user);
+		this.userService.update(user);
 
 		result.put("success", true);
 		return result;
@@ -113,25 +118,33 @@ public class UserController {
 
 	@RequestMapping(value = "/checkLogin.json", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> checkLogin(String username, String password) throws Exception {
+	public Map<String, Object> checkLogin(String username, String password, String openid) throws Exception {
 		logger.info(String.format("Clien is trying to log in with username: %s, password: %s", username, password));
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-			Subject currentUser = SecurityUtils.getSubject();
-
-			token.setRememberMe(true);
-			currentUser.login(token);
-			User loginUser = userService.findByEmail(username);
-			currentUser.getSession().setAttribute("currentUser", loginUser);
-			logger.info(String.format("User logged in: ", loginUser));
-		} catch (Exception ex) {
-			logger.error(String.format("User failed logging in "), ex);
+		try{
+			User user = login(username, password);
+			if(null!=openid){
+				user.setOpenId(openid);
+				this.userService.update(user);
+			}
+			result.put("success", true);
+		}catch (Exception ex) {
 			throw new BusinessException(ex.getMessage());
 		}
-
-		result.put("success", true);
 		return result;
+	}
+	
+	private User login(String username, String password) throws Exception{
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		Subject currentUser = SecurityUtils.getSubject();
+
+		token.setRememberMe(true);
+		currentUser.login(token);
+		User loginUser = userService.findByEmail(username);
+		currentUser.getSession().setAttribute("currentUser", loginUser);
+		logger.info(String.format("User logged in: ", loginUser));
+		
+		return loginUser;
 	}
 }

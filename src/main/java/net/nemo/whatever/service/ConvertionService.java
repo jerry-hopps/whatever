@@ -94,9 +94,8 @@ public class ConvertionService {
 					logger.info(String.format("Email sent successfully"));
 					
 					receiver.setStatus(1);
-					this.userService.updateStatus(receiver);
 					receiver.setPassword(DESCoder.KEY);
-					this.userService.updatePassword(receiver);
+					this.userService.update(receiver);
 				}
 				
 				chat.setId(this.chatService.addChat(chat));

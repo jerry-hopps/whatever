@@ -15,15 +15,13 @@
 		select id, name, email, password, status from users where email=#{email}
 	</select>
 	
-	<update id="updatePassword" parameterType="net.nemo.whatever.entity.User">
-		update users
-		set password = #{password}
-		where id = #{id}
-	</update>
+	<select id="findByOpenId" parameterType="string" resultType="net.nemo.whatever.entity.User">
+		select id, name, email, password, status from users where openid=#{openId}
+	</select>
 	
-	<update id="updateStatus" parameterType="net.nemo.whatever.entity.User">
+	<update id="update" parameterType="net.nemo.whatever.entity.User">
 		update users
-		set status = #{status}
+		set password = #{password}, status = #{status}, openid=#{openId}
 		where id = #{id}
 	</update>
 </mapper>

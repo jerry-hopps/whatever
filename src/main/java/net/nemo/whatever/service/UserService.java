@@ -1,5 +1,6 @@
 package net.nemo.whatever.service;
 
+import org.apache.http.HeaderElementIterator;
 import org.apache.log4j.Logger;
 
 import net.nemo.whatever.db.mapper.UserMapper;
@@ -38,11 +39,12 @@ public class UserService {
 		return this.userMapper.findByEmail(email);
 	}
 	
-	public void updatePassword(User user){
-		this.userMapper.updatePassword(user);
+	public User findByOpenId(String openId){
+		return this.userMapper.findByOpenId(openId);
 	}
 	
-	public void updateStatus(User user){
-		this.userMapper.updateStatus(user);
+	public void update(User user){
+		this.userMapper.update(user);
 	}
+	
 }
