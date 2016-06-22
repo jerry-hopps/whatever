@@ -1,10 +1,10 @@
 package net.nemo.whatever.controller;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.print.attribute.standard.Copies;
-import javax.security.auth.login.LoginContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -24,8 +24,6 @@ import net.nemo.whatever.exception.BusinessException;
 import net.nemo.whatever.service.UserService;
 import net.nemo.whatever.service.WechatService;
 import net.nemo.whatever.util.DESCoder;
-import net.nemo.whatever.util.HttpUtil;
-import net.nemo.whatever.util.StringUtil;
 
 @Controller
 public class UserController {
@@ -45,15 +43,14 @@ public class UserController {
 	}
 
 	@RequestMapping("/login.html")
-	public ModelAndView login(@RequestParam(value="source", required=false) String source) throws Exception {
+	public ModelAndView login(HttpServletRequest request, @RequestParam(value="source", required=false) String source) throws Exception {
 		ModelAndView  mav = null;
 		if(source==null){
 			mav = new ModelAndView("user/login");
 		}
 		else if("wechat".equals(source)){
-			String corpId = "wx6ccf61a87accb57d";
-			String redirectURI = "http://www.ileqi.com.cn:8080/whatever/wechat_callback.html";
-			String redirectURL = String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect", corpId, redirectURI);
+			String redirectURI = String.format("%s%s/wechat_callback.html", getURLBase(request), request.getContextPath());
+			String redirectURL = String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect", WechatService.CORP_ID, redirectURI);
 			
 			logger.info(String.format("Redirecting to %s", redirectURL));
 			mav = new ModelAndView("redirect:"+redirectURL);
@@ -150,5 +147,12 @@ public class UserController {
 		logger.info(String.format("User logged in: ", loginUser));
 		
 		return loginUser;
+	}
+	
+	public String getURLBase(HttpServletRequest request) throws Exception {
+	    URL requestURL = new URL(request.getRequestURL().toString());
+	    String port = requestURL.getPort() == -1 ? "" : ":" + requestURL.getPort();
+	    return requestURL.getProtocol() + "://" + requestURL.getHost() + port;
+
 	}
 }
