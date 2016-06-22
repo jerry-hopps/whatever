@@ -24,6 +24,7 @@ import net.nemo.whatever.exception.BusinessException;
 import net.nemo.whatever.service.UserService;
 import net.nemo.whatever.service.WechatService;
 import net.nemo.whatever.util.DESCoder;
+import net.nemo.whatever.util.StringUtil;
 
 @Controller
 public class UserController {
@@ -46,7 +47,7 @@ public class UserController {
 	public ModelAndView login(HttpServletRequest request, @RequestParam(value="source", required=false) String source) throws Exception {
 		ModelAndView  mav = null;
 		if(source==null){
-			mav = new ModelAndView("user/login");
+			mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/login"));
 		}
 		else if("wechat".equals(source)){
 			String redirectURI = String.format("%s%s/wechat_callback.html", getURLBase(request), request.getContextPath());
@@ -59,7 +60,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/wechat_callback.html")
-	public ModelAndView wechatCallback(@RequestParam(value="code", required=false) String code) throws Exception {
+	public ModelAndView wechatCallback(HttpServletRequest request, @RequestParam(value="code", required=false) String code) throws Exception {
 		ModelAndView  mav = new ModelAndView();
 		
 		String openId = this.wechatService.getOpenId(code);
@@ -71,22 +72,22 @@ public class UserController {
 		}
 		else{
 			logger.info(String.format("Use not bound with Wechat account yet, render login page and bind with %s", openId));
-			mav.setViewName("user/login");
+			mav.setViewName(StringUtil.getUserAgentViewName(request,"user/login"));
 			mav.addObject("openid", openId);
 		}
 		return mav;
 	}
 
 	@RequestMapping("/logout.html")
-	public ModelAndView logout() {
+	public ModelAndView logout(HttpServletRequest request) {
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.logout();
-		ModelAndView mav = new ModelAndView("user/login");
+		ModelAndView mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/login"));
 		return mav;
 	}
 
 	@RequestMapping("/register/{id}/{token}.html")
-	public ModelAndView register(@PathVariable("id") Integer id, @PathVariable("token") String token) {
+	public ModelAndView register(HttpServletRequest request, @PathVariable("id") Integer id, @PathVariable("token") String token) {
 		ModelAndView mav = null;
 
 		String encryptedStr = token.trim();
@@ -94,10 +95,10 @@ public class UserController {
 		
 		try {
 			String email = new String(DESCoder.decrypt(DESCoder.decryptBASE64(encryptedStr), key));
-			mav = new ModelAndView("user/register");
+			mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/register"));
 			mav.addObject("email", email);
 		} catch (Exception e) {
-			mav = new ModelAndView("user/invalidtoken");
+			mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/invalidtoken"));
 		}
 
 		return mav;
