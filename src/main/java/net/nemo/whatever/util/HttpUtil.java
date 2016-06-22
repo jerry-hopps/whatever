@@ -1,7 +1,6 @@
 package net.nemo.whatever.util;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -12,12 +11,18 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
 
 public class HttpUtil {
+	
+	private static Logger logger = Logger.getLogger(HttpUtil.class);
 
 	public static String get(String url) {
+		
+		logger.info(String.format("Calling(GET) %s", url));
+		
 		// 创建HttpClientBuilder
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		// HttpClient
@@ -47,6 +52,9 @@ public class HttpUtil {
 	}
 
 	public static String post(String url, Map<String, String> params) {
+		
+		logger.info(String.format("Calling(POST) %s with parameters %s", url, params.toString()));
+		
 		// 创建HttpClientBuilder
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		CloseableHttpClient closeableHttpClient = httpClientBuilder.build();

@@ -54,6 +54,8 @@ public class UserController {
 			String corpId = "wx6ccf61a87accb57d";
 			String redirectURI = "http://www.ileqi.com.cn:8080/whatever/wechat_callback.html";
 			String redirectURL = String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=wechat#wechat_redirect", corpId, redirectURI);
+			
+			logger.info(String.format("Redirecting to %s", redirectURL));
 			mav = new ModelAndView("redirect:"+redirectURL);
 		}
 		return mav;
@@ -66,10 +68,12 @@ public class UserController {
 		String openId = this.wechatService.getOpenId(code);
 		User user = this.userService.findByOpenId(openId);
 		if(user!=null){
+			logger.info(String.format("Found user in DB, login automactically and then redirect to %s", "/chat/list.html"));
 			login(user.getEmail(), user.getPassword());
 			mav.setViewName("redirect:/chat/list.html");
 		}
 		else{
+			logger.info(String.format("Use not bound with Wechat account yet, render login page and bind with %s", openId));
 			mav.setViewName("user/login");
 			mav.addObject("openid", openId);
 		}
