@@ -44,10 +44,11 @@ public class UserController {
 	}
 
 	@RequestMapping("/login.html")
-	public ModelAndView login(HttpServletRequest request, @RequestParam(value="source", required=false) String source) throws Exception {
+	public ModelAndView login(HttpServletRequest request, @RequestParam(value="source", required=false) String source, @RequestParam(value="openid", required=false) String openid) throws Exception {
 		ModelAndView  mav = null;
 		if(source==null){
 			mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/login"));
+			mav.addObject("openid", openid);
 		}
 		else if("wechat".equals(source)){
 			String redirectURI = String.format("%s%s/wechat_callback.html", getURLBase(request), request.getContextPath());
@@ -71,9 +72,8 @@ public class UserController {
 			mav.setViewName("redirect:/chat/list.html");
 		}
 		else{
-			logger.info(String.format("Use not bound with Wechat account yet, render login page and bind with %s", openId));
-			mav.setViewName(StringUtil.getUserAgentViewName(request,"user/login"));
-			mav.addObject("openid", openId);
+			logger.info(String.format("Use not bound with Wechat account yet, render login page and bind with /user/login.html?openid=%s", openId));
+			mav.setViewName("redirect:/login.html?openid="+openId);
 		}
 		return mav;
 	}

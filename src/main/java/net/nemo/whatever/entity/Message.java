@@ -58,6 +58,6 @@ public class Message {
 	}
 	@Override
 	public String toString() {
-		return String.format("Sender: %s, Time: %s, Chat ID: %s, Type: %s, Content: %s", this.sender, DateUtil.formatDate(this.time), this.chat.getId(), this.type.toString(), this.content);
+		return String.format("Sender: %s, Time: %s, Chat ID: %s, Type: %s, Content: %s", this.sender, DateUtil.formatDate(this.time), (this.chat == null ? "NULL" : this.chat.getId()), this.type.toString(), this.content);
 	}
 }
