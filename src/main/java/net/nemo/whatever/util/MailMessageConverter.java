@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -237,5 +238,12 @@ public class MailMessageConverter {
 		String name = dialogMatches != null ? dialogMatches.get(1) : "";
 		String email = from.getAddress().toString();
 		return new User(name, email);
+	}
+	
+	public static void main(String[] args) {
+		String a = "[深入Java虚拟机（2）：Class类文件结构 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477221&idx=2&sn=2217ce137006e6dbe790733e074b9ba9&scene=1&srcid=0619SPEftwQgldmw7zwKQwK3#rd]";
+		String[] aa = a.replace("[", "").replace("]", "").split(" : ");
+		
+		System.out.println(String.format("<a href=\"%s\">%s</a>", aa[1], aa[0]));
 	}
 }

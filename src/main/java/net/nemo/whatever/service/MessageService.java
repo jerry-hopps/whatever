@@ -46,8 +46,8 @@ public class MessageService {
 		return m.getId();
 	}
 	
-	public List<Message> findMessages(Integer chatId, Integer receiverId){
-		return this.messageMapper.findMessages(receiverId, chatId);
+	public List<Map> findMessages(Integer chatId){
+		return this.messageMapper.findMessages(chatId);
 	}
 	
 	public Map<String, String> findAttachmentPaths(Integer chatId, List<Message> messages){

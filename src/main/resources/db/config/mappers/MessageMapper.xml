@@ -12,10 +12,14 @@
 		where sender=#{sender} and receiver_id = #{receiver.id} and content = '${content}'
 	</select>
 	
-	<select id="findMessages" resultType="net.nemo.whatever.entity.Message">
-		select id, timestamp as time, sender, content, type
-		from messages
-		where chat_id = #{chat_id} and receiver_id = #{receiver_id}
+	<select id="findMessages" resultType="Map">
+		select m.id, m.timestamp, m.sender, m.type, m.content, u.name as receiver, a.path as apath, 
+			case when m.sender = u.name then 'sent' else 'received' end as direction,
+			case when m.type=1 then true else false end as is_image
+		from messages m 
+			join users u on m.receiver_id = u.id 
+			left join attachments a on m.content = a.file_name
+		where m.chat_id = #{chat_id}
 	</select>
 </mapper>
 

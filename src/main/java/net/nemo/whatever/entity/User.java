@@ -7,6 +7,7 @@ public class User {
 	private String email;
 	private String password;
 	private String openId;
+	private String avatar;
 	private Integer status = 0;
 
 	public User(String name, String email) {
@@ -69,6 +70,14 @@ public class User {
 	
 	public Integer getStatus() {
 		return status;
+	}
+	
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+	
+	public String getAvatar() {
+		return avatar;
 	}
 
 	@Override

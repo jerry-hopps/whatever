@@ -9,14 +9,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style"
 	content="black-translucent">
-<title>ToDo7</title>
+<title>Memories</title>
 <script src="<%=request.getContextPath()%>/static/js/jquery-1.8.1.min.js"></script>
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/lib/framework7/css/framework7.ios.min.css">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/lib/framework7/css/framework7.ios.colors.min.css">
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/static/css/todo7.css">
 <!-- Favicon-->
 <link href="static/img/icon-57.png" rel="shortcut icon">
 <!-- iOS 7 iPad (retina) -->
@@ -88,7 +86,7 @@
 						</div>
 						<div class="row">
 							<div class="col-100">
-								<a id="loginbtn" href="#" class="button button-big button-submit color-pink active">Submit</a>
+								<a id="loginbtn" href="#" class="button button-big button-submit active">Submit</a>
 							</div>
 						</div>
 					</div>

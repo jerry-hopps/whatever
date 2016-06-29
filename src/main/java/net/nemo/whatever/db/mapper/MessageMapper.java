@@ -2,6 +2,7 @@ package net.nemo.whatever.db.mapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -13,5 +14,5 @@ public interface MessageMapper {
 	int insert(Message message);
 	void insertList(List<Message> messages);
 	Message findBy(@Param("time") Date timestamp, @Param("sender") String sender, @Param("receiver") User receiver, @Param("content") String content);
-	List<Message> findMessages(@Param("receiver_id") Integer receiver_id, @Param("chat_id") Integer chat_id);
+	List<Map> findMessages(@Param("chat_id") Integer chat_id);
 }

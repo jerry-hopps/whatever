@@ -1,15 +1,14 @@
 package net.nemo.whatever.test;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 
-import net.nemo.whatever.entity.Message;
 import net.nemo.whatever.service.ChatService;
 import net.nemo.whatever.service.ConvertionService;
 import net.nemo.whatever.service.MessageService;
-import net.nemo.whatever.util.StringUtil;
 
 public class Test {
 	
@@ -20,7 +19,7 @@ public class Test {
 		ChatService chatService = (ChatService) applicationContext.getBean("chatService");
 		MessageService messageService = (MessageService) applicationContext.getBean("messageService");
 		
-		List<Message> messages = messageService.findMessages(1, 1);
+		List<Map> messages = messageService.findMessages(1);
 		
 		System.out.println(JSON.toJSON(messages));
 	}

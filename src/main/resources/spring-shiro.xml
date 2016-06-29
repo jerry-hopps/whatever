@@ -31,7 +31,7 @@
 				/login.html = anon
 				/checkLogin.json = anon
 				/setPassword.json = anon
-				/chat/list.json = anon
+				/chat/*.json = anon
 				/loginsuccess.html = anon
 				/logout.json = anon
 				/** = authc

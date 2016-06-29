@@ -1,6 +1,6 @@
 // Initialize your app
 var myApp = new Framework7({
-    modalTitle: 'ToDo7'
+    modalTitle: 'Memories'
 });
 
 // Export selectors engine
@@ -11,68 +11,31 @@ var mainView = myApp.addView('.view-main', {
     // Because we use fixed-through navbar we can enable dynamic navbar
     dynamicNavbar: true
 });
-
-var todoData = [{"id": 1,"chatOwner": "tracylee", "receiver": null, "groupChat": false, "messages": null,"attachments": null}, 
-                {"id": 2, "chatOwner": "文件传输助手", "receiver": null, "groupChat": false, "messages": null, "attachments": null}];
-
-$$('.popup').on('open', function () {
-    $$('body').addClass('with-popup');
-});
-$$('.popup').on('opened', function () {
-    $$(this).find('input[name="title"]').focus();
-});
-$$('.popup').on('close', function () {
-    $$('body').removeClass('with-popup');
-    $$(this).find('input[name="title"]').blur().val('');
-});
-
-// Popup colors
-$$('.popup .color').on('click', function () {
-    $$('.popup .color.selected').removeClass('selected');
-    $$(this).addClass('selected');
-});
-
-// Add Task
-$$('.popup .add-task').on('click', function () {
-    var title = $$('.popup input[name="title"]').val().trim();
-    if (title.length === 0) {
-        return;
-    }
-    var color = $$('.popup .color.selected').attr('data-color');
-    todoData.push({
-        title: title,
-        color: color,
-        checked: '',
-        id: (new Date()).getTime()
-    });
-    localStorage.td7Data = JSON.stringify(todoData);
-    buildTodoListHtml();
-    myApp.closeModal('.popup');
-});
-
 // Build Todo HTML using Template7 template engine
 var todoItemTemplateSource = $$('#todo-item-template').html();
 var todoItemTemplate = Template7.compile(todoItemTemplateSource);
 function buildTodoListHtml() {
-    var renderedList = todoItemTemplate(todoData);
-    $$('.todo-items-list').html(renderedList);
-    console.log($$('.todo-items-list').html());
+	$$.getJSON("/whatever/chat/list.json", {}, function(data){
+		var renderedList = todoItemTemplate(data['chats']);
+	    $$('.todo-items-list').html(renderedList);
+	});
 }
 // Build HTML on App load
 buildTodoListHtml();
 
+var itemTemplateSource = $$('#item-template').html();
+var itemTemplate = Template7.compile(itemTemplateSource);
+function buildMessagesHtml(chat_id) {
+	$$.getJSON("/whatever/chat/" + chat_id + ".json", {}, function(data){
+		var renderedList = itemTemplate(data['messages']);
+	    $$('.messages').html(renderedList);
+	});
+}
 
-// Mark checked
-$$('.todo-items-list').on('change', 'input', function () {
-    var input = $$(this);
-    var item = input.parents('li');
-    var checked = input[0].checked;
-    var id = item.attr('data-id') * 1;
-    for (var i = 0; i < todoData.length; i++) {
-        if (todoData[i].id === id) todoData[i].checked = checked ? 'checked' : '';
-    }
-    localStorage.td7Data = JSON.stringify(todoData);
-});
+$$(document).on('pageInit', '.page[data-page="messages"]', function (e) {
+	 var chat_id = e.detail.page.url.replace('.html', '');
+	 buildMessagesHtml(chat_id);
+}); 
 
 // Delete item
 $$('.todo-items-list').on('delete', '.swipeout', function () {
