@@ -267,28 +267,9 @@ public class MailMessageConverter {
 					return src;
 				}
 			}
-			return null;
+			return "/whatever/static/img/link.jpg";
 		} catch (IOException e) {
-			return null;
-		}
-	}
-	
-	public static void main(String[] args) {
-		List<String> lines = new ArrayList<String>();
-		lines.add("[ImportNew : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477246&idx=1&sn=6e1450cc79653bf1676a54d81973592c&scene=0]");
-		lines.add("[Spring+SpringMVC+Maven+Mybatis+MySQL项目搭建（下） : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477246&idx=2&sn=f30d754635ec5a3f589574707c12c263&scene=1&srcid=0619u1hlkjEd50fQWLaq3Ton#rd]");
-		lines.add("[数据库事务必会必知 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477244&idx=1&sn=f797d15e035e40cb440cc5ebc7031877&scene=1&srcid=0619YTyEw2pkchaZicLhhleP#rd]");
-		lines.add("[Java异常处理的10个最佳实践 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477241&idx=1&sn=70c52ae3c3cda9905231d832fb20d91a&scene=1&srcid=0619aBzEwT1jjX73XF7UpLZQ#rd]");
-		lines.add("[Java对象初始化详解 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477239&idx=1&sn=5e228282c6a4ebd94787f56cd82392ec&scene=1&srcid=0619s3lxZsibz6TlUqTFzdo9#rd]");
-		lines.add("[值得使用的Spring Boot : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477237&idx=2&sn=8e51fe170ced4f9186d90ad4fd50ac4a&scene=1&srcid=0619I19XSxmthMP67w1BbGLd#rd]");
-		lines.add("[ThreadLocal 那点事儿 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477237&idx=1&sn=e0d4f9a63de5d2d79380bdf1bb3a63ef&scene=1&srcid=0619CFn843YSqXT6fMQ1vSNU#rd]");
-		lines.add("[深入Java虚拟机（1）：Java内存区域与内存溢出 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477210&idx=2&sn=57955ff79f6c930a54b6ed52b9b30e70&scene=1&srcid=0619ZNcJRSvAcxFsJEBMBT57#rd]");
-		lines.add("[深入Java虚拟机（2）：Class类文件结构 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477221&idx=2&sn=2217ce137006e6dbe790733e074b9ba9&scene=1&srcid=0619SPEftwQgldmw7zwKQwK3#rd]");
-		lines.add("[深入Java虚拟机（3）：类初始化 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477246&idx=3&sn=f6e706408197d24791dc317ff666b256&scene=1&srcid=06198DrfIrLH7d0lTxS3DChO#rd]");
-		lines.add("[深入Java虚拟机（4）：类加载机制 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477252&idx=2&sn=6af2ebda31862bd1cbe131a42634955d&scene=1&srcid=0619eq6EAZtpQikDIJvnjEQd#rd]");
-		
-		for(String line : lines){
-		  System.out.println(getLinkPreviewSegement(line));
+			return "/whatever/static/img/link.jpg";
 		}
 	}
 }
