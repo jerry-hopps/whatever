@@ -30,12 +30,12 @@
 <!-- iOS 6 iPhone -->
 <link href="img/icon-57.png" sizes="57x57" rel="apple-touch-icon">
 </head>
-<body class="theme-red">
+<body class="theme">
 	<!-- Statusbar overlay-->
 	<div class="statusbar-overlay"></div>
 	<!-- Views-->
 	<div class="views">
-		<div class="view view-main navbar-fixed  theme-black">
+		<div class="view view-main navbar-fixed">
 			<div class="navbar">
 				<div class="navbar-inner">
 					<div class="left"></div>

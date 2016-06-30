@@ -15,6 +15,8 @@
 	href="<%=request.getContextPath()%>/lib/framework7/css/framework7.ios.min.css">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/lib/framework7/css/framework7.ios.colors.min.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/static/css/todo7.css">
 <!-- Favicon-->
 <link href="static/img/icon-57.png" rel="shortcut icon">
 <!-- iOS 7 iPad (retina) -->
