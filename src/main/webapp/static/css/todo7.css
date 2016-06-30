@@ -2,10 +2,12 @@
     font-size: 12px;
     font-family: tahoma;
     height: 140px;
+    width: 300px;
     border: 1px solid #ccc;
     color: #555;
     display: block;
     padding: 10px;
+    margin: 5px;
     box-sizing: border-box;
     text-decoration: none;
 }
@@ -18,6 +20,7 @@
 .fragment img { 
     float: left;
     margin-right: 10px;
+    border: 1px solid grey;
 }
 
 
