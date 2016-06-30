@@ -48,7 +48,7 @@ public class UserController {
 		ModelAndView  mav = null;
 		if(source==null){
 			mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/login"));
-			mav.addObject("openid", openid);
+			if(openid!=null) mav.addObject("openid", openid);
 		}
 		else if("wechat".equals(source)){
 			String redirectURI = String.format("%s%s/wechat_callback.html", getURLBase(request), request.getContextPath());

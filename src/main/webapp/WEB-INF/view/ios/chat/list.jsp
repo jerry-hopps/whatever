@@ -11,8 +11,8 @@
 	href="<%=request.getContextPath()%>/lib/framework7/css/framework7.ios.min.css">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/lib/framework7/css/framework7.ios.colors.min.css">
-<%-- <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/static/css/todo7.css"> --%>
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/static/css/todo7.css">
 <!-- Favicon-->
 <link href="img/icon-57.png" rel="shortcut icon">
 <!-- iOS 7 iPad (retina) -->
@@ -30,12 +30,12 @@
 <!-- iOS 6 iPhone -->
 <link href="img/icon-57.png" sizes="57x57" rel="apple-touch-icon">
 </head>
-<body>
+<body class="theme-red">
 	<!-- Statusbar overlay-->
 	<div class="statusbar-overlay"></div>
 	<!-- Views-->
 	<div class="views">
-		<div class="view view-main navbar-fixed">
+		<div class="view view-main navbar-fixed  theme-black">
 			<div class="navbar">
 				<div class="navbar-inner">
 					<div class="left"></div>

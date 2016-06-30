@@ -45,7 +45,7 @@
 			<div class="navbar">
 				<div class="navbar-inner">
 					<div class="left"></div>
-					<div class="center sliding">ToDo7</div>
+					<div class="center sliding">Memories</div>
 					<div class="right"></div>
 				</div>
 			</div>

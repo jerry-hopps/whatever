@@ -1,6 +1,12 @@
 // Initialize your app
 var myApp = new Framework7({
-    modalTitle: 'Memories'
+    modalTitle: 'Memories',
+    onAjaxStart: function (xhr) {
+        myApp.showIndicator();
+    },
+    onAjaxComplete: function (xhr) {
+        myApp.hideIndicator();
+    }
 });
 
 // Export selectors engine
