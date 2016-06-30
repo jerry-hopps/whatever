@@ -15,7 +15,7 @@
 	<select id="findMessages" resultType="Map">
 		select m.timestamp as time, m.sender as name,
 			case when m.sender = u.name then 'sent' else 'received' end as type,
-			case when m.type=1 then concat("<img src='/assets/images/", a.path, "'>") else m.content end as text
+			case when m.type=1 then a.path else m.content end as text
 		from messages m
 			join users u on m.receiver_id = u.id
 			left join attachments a on m.content = a.file_name

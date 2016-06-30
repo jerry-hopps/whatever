@@ -106,6 +106,7 @@ public class ConvertionService {
 				}
 				for(Attachment attachment : chat.getAttachments()){
 					attachment.setChat(chat);
+					attachment.setPath(String.format("<img src='/assets/images/%s'>", attachment.getPath()));
 					this.attachmentService.addAttachement(attachment);
 				}
 				logger.info(String.format("***End processing message : %d of %d", i+1, messages.length));
