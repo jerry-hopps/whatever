@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +19,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
@@ -34,16 +40,16 @@ public class MailMessageConverter {
 	public final static String GROUP_CHAT_TITLE_PATTERN = "微信群\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	public final static String DIALOG_CHAT_TITLE_PATTERN = "\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"和\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	
-	public static String FILE_STORE_PATH = null;
+	public static String FILE_STORE_PATH = "/var/lib/tomcat6/webapps/ROOT/images";
 	
-	static{
-		try{
-			String rootPath = new File(MailMessageConverter.class.getResource("").toURI()).getParent().replace("WEB-INF/classes/net/nemo/whatever", "");
-			FILE_STORE_PATH = StringUtils.join(new String[]{rootPath, "static", "images"}, System.getProperty("file.separator"));
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
+//	static{
+//		try{
+//			String rootPath = new File(MailMessageConverter.class.getResource("").toURI()).getParent().replace("WEB-INF/classes/net/nemo/whatever", "");
+//			FILE_STORE_PATH = StringUtils.join(new String[]{rootPath, "static", "images"}, System.getProperty("file.separator"));
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public static Chat fromMailMessage(javax.mail.Message message) {
 		Chat chat = new Chat();
@@ -123,7 +129,7 @@ public class MailMessageConverter {
 					sender = null;
 				} else if (null != (matches = StringUtil.findFirstMatch(LINK_MSG_PATTERN, line))) {
 					Message chatMessage = new Message();
-					chatMessage.setContent(line);
+					chatMessage.setContent(getLinkPreviewSegement(line));
 					chatMessage.setType(ChatMessageType.LINK);
 					chatMessage.setSender(sender);
 					chatMessage.setTime(DateUtil.parseDate(date + " " + time));
@@ -169,7 +175,7 @@ public class MailMessageConverter {
 						fileName = MimeUtility.decodeText(fileName);
 					}
 					String timestampedName = getTimestampedName(fileName);
-					Attachment attachment = new Attachment(timestampedName, String.format("%s%s%s", DateUtil.formatDate(new Date(), "yyyyMMdd"), System.getProperty("file.separator"), timestampedName));
+					Attachment attachment = new Attachment(timestampedName, String.format("/assets/images/%s%s%s", DateUtil.formatDate(new Date(), "yyyyMMdd"), System.getProperty("file.separator"), timestampedName));
 					attachements.add(attachment);
 					saveFile(attachment, mPart.getInputStream());
 				} else if (mPart.isMimeType("multipart/*")) {
@@ -240,10 +246,28 @@ public class MailMessageConverter {
 		return new User(name, email);
 	}
 	
-	public static void main(String[] args) {
-		String a = "[深入Java虚拟机（2）：Class类文件结构 : http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&mid=2651477221&idx=2&sn=2217ce137006e6dbe790733e074b9ba9&scene=1&srcid=0619SPEftwQgldmw7zwKQwK3#rd]";
-		String[] aa = a.replace("[", "").replace("]", "").split(" : ");
+	private static String getLinkPreviewSegement(String line){
+		String[] aa = line.replace("[", "").replace("]", "").split(" : ");
+		String imgSrc = getLinkImage(aa[1]);
 		
-		System.out.println(String.format("<a href=\"%s\">%s</a>", aa[1], aa[0]));
+		return String.format("<a href=\"%s\"><img src=\"%s\">%s</a>", aa[1], imgSrc, aa[0]);
+	}
+	
+	private static String getLinkImage(String url) {
+		Document doc;
+		try {
+			doc = Jsoup.connect(url).get();
+
+			Elements links = doc.select("img");
+			for (Element link : links) {
+				String src = link.attr("data-src") == null ? link.attr("src") : link.attr("data-src");
+				if (src != null && !"".equals(src.trim())) {
+					return src;
+				}
+			}
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }

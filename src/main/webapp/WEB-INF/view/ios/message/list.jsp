@@ -11,7 +11,8 @@
 	<!-- Page, data-page contains page name-->
 	<div data-page="messages" class="page">
 		<!-- Scrollable page content-->
-		<div class="page-content message-content messages">
+		<div class="page-content message-content">
+			<div class="messages"></div>
 		</div>
 	</div>
 </div>

@@ -70,20 +70,16 @@
         </li>{{/each}}
       </ul>
     </script>
-    <script id="item-template" type="text/template">
-		<div class="messages">{{#each this}}
-    		<div class="message message-with-avatar message-{{direction}} {{#if is_image}}message-pic{{/if}}">
-                <div class="message-name">{{sender}}</div>
-				<div class="message-text">
-					{{#if is_image}}
-						<img src="{{apath}}">
-					{{else}}
-						{{content}}
-					{{/if}}
-				</div>
-				<div style="background-image:url(http://png.clipart.me/graphics/thumbs/151/man-avatar-profile-picture-vector_151265384.jpg)" class="message-avatar"></div>
-			</div>{{/each}}
-		</div>
+    <script id="message-template" type="text/template">
+    		{{#if day}}
+			<div class="messages-date">{{day}} {{#if time}}, <span>{{time}}</span>{{/if}}</div>
+			{{/if}}
+			<div class="message message-{{type}} {{#if hasImage}}message-pic{{/if}} {{#if avatar}}message-with-avatar{{/if}}">
+ 			   {{#if name}}<div class="message-name">{{name}}</div>{{/if}}
+			   <div class="message-text">{{text}}</div>
+    		   {{#if avatar}}<div class="message-avatar" style="background-image:url({{avatar}})"></div>{{/if}}
+               {{#if label}}<div class="message-label">{{label}}</div>{{/if}}
+            </div>
 	</script>
 	<!-- Path to Framework7 Library JS-->
 	<script type="text/javascript"

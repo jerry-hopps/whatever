@@ -23,12 +23,16 @@ function buildTodoListHtml() {
 // Build HTML on App load
 buildTodoListHtml();
 
-var itemTemplateSource = $$('#item-template').html();
-var itemTemplate = Template7.compile(itemTemplateSource);
+var myMessages = null;
+
 function buildMessagesHtml(chat_id) {
 	$$.getJSON("/whatever/chat/" + chat_id + ".json", {}, function(data){
-		var renderedList = itemTemplate(data['messages']);
-	    $$('.messages').html(renderedList);
+		console.log(data['messages']);
+		myMessages = myApp.messages('.messages', {
+		    autoLayout: true,
+		    messages: data['messages'],
+		    messageTemplate: $$('#message-template').html()
+		});
 	});
 }
 
