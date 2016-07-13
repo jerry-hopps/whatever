@@ -31,10 +31,14 @@
 }
 
 .statusbar-overlay {
-    background: pink;
+    background: #000000;
 }
 
 .navbar{
 	background: #000000;
     color: white;
+}
+
+.list-block{
+	margin:0px!important;
 }

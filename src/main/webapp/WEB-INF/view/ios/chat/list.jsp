@@ -30,7 +30,7 @@
 <!-- iOS 6 iPhone -->
 <link href="img/icon-57.png" sizes="57x57" rel="apple-touch-icon">
 </head>
-<body class="theme">
+<body class="theme-white">
 	<!-- Statusbar overlay-->
 	<div class="statusbar-overlay"></div>
 	<!-- Views-->
