@@ -27,7 +27,7 @@ public class MailService {
 
 	private JavaMailSender mailSender;
 	
-	private VelocityConfigurer velocityConfigurer;
+	private VelocityEngine velocityEngine;
 
 	private Store store;
 	private Folder folder;
@@ -42,12 +42,12 @@ public class MailService {
 		this.pwd = pwd;
 	}
 	
-	public void setVelocityConfigurer(VelocityConfigurer velocityConfigurer) {
-		this.velocityConfigurer = velocityConfigurer;
+	public void setVelocityEngine(VelocityEngine velocityEngine) {
+		this.velocityEngine = velocityEngine;
 	}
 	
-	public VelocityConfigurer getVelocityConfigurer() {
-		return velocityConfigurer;
+	public VelocityEngine getVelocityEngine() {
+		return velocityEngine;
 	}
 
 	public String getMailServer() {
@@ -129,7 +129,7 @@ public class MailService {
 	public void sendMessageWithTemplate(String from, String to, String subject, String template, Map<String, Object> model) throws Exception {
 		String result = null;  
         try {  
-            result = VelocityEngineUtils.mergeTemplateIntoString(this.velocityConfigurer.getVelocityEngine(), template, "GBK", model);  
+            result = VelocityEngineUtils.mergeTemplateIntoString(this.getVelocityEngine(), template, "GBK", model);  
         } catch (Exception e) {
         	throw e;
         }  

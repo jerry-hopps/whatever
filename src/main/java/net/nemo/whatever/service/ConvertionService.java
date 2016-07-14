@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.mail.Message;
 
 import org.apache.log4j.Logger;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 
@@ -30,6 +31,9 @@ public class ConvertionService {
 	private ChatService chatService;
 	@Autowired
 	private AttachmentService attachmentService;
+	
+	@Autowired
+	private AmqpTemplate emailAMQPTemplate;
 	
 	public MailService getMailService() {
 		return mailService;
@@ -121,15 +125,16 @@ public class ConvertionService {
 	}
 	
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
-		String from = this.mailService.getUser();
-		String subject = "Welcome to Cunle.me";
-		try{
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("email", to);
-			model.put("url", "http://www.ileqi.com.cn/whatever/register/" + id + "/" + encryptedStr.trim() + ".html");
-			mailService.sendMessageWithTemplate(from, to, subject, "mail/registration.vm", model);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("email", to);
+		model.put("url", "http://www.ileqi.com.cn/whatever/register/" + id + "/" + encryptedStr.trim() + ".html");
+		
+		Map<String, Object> queueMsg = new HashMap<String, Object>();
+		queueMsg.put("from", this.mailService.getUser());
+		queueMsg.put("to", to);
+		queueMsg.put("subject", "Welcome to Cunle.me");
+		queueMsg.put("template", "mail/registration.vm");
+		queueMsg.put("model", model);
+		emailAMQPTemplate.convertAndSend("email_queue_key", queueMsg);
 	}
 }

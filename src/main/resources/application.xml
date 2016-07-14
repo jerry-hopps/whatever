@@ -15,6 +15,7 @@
 	<context:component-scan base-package="net.nemo.whatever" />
 
 	<import resource="spring-job.xml" />
+	<import resource="spring-message.xml"/>
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${mail.server.smtp}" />
@@ -28,14 +29,14 @@
 			</props>
 		</property>
 	</bean>
-
-	<bean id="velocityConfigurer"
-		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="resourceLoaderPath" value="WEB-INF/velocity" />
+	
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="velocityProperties">
 			<props>
-				<prop key="input.encoding">utf-8</prop>
-				<prop key="output.encoding">utf-8</prop>
+				<prop key="resource.loader">class</prop>
+				<prop key="class.resource.loader.class">
+					org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+				</prop>
 			</props>
 		</property>
 	</bean>
@@ -46,7 +47,7 @@
 		<property name="user" value="${mail.user}" />
 		<property name="pwd" value="${mail.pwd}" />
 		<property name="mailSender" ref="mailSender" />
-		<property name="velocityConfigurer" ref="velocityConfigurer" />
+		<property name="velocityEngine" ref="velocityEngine" />
 	</bean>
 
 	<bean name="dataSource"
