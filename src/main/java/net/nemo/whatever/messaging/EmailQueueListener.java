@@ -17,7 +17,6 @@ public class EmailQueueListener implements MessageListener{
 	
 	public void onMessage(Message message) {
 		Map<String, Object> map = getMessageMap(message);
-		System.out.println(map);
 		try{
 			mailService.sendMessageWithTemplate(map.get("from").toString(), 
 					map.get("to").toString(), 
