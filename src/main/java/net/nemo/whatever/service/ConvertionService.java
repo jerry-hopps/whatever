@@ -133,7 +133,7 @@ public class ConvertionService {
 		queueMsg.put("from", this.mailService.getUser());
 		queueMsg.put("to", to);
 		queueMsg.put("subject", "Welcome to Cunle.me");
-		queueMsg.put("template", "mail/registration.vm");
+		queueMsg.put("template", "velocity/mail/registration.vm");
 		queueMsg.put("model", model);
 		emailAMQPTemplate.convertAndSend("email_queue_key", queueMsg);
 	}
