@@ -2,8 +2,6 @@ package net.nemo.whatever.entity;
 
 import java.util.Date;
 
-import javax.sql.rowset.Predicate;
-
 import net.nemo.whatever.util.DateUtil;
 
 public class Message {
