@@ -1,58 +1,46 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
-<head>
-<title>Memories</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-<link rel="stylesheet" href="http://www.ileqi.com.cn/static/css/weui.min.css" />
-<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
-<script>
-	function changeHeight(){
-		var h=window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		var w=window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		$("#container").css("height", h-50);
-		$(".weui_media_box").css("width", w-60);
-	}
-	
-	window.onresize = function(){
-		changeHeight();
-	}
-	
-	$(document).ready(function(){
-		changeHeight();
-	});
-</script>
-<style>
-body {
-	background: #dddddd;
-	font-size: 11pt;
-	padding: 0px;
-	margin: 0px;
-}
-</style>
-</head>
-<body>
-<!-- 
-	<div style="width:100％;height:40px;color:white;background-color:black;text-align:center;padding:10px 0 0 10px;">
-		<span style="margin-left:30px;">Cunle.me</span>
-		<a href="<%=request.getContextPath()%>/logout.html" class="weui_btn weui_btn_mini weui_btn_default" style="background-color:black;color:white;float:right;">登出</a>
-	</div>
- -->
-	<div id="container" class="weui_panel weui_panel_access" style="width:100%;overflow:auto;-webkit-overflow-scrolling: touch;">
-			<c:forEach items="${chats}" var="chat">
-				<a href="<%=request.getContextPath()%>/chat/<c:out value="${chat.id}"/>.html" class="weui_media_box weui_media_appmsg">
-					<div class="weui_media_hd">
-						<img class="weui_media_appmsg_thumb" src="http://www.ileqi.com.cn/static/images/<c:out value="${chat.id}"/>.jpg" alt="">
+	<head>
+		<title>Wecord</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<a class="btn btn-default navbar-btn" href="<%=request.getContextPath()%>/logout.html" role="button">登出</a>
+						<a class="navbar-brand" href="#">Wecord</a>
 					</div>
-					<div class="weui_media_bd">
-						<h4 class="weui_media_title"><c:out value="${chat.chatOwner}" /></h4>
-						<p class="weui_media_desc">与<c:out value="${chat.chatOwner}"/>的聊天记录</p>
+				</div>
+			</nav>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="list-group">
+					<c:forEach items="${chats}" var="chat">
+						<a href="#" class="list-group-item" data="<c:out value="${chat.id}"/>">
+							<img class="weui_media_appmsg_thumb" src="http://www.ileqi.com.cn/static/images/<c:out value="${chat.id}"/>.jpg" alt="" style="width: 32px; height: 32px;">
+							<c:out value="${chat.chatOwner}" />
+						</a>
+					</c:forEach>
 					</div>
-				</a>
-			</c:forEach>
-	</div>
-</body>
-<script type="text/javascript">
-document.documentElement.webkitRequestFullScreen();
-</script>
+				</div>
+				<div class="col-md-9">
+					<div class="panel panel-default">
+						<div class="panel-heading">聊天记录</div>
+						<div class="panel-body">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script language="JavaScript">
+			$("#logoutBtn").click(function(){
+
+			})
+		</script>
+	</body>
 </html>

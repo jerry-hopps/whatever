@@ -118,6 +118,16 @@ public class UserController {
 		return result;
 	}
 
+	@RequestMapping(value = "/loginStatus.json", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> loginStatus() throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		result.put("status", SecurityUtils.getSubject().isAuthenticated());
+
+		return result;
+	}
+
 	@RequestMapping(value = "/checkLogin.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> checkLogin(String username, String password, String openid) throws Exception {
