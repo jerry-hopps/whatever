@@ -37,7 +37,7 @@ public class MailMessageConverter {
 	public final static String GROUP_CHAT_TITLE_PATTERN = "微信群\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	public final static String DIALOG_CHAT_TITLE_PATTERN = "\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"和\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	
-	public static String FILE_STORE_PATH = "/var/lib/tomcat6/webapps/ROOT/images";
+	public static String FILE_STORE_PATH = "/home/ubuntu/tomcat7/webapps/static";
 	
 //	static{
 //		try{

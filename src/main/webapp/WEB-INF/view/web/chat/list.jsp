@@ -4,8 +4,8 @@
 <head>
 <title>Memories</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-<link rel="stylesheet" href="<%=request.getContextPath()%>/static/css/weui.min.css" />
-<script src="<%=request.getContextPath()%>/static/js/jquery-1.8.1.min.js"></script>
+<link rel="stylesheet" href="<%=request.getServerName()%>/static/css/weui.min.css" />
+<script src="<%=request.getServerName()%>/static/js/jquery-1.8.1.min.js"></script>
 <script>
 	function changeHeight(){
 		var h=window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -42,7 +42,7 @@ body {
 			<c:forEach items="${chats}" var="chat">
 				<a href="<%=request.getContextPath()%>/chat/<c:out value="${chat.id}"/>.html" class="weui_media_box weui_media_appmsg">
 					<div class="weui_media_hd">
-						<img class="weui_media_appmsg_thumb" src="<%=request.getContextPath()%>/static/images/<c:out value="${chat.id}"/>.jpg" alt="">
+						<img class="weui_media_appmsg_thumb" src="<%=request.getServerName()%>/static/images/<c:out value="${chat.id}"/>.jpg" alt="">
 					</div>
 					<div class="weui_media_bd">
 						<h4 class="weui_media_title"><c:out value="${chat.chatOwner}" /></h4>
