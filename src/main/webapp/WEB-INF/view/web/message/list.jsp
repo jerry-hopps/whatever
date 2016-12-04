@@ -7,8 +7,8 @@
 <head>
 <title>与<c:out value="${chat.chatOwner}" />的聊天记录</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-<link rel="stylesheet" href="<%=request.getServerName()%>/static/css/weui.min.css" />
-<script src="<%=request.getServerName()%>/static/js/jquery-1.8.1.min.js"></script>
+<link rel="stylesheet" href="http://www.ileqi.com.cn/static/css/weui.min.css" />
+<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
 <script>
 	function changeHeight(){
 		var h=window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -136,10 +136,10 @@ body {
 				<div class="avatar-<c:out value="${direction}"/>">
 				<c:choose>
 					<c:when test="${message.sender == receiver}">
-						<img src="<%=request.getServerName()%>/static/images/receiver-<c:out value="${receiver_id}"/>.jpg" style="width:32px;height:32px;">
+						<img src="http://www.ileqi.com.cn/static/images/receiver-<c:out value="${receiver_id}"/>.jpg" style="width:32px;height:32px;">
 					</c:when>
 				    <c:otherwise>
-				    	<img src="<%=request.getServerName()%>/static/images/<c:out value="${chat.id}"/>.jpg" style="width:32px;height:32px;">
+				    	<img src="http://www.ileqi.com.cn/static/images/<c:out value="${chat.id}"/>.jpg" style="width:32px;height:32px;">
 				    </c:otherwise>
 			    </c:choose>
 				</div>
@@ -150,7 +150,7 @@ body {
 							<c:out value="${message.content}" />
 						</c:when>
 						<c:when test="${message.type == 1}">
-							<img src="<%=request.getServerName()%>/static/images/<c:out value="${attachments[message.content]}" />" width="100px" height="100px"/>
+							<img src="http://www.ileqi.com.cn/static/images/<c:out value="${attachments[message.content]}" />" width="100px" height="100px"/>
 						</c:when>
 						<c:otherwise>
 							<a target="_BLANK" href="<c:out value="${fn:substringAfter(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ':')}" />"><c:out value="${fn:split(fn:replace(fn:replace(message.content, '[', ''), ']', ''), ': ')[0]}" /></a>

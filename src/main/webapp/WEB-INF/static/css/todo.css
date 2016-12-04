@@ -17,7 +17,7 @@
 
 }
 
-.fragment img { 
+.fragment img {
     float: left;
     margin-right: 10px;
     border: 1px solid grey;
@@ -35,10 +35,10 @@
 }
 
 .navbar{
-	background: #000000;
+    background: #000000;
     color: white;
 }
 
 .list-block{
-	margin:0px!important;
+    margin:0px!important;
 }

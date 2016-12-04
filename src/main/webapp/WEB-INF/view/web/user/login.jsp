@@ -2,15 +2,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-<link rel="stylesheet" href="<%=request.getServerName()%>/static/css/weui.min.css" />
-<script src="<%=request.getServerName()%>/static/js/jquery-1.8.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
 </head>
 <body>
-	<div style="width:100％;height:40px;background-color:black;color:white;text-align:center;padding-top:10px;">Memories</div>
 	<div class="container" style="padding:10px;">
 		<div class="weui_cells weui_cells_form">
-			<div class="weui_cell" style="display:none">
+			<div class="weui_cell">
 		        <div class="weui_cell_hd">
 		            <label class="weui_label">openid</label>
 		        </div>
@@ -35,7 +33,7 @@
 		        </div>
 		    </div>
 		</div>
-		<a href="javascript:;" class="weui_btn weui_btn_primary" id="loginbtn">登录</a>
+		<a class="weui_btn weui_btn_primary" id="loginbtn">登录</a>
 	</div>
 </body>
 <script type="text/javascript">

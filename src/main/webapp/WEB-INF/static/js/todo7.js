@@ -21,7 +21,7 @@ var mainView = myApp.addView('.view-main', {
 var todoItemTemplateSource = $$('#todo-item-template').html();
 var todoItemTemplate = Template7.compile(todoItemTemplateSource);
 function buildTodoListHtml() {
-	$$.getJSON("/whatever/chat/list.json", {}, function(data){
+	$$.getJSON("/chat/list.json", {}, function(data){
 		var renderedList = todoItemTemplate(data['chats']);
 	    $$('.todo-items-list').html(renderedList);
 	});
@@ -32,7 +32,7 @@ buildTodoListHtml();
 var myMessages = null;
 
 function buildMessagesHtml(chat_id) {
-	$$.getJSON("/whatever/chat/" + chat_id + ".json", {}, function(data){
+	$$.getJSON("/chat/" + chat_id + ".json", {}, function(data){
 		console.log(data['messages']);
 		myMessages = myApp.messages('.messages', {
 		    autoLayout: true,

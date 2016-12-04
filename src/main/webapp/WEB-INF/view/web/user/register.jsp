@@ -3,8 +3,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-<link rel="stylesheet" href="<%=request.getServerName()%>/static/css/weui.min.css" />
-<script src="<%=request.getServerName()%>/static/js/jquery-1.8.1.min.js"></script>
+<link rel="stylesheet" href="http://www.ileqi.com.cn/static/css/weui.min.css" />
+<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
 </head>
 <body>
 	<!-- 

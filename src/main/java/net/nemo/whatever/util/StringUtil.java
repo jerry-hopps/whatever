@@ -53,7 +53,7 @@ public class StringUtil {
 			os = "web";
 		}
 		
-		return  "ios/" + viewName;
+		return  "web/" + viewName;
 	}
 
 }
