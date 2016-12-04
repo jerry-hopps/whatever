@@ -5,6 +5,12 @@
 		<title>Wecord</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
+		<script src="http://www.ileqi.com.cn/static/js/mustache.min.js"></script>
+		<script id="template" type="x-tmpl-mustache">
+			{{#messages}}
+			<b>{{&text}}</b><br/>
+			{{/messages}}
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -21,7 +27,7 @@
 				<div class="col-md-3">
 					<div class="list-group">
 					<c:forEach items="${chats}" var="chat">
-						<a href="#" class="list-group-item" data="<c:out value="${chat.id}"/>">
+						<a href="#" class="list-group-item chat-item" data="<c:out value="${chat.id}"/>">
 							<img class="weui_media_appmsg_thumb" src="http://www.ileqi.com.cn/static/images/<c:out value="${chat.id}"/>.jpg" alt="" style="width: 32px; height: 32px;">
 							<c:out value="${chat.chatOwner}" />
 						</a>
@@ -31,16 +37,48 @@
 				<div class="col-md-9">
 					<div class="panel panel-default">
 						<div class="panel-heading">聊天记录</div>
-						<div class="panel-body">
+						<div class="panel-body" id="messages">
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script language="JavaScript">
-			$("#logoutBtn").click(function(){
+			var activeItem = null;
 
-			})
+//
+//			Mustache.parse(template);   // optional, speeds up future uses
+//			var rendered = Mustache.render(template, {name: "Luke"});
+//
+//			alert(rendered);
+
+			$(".chat-item").click(function(){
+				var chatId = $(this).attr('data');
+
+				if(activeItem != null && activeItem != undefined){
+					activeItem.removeClass("active");
+				}
+				$(this).addClass("active");
+				activeItem = $(this);
+				$.ajax({
+					type: "get",
+					url: "<%=request.getContextPath()%>/chat/" + chatId + ".json",
+					dataType: "json",
+					success: function(data){
+						if(data.success == true){
+							var template = $('#template').html();
+							var rendered = Mustache.render(template, {messages: data.messages});
+							$("#messages").html(rendered);
+						}
+					},
+					error: function(data) {
+						alert("调用失败...."+data.responseText);
+					}
+				})
+			});
+
+			var chatItems = $(".chat-item");
+			if(chatItems.length > 0 ) $(chatItems[0]).click();
 		</script>
 	</body>
 </html>
