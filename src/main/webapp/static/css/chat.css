@@ -1,0 +1,41 @@
+.sent {
+    position:relative;
+    max-width: 350px;
+    min-height: 35px;
+    background:#A6DADC;
+    border-radius:5px; /* 圆角 */
+    margin:10px 10px 0 auto;
+    padding: 10px;
+}
+
+.sent .arrow {
+    position:absolute;
+    top:5px;
+    right:-16px;
+    width:0;
+    height:0;
+    font-size:0;
+    border:solid 8px;
+    border-color:white white white #A6DADC;
+}
+
+.received {
+    position:relative;
+    max-width: 350px;
+    min-height: 35px;
+    background:#F8C301;
+    border-radius:5px; /* 圆角 */
+    margin:10px auto 0 10px;
+    padding: 10px;
+}
+
+.received .arrow {
+    position:absolute;
+    top:5px;
+    left:-16px;
+    width:0;
+    height:0;
+    font-size:0;
+    border:solid 8px;
+    border-color:white #F8C301 white white ;
+}

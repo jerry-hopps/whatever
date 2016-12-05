@@ -4,11 +4,12 @@
 	<head>
 		<title>Wecord</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<script src="http://www.ileqi.com.cn/static/js/jquery-1.8.1.min.js"></script>
-		<script src="http://www.ileqi.com.cn/static/js/mustache.min.js"></script>
+		<link rel="stylesheet" href="/static/css/chat.css"/>
+		<script src="/static/lib/jquery-1.8.1.min.js"></script>
+		<script src="/static/lib/mustache.min.js"></script>
 		<script id="template" type="x-tmpl-mustache">
 			{{#messages}}
-			<b>{{&text}}</b><br/>
+				<div class="{{type}}"><div class="arrow"></div>{{&text}}</div>
 			{{/messages}}
 		</script>
 	</head>
@@ -45,12 +46,6 @@
 		</div>
 		<script language="JavaScript">
 			var activeItem = null;
-
-//
-//			Mustache.parse(template);   // optional, speeds up future uses
-//			var rendered = Mustache.render(template, {name: "Luke"});
-//
-//			alert(rendered);
 
 			$(".chat-item").click(function(){
 				var chatId = $(this).attr('data');
