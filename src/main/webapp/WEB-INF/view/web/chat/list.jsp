@@ -29,7 +29,7 @@
 					<div class="list-group">
 					<c:forEach items="${chats}" var="chat">
 						<a href="#" class="list-group-item chat-item" data="<c:out value="${chat.id}"/>">
-							<img class="weui_media_appmsg_thumb" src="http://www.ileqi.com.cn/static/images/<c:out value="${chat.id}"/>.jpg" alt="" style="width: 32px; height: 32px;">
+							<img class="weui_media_appmsg_thumb" src="http://www.ileqi.com.cn/assets/images/<c:out value="${chat.id}"/>.jpg" alt="" style="width: 32px; height: 32px;">
 							<c:out value="${chat.chatOwner}" />
 						</a>
 					</c:forEach>

@@ -26,8 +26,6 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<mvc:resources mapping="/static/**" location="/static/"/>
-
 	<!-- 扫描controller（controller层注入） -->
 	<context:component-scan base-package="net.nemo.whatever.controller" />
 

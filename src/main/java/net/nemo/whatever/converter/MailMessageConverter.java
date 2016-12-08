@@ -1,4 +1,4 @@
-package net.nemo.whatever.util;
+package net.nemo.whatever.converter;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,6 +17,8 @@ import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
+import net.nemo.whatever.util.DateUtil;
+import net.nemo.whatever.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +29,14 @@ import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.ChatMessageType;
 import net.nemo.whatever.entity.Message;
 import net.nemo.whatever.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MailMessageConverter {
 	
 	public final static String CHAT_DATE_PATTERN = "(\\d{4}-\\d{1,2}-\\d{1,2})";
@@ -36,19 +45,21 @@ public class MailMessageConverter {
 	public final static String LINK_MSG_PATTERN = "\\[(.*) : (http[s]?://.*)]";
 	public final static String GROUP_CHAT_TITLE_PATTERN = "微信群\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	public final static String DIALOG_CHAT_TITLE_PATTERN = "\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"和\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
-	
-	public static String FILE_STORE_PATH = "/home/ubuntu/tomcat7/webapps/static";
-	
-//	static{
-//		try{
-//			String rootPath = new File(MailMessageConverter.class.getResource("").toURI()).getParent().replace("WEB-INF/classes/net/nemo/whatever", "");
-//			FILE_STORE_PATH = StringUtils.join(new String[]{rootPath, "static", "images"}, System.getProperty("file.separator"));
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//	}
-	
-	public static Chat fromMailMessage(javax.mail.Message message) {
+
+	@Autowired
+	private Environment env;
+
+	@Value("${app.assets.path}")
+	private String fileStorePath;
+
+	@Value("${app.domain.name}")
+	private String appDomainName;
+
+	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
+	public Chat fromMailMessage(javax.mail.Message message) {
 		Chat chat = new Chat();
 		try {
 			chat.setGroupChat(isGroupChat(message.getSubject()));
@@ -93,7 +104,7 @@ public class MailMessageConverter {
 		return chat;
 	}
 
-	private static List<Message> parseMessageBody(Object content) {
+	private List<Message> parseMessageBody(Object content) {
 		List<Message> messages = new ArrayList<Message>();
 
 		String[] lines = content.toString().split(System.getProperty("line.separator"));
@@ -158,7 +169,7 @@ public class MailMessageConverter {
 		return messages;
 	}
 
-	private static void saveAttachments(List<Attachment> attachements, Part part) throws Exception {
+	private void saveAttachments(List<Attachment> attachements, Part part) throws Exception {
 		String fileName = "";
 		if (part.isMimeType("multipart/*")) {
 			Multipart mp = (Multipart) part.getContent();
@@ -193,18 +204,19 @@ public class MailMessageConverter {
 		}
 	}
 
-	private static String getTimestampedName(String fileName) {
+	private String getTimestampedName(String fileName) {
 		Date now = new Date();
 		return String.format("%d_%s", now.getTime(), fileName);
 	}
 
-	private static void saveFile(Attachment attachment, InputStream stream) throws Exception{
-		File dir = new File(FILE_STORE_PATH + System.getProperty("file.separator") + DateUtil.formatDate(new Date(), "yyyyMMdd"));
+	private void saveFile(Attachment attachment, InputStream stream) throws Exception{
+		String assetsPath = getFileStorePath();
+		File dir = new File(assetsPath + System.getProperty("file.separator") + DateUtil.formatDate(new Date(), "yyyyMMdd"));
 		if(!dir.exists()){
 			dir.mkdir();
 		}
 		
-		File storefile = new File(FILE_STORE_PATH + System.getProperty("file.separator") + attachment.getPath());
+		File storefile = new File(assetsPath + System.getProperty("file.separator") + attachment.getPath());
 		BufferedOutputStream bos = null;
 		BufferedInputStream bis = null;
 		try {
@@ -225,25 +237,25 @@ public class MailMessageConverter {
 		}
 	}
 
-	private static boolean isGroupChat(String messageSubject) {
+	private boolean isGroupChat(String messageSubject) {
 		List<String> matches = StringUtil.findFirstMatch(GROUP_CHAT_TITLE_PATTERN, messageSubject);
 		return matches != null;
 	}
 
-	private static String getMessageOwner(String messageSubject) {
+	private String getMessageOwner(String messageSubject) {
 		List<String> groupMatches = StringUtil.findFirstMatch(GROUP_CHAT_TITLE_PATTERN, messageSubject);
 		List<String> dialogMatches = StringUtil.findFirstMatch(DIALOG_CHAT_TITLE_PATTERN, messageSubject);
 		return groupMatches == null ? dialogMatches.get(0) : groupMatches.get(0);
 	}
 
-	private static User getMessageReceiver(String messageSubject, InternetAddress from) {
+	private User getMessageReceiver(String messageSubject, InternetAddress from) {
 		List<String> dialogMatches = StringUtil.findFirstMatch(DIALOG_CHAT_TITLE_PATTERN, messageSubject);
 		String name = dialogMatches != null ? dialogMatches.get(1) : "";
 		String email = from.getAddress().toString();
 		return new User(name, email);
 	}
 	
-	private static String getLinkPreviewSegement(String line){
+	private String getLinkPreviewSegement(String line){
 		String[] aa = line.replace("[", "").replace("]", "").split(" : ");
 		String imgSrc = getLinkImage(aa[1]);
 		
@@ -255,7 +267,7 @@ public class MailMessageConverter {
 		return String.format(template, aa[1], imgSrc, aa[0]);
 	}
 	
-	private static String getLinkImage(String url) {
+	private String getLinkImage(String url) {
 		Document doc;
 		try {
 			doc = Jsoup.connect(url).get();
@@ -267,9 +279,13 @@ public class MailMessageConverter {
 					return src;
 				}
 			}
-			return "/whatever/static/img/link.jpg";
+			return "/assets/images/link.jpg";
 		} catch (IOException e) {
-			return "/whatever/static/img/link.jpg";
+			return "/assets/images/link.jpg";
 		}
+	}
+
+	private String getFileStorePath(){
+		return this.env.getProperty("FILE_STORE_PATH") == null ? this.fileStorePath : this.env.getProperty("FILE_STORE_PATH");
 	}
 }

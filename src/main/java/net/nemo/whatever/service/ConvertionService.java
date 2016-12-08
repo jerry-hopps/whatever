@@ -8,15 +8,16 @@ import javax.mail.Message;
 import org.apache.log4j.Logger;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
 import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
 import net.nemo.whatever.util.DESCoder;
-import net.nemo.whatever.util.MailMessageConverter;
+import net.nemo.whatever.converter.MailMessageConverter;
 
-@PropertySource("classpath:mail.properties")
+@PropertySource({"classpath:mail.properties", "classpath:application.properties"})
 public class ConvertionService {
 	
 	private static Logger logger = Logger.getLogger(ConvertionService.class);
@@ -31,49 +32,69 @@ public class ConvertionService {
 	private ChatService chatService;
 	@Autowired
 	private AttachmentService attachmentService;
-	
+	@Autowired
+	private MailMessageConverter mailMessageConverter;
 	@Autowired
 	private AmqpTemplate emailAMQPTemplate;
-	
-	public MailService getMailService() {
-		return mailService;
-	}
 
 	public void setMailService(MailService mailService) {
 		this.mailService = mailService;
-	}
-
-	public UserService getUserService() {
-		return userService;
 	}
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
-	public MessageService getMessageService() {
-		return messageService;
-	}
-	
 	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
 	}
-	
+
 	public void setChatService(ChatService chatService) {
 		this.chatService = chatService;
 	}
-	
-	public ChatService getChatService() {
-		return chatService;
-	}
-	
+
 	public void setAttachmentService(AttachmentService attachmentService) {
 		this.attachmentService = attachmentService;
 	}
-	
+
+	public void setMailMessageConverter(MailMessageConverter mailMessageConverter) {
+		this.mailMessageConverter = mailMessageConverter;
+	}
+
+	public void setEmailAMQPTemplate(AmqpTemplate emailAMQPTemplate) {
+		this.emailAMQPTemplate = emailAMQPTemplate;
+	}
+
+	public MailService getMailService() {
+		return mailService;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public MessageService getMessageService() {
+		return messageService;
+	}
+
+	public ChatService getChatService() {
+		return chatService;
+	}
+
 	public AttachmentService getAttachmentService() {
 		return attachmentService;
 	}
+
+	public MailMessageConverter getMailMessageConverter() {
+		return mailMessageConverter;
+	}
+
+	public AmqpTemplate getEmailAMQPTemplate() {
+		return emailAMQPTemplate;
+	}
+
+	@Value("${app.domain.name}")
+	private String appDomainName;
 	
 	public void convert(){
 		logger.info("*****Begin conversion of message*****");
@@ -86,7 +107,7 @@ public class ConvertionService {
 				logger.info(String.format("***Begin processing message : %d of %d", i+1, messages.length));
 				
 				Message message = messages[i];
-				Chat chat = MailMessageConverter.fromMailMessage(message);
+				Chat chat = this.mailMessageConverter.fromMailMessage(message);
 				User receiver = this.userService.findUserById(this.userService.addUser(chat.getReceiver()));
 				chat.setReceiver(receiver);
 				
@@ -110,7 +131,7 @@ public class ConvertionService {
 				}
 				for(Attachment attachment : chat.getAttachments()){
 					attachment.setChat(chat);
-					attachment.setPath(String.format("<img src='/assets/images/%s'>", attachment.getPath()));
+					attachment.setPath(String.format("<img src='/assets/%s'>", attachment.getPath()));
 					this.attachmentService.addAttachement(attachment);
 				}
 				logger.info(String.format("***End processing message : %d of %d", i+1, messages.length));
@@ -127,7 +148,7 @@ public class ConvertionService {
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("email", to);
-		model.put("url", "http://www.ileqi.com.cn/whatever/register/" + id + "/" + encryptedStr.trim() + ".html");
+		model.put("url", String.format("%s/register/%d/%s.html", this.appDomainName, id, encryptedStr.trim()));
 		
 		Map<String, Object> queueMsg = new HashMap<String, Object>();
 		queueMsg.put("from", this.mailService.getUser());

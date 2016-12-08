@@ -10,8 +10,7 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:property-placeholder
-		location="classpath:mail.properties, classpath:db.properties" />
+	<context:property-placeholder location="classpath:mail.properties, classpath:db.properties, classpath:application.properties" />
 	<context:component-scan base-package="net.nemo.whatever" />
 
 	<import resource="spring-job.xml" />
@@ -108,5 +107,4 @@
 		<property name="messageService" ref="messageService" />
 		<property name="chatService" ref="chatService" />
 	</bean>
-
 </beans>
