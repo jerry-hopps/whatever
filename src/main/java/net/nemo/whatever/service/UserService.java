@@ -5,20 +5,16 @@ import org.apache.log4j.Logger;
 
 import net.nemo.whatever.db.mapper.UserMapper;
 import net.nemo.whatever.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
 	
 	private Logger logger = Logger.getLogger(UserService.class);
 
+	@Autowired
 	private UserMapper userMapper;
-	
-	public void setUserMapper(UserMapper userMapper) {
-		this.userMapper = userMapper;
-	}
-	
-	public UserMapper getUserMapper() {
-		return userMapper;
-	}
 	
 	public int addUser(User user){
 		

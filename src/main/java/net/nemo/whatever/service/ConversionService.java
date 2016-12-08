@@ -9,18 +9,18 @@ import org.apache.log4j.Logger;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 
 import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
 import net.nemo.whatever.util.DESCoder;
 import net.nemo.whatever.converter.MailMessageConverter;
+import org.springframework.stereotype.Service;
 
-@PropertySource({"classpath:mail.properties", "classpath:application.properties"})
-public class ConvertionService {
+@Service
+public class ConversionService {
 	
-	private static Logger logger = Logger.getLogger(ConvertionService.class);
+	private static Logger logger = Logger.getLogger(ConversionService.class);
 
 	@Autowired
 	private MailService mailService;
@@ -37,64 +37,10 @@ public class ConvertionService {
 	@Autowired
 	private AmqpTemplate emailAMQPTemplate;
 
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	public void setMessageService(MessageService messageService) {
-		this.messageService = messageService;
-	}
-
-	public void setChatService(ChatService chatService) {
-		this.chatService = chatService;
-	}
-
-	public void setAttachmentService(AttachmentService attachmentService) {
-		this.attachmentService = attachmentService;
-	}
-
-	public void setMailMessageConverter(MailMessageConverter mailMessageConverter) {
-		this.mailMessageConverter = mailMessageConverter;
-	}
-
-	public void setEmailAMQPTemplate(AmqpTemplate emailAMQPTemplate) {
-		this.emailAMQPTemplate = emailAMQPTemplate;
-	}
-
-	public MailService getMailService() {
-		return mailService;
-	}
-
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public MessageService getMessageService() {
-		return messageService;
-	}
-
-	public ChatService getChatService() {
-		return chatService;
-	}
-
-	public AttachmentService getAttachmentService() {
-		return attachmentService;
-	}
-
-	public MailMessageConverter getMailMessageConverter() {
-		return mailMessageConverter;
-	}
-
-	public AmqpTemplate getEmailAMQPTemplate() {
-		return emailAMQPTemplate;
-	}
-
 	@Value("${app.domain.name}")
 	private String appDomainName;
+	@Value("${mail.user}")
+	private String emailFromUser;
 	
 	public void convert(){
 		logger.info("*****Begin conversion of message*****");
@@ -151,7 +97,7 @@ public class ConvertionService {
 		model.put("url", String.format("%s/register/%d/%s.html", this.appDomainName, id, encryptedStr.trim()));
 		
 		Map<String, Object> queueMsg = new HashMap<String, Object>();
-		queueMsg.put("from", this.mailService.getUser());
+		queueMsg.put("from", this.emailFromUser);
 		queueMsg.put("to", to);
 		queueMsg.put("subject", "Welcome to Cunle.me");
 		queueMsg.put("template", "velocity/mail/registration.vm");

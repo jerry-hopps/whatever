@@ -5,7 +5,9 @@ import java.util.Map;
 
 import net.nemo.whatever.util.HttpUtil;
 import net.nemo.whatever.util.StringUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 public class WechatService {
 	
 	public final static String CORP_ID = "wx6ccf61a87accb57d";

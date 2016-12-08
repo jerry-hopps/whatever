@@ -6,6 +6,6 @@ import net.nemo.whatever.entity.Attachment;
 
 public interface AttachmentMapper {
 
-	public void insert(Attachment attachment);
-	public Attachment findByChat(@Param("chatId") Integer chatId, @Param("fileName") String fileName);
+	void insert(Attachment attachment);
+	Attachment findByChat(@Param("chatId") Integer chatId, @Param("fileName") String fileName);
 }

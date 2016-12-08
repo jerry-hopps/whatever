@@ -6,20 +6,16 @@ import org.apache.log4j.Logger;
 
 import net.nemo.whatever.db.mapper.ChatMapper;
 import net.nemo.whatever.entity.Chat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ChatService {
 	
 	private static Logger logger = Logger.getLogger(ChatService.class);
 
+	@Autowired
 	private ChatMapper chatMapper;
-	
-	public ChatMapper getChatMapper() {
-		return chatMapper;
-	}
-	
-	public void setChatMapper(ChatMapper chatMapper) {
-		this.chatMapper = chatMapper;
-	}
 	
 	public int addChat(Chat chat){
 		Chat c = this.chatMapper.findBySenderAndReceiver(chat.getChatOwner(), chat.getReceiver());
