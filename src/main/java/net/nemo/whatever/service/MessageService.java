@@ -11,30 +11,19 @@ import net.nemo.whatever.db.mapper.MessageMapper;
 import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.ChatMessageType;
 import net.nemo.whatever.entity.Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MessageService {
 
 	private Logger logger = Logger.getLogger(MessageService.class);
-	
+
+	@Autowired
 	private MessageMapper messageMapper;
+	@Autowired
 	private AttachmentMapper attachmentMapper;
-	
-	public void setMessageMapper(MessageMapper messageMapper) {
-		this.messageMapper = messageMapper;
-	}
-	
-	public MessageMapper getMessageMapper() {
-		return messageMapper;
-	}
-	
-	public void setAttachmentMapper(AttachmentMapper attachmentMapper) {
-		this.attachmentMapper = attachmentMapper;
-	}
-	
-	public AttachmentMapper getAttachmentMapper() {
-		return attachmentMapper;
-	}
-	
+
 	public int addMessage(Message message){
 		Message m = this.messageMapper.findBy(message.getTime(), message.getSender(), message.getReceiver(), message.getContent());		
 		if(m==null){

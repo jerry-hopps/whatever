@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.alibaba.fastjson.JSON;
 
 import net.nemo.whatever.service.ChatService;
-import net.nemo.whatever.service.ConvertionService;
+import net.nemo.whatever.service.ConversionService;
 import net.nemo.whatever.service.MessageService;
 
 public class Test {
@@ -26,7 +26,7 @@ public class Test {
 	
 	private static void testConvertionService(){
 		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("application.xml");
-		ConvertionService convertionService = (ConvertionService) applicationContext.getBean("convertionService");
+		ConversionService convertionService = (ConversionService) applicationContext.getBean("convertionService");
 
 		convertionService.convert();
 	}

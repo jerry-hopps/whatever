@@ -12,82 +12,41 @@ import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
+@Service
 public class MailService {
 
+	@Value("${mail.server.pop3}")
 	private String mailServer;
+	@Value("${mail.protocal}")
 	private String protocal;
+	@Value("${mail.user}")
 	private String user;
+	@Value("${mail.pwd}")
 	private String pwd;
 
+	@Autowired
 	private JavaMailSender mailSender;
-	
+
+	@Autowired
 	private VelocityEngine velocityEngine;
 
 	private Store store;
 	private Folder folder;
-
-	public MailService() {
-	}
 
 	public MailService(String mailServer, String protocal, String user, String pwd) {
 		this.mailServer = mailServer;
 		this.protocal = protocal;
 		this.user = user;
 		this.pwd = pwd;
-	}
-	
-	public void setVelocityEngine(VelocityEngine velocityEngine) {
-		this.velocityEngine = velocityEngine;
-	}
-	
-	public VelocityEngine getVelocityEngine() {
-		return velocityEngine;
-	}
-
-	public String getMailServer() {
-		return mailServer;
-	}
-
-	public void setMailServer(String mailServer) {
-		this.mailServer = mailServer;
-	}
-
-	public String getProtocal() {
-		return protocal;
-	}
-
-	public void setProtocal(String protocal) {
-		this.protocal = protocal;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
-	public JavaMailSender getMailSender() {
-		return mailSender;
-	}
-
-	public void setMailSender(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
 	}
 
 	public void connect() throws Exception {
@@ -100,6 +59,15 @@ public class MailService {
 
 		this.store = session.getStore();
 		this.store.connect(this.mailServer, user, pwd);
+	}
+
+	public void disconnect() {
+		try {
+			this.folder.close(true);
+			this.store.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Message[] receiveMessage() throws Exception {
@@ -129,19 +97,10 @@ public class MailService {
 	public void sendMessageWithTemplate(String from, String to, String subject, String template, Map<String, Object> model) throws Exception {
 		String result = null;  
         try {  
-            result = VelocityEngineUtils.mergeTemplateIntoString(this.getVelocityEngine(), template, "GBK", model);  
+            result = VelocityEngineUtils.mergeTemplateIntoString(this.velocityEngine, template, "GBK", model);
         } catch (Exception e) {
         	throw e;
         }  
         sendMessage(from, to, subject, result);
-	}
-
-	public void disconnect() {
-		try {
-			this.folder.close(true);
-			this.store.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

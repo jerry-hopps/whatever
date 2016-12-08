@@ -14,12 +14,15 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring-shiro.xml, classpath:application.xml</param-value>
 	</context-param>
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>classpath:props/log4j.properties</param-value>
+    </context-param>
 	<!-- 设计路径变量值 -->
 	<context-param>
 		<param-name>webAppRootKey</param-name>
 		<param-value>springmvc.root</param-value>
 	</context-param>
-
 
 	<!-- Spring字符集过滤器 -->
 	<filter>
@@ -75,7 +78,6 @@
 		<url-pattern>*.html</url-pattern>
 		<url-pattern>*.json</url-pattern>
 	</servlet-mapping>
-
 
 	<!-- 错误跳转页面 -->
 	<error-page>
