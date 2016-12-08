@@ -42,13 +42,6 @@ public class MailService {
 	private Store store;
 	private Folder folder;
 
-	public MailService(String mailServer, String protocal, String user, String pwd) {
-		this.mailServer = mailServer;
-		this.protocal = protocal;
-		this.user = user;
-		this.pwd = pwd;
-	}
-
 	public void connect() throws Exception {
 		Properties props = new Properties();
 		props.setProperty("mail.store.protocol", this.protocal);
