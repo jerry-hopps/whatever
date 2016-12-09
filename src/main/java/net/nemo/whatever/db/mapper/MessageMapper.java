@@ -13,6 +13,6 @@ public interface MessageMapper {
 	
 	int insert(Message message);
 	void insertList(List<Message> messages);
-	Message findBy(@Param("time") Date timestamp, @Param("sender") String sender, @Param("receiver") User receiver, @Param("content") String content);
+	int findCount(@Param("msg") Message message);
 	List<Map> findMessages(@Param("chat_id") Integer chat_id);
 }

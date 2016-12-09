@@ -7,12 +7,6 @@
 		values(#{chatOwner},#{receiver.id},#{groupChat})
 	</insert>
 
-	<select id="findBySenderAndReceiver" resultType="net.nemo.whatever.entity.Chat">
-		select id, owner_name, is_group_chat
-		from chats
-		where owner_name = #{sender} and receiver_id = #{receiver.id}
-	</select>
-
 	<select id="selectChats" parameterType="int" resultType="net.nemo.whatever.entity.Chat">
 		select id, owner_name as "chatOwner", is_group_chat as "groupChat"
 		from chats
@@ -24,5 +18,41 @@
 		from chats
 		where id = #{id}
 	</select>
+
+    <select id="findBySenderAndReceiver" resultMap="chatResult">
+        select c.id as chatId, c.owner_name as ownerName, c.is_group_chat as groupChat,
+        r.id as receiver_id, r.name as receiver_name, r.email as receiver_email, r.status as receiver_status,
+        m.id as message_id, m.content as message_content, m.type as message_type,
+        a.id as attachment_id, a.file_name as attachment_file_name, a.path as attachment_path
+        from chats c
+        left join users r on c.receiver_id = c.id
+        left join messages m on c.id = m.chat_id and c.receiver_id = m.receiver_id
+        left join attachments a on c.id = a.chat_id
+        where c.owner_name = #{sender} and c.receiver_id = #{receiver.id}
+    </select>
+    
+    <resultMap id="chatResult" type="net.nemo.whatever.entity.Chat">
+        <constructor>
+            <idArg column="chatId" javaType="int"/>
+            <arg column="ownerName" javaType="string"/>
+            <arg column="groupChat" javaType="boolean"/>
+        </constructor>
+        <association property="receiver" javaType="net.nemo.whatever.entity.User">
+            <id property="id" column="receiver_id"/>
+            <result property="name" column="receiver_name"/>
+            <result property="email" column="receiver_email"/>
+            <result property="status" column="receiver_status"/>
+        </association>
+        <collection property="messages" ofType="net.nemo.whatever.entity.Message">
+            <id property="id" column="message_id"/>
+            <result property="content" column="message_content"/>
+            <result property="type" column="message_type"/>
+        </collection>
+        <collection property="attachments" ofType="net.nemo.whatever.entity.Attachment">
+            <id property="id" column="attachment_id" javaType="int"/>
+            <result property="fileName" column="attachment_file_name" javaType="string"/>
+            <result property="path" column="attachment_path" javaType="string"/>
+        </collection>
+    </resultMap>
 </mapper>
 

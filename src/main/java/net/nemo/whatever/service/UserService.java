@@ -16,15 +16,14 @@ public class UserService {
 	@Autowired
 	private UserMapper userMapper;
 	
-	public int addUser(User user){
-		
+	public User addUser(User user){
 		User u = userMapper.findByEmail(user.getEmail());
 		if(u==null){
 			this.userMapper.insert(user);
 			logger.info(String.format("Inserting new user into DB : [%s]", user.toString()));
 			u = user;
 		}
-		return u.getId();
+		return u;
 	}
 	
 	public User findUserById(Integer id){

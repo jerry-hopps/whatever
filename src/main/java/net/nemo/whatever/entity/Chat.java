@@ -1,5 +1,6 @@
 package net.nemo.whatever.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
@@ -7,8 +8,8 @@ public class Chat {
 	private String chatOwner;
 	private User receiver;
 	private boolean groupChat = false;
-	private List<Message> messages;
-	private List<Attachment> attachments;
+	private List<Message> messages = new ArrayList<Message>();
+	private List<Attachment> attachments = new ArrayList<Attachment>();
 	
 	public Chat(){}
 	public Chat(Integer id, String chatOwner, Boolean groupChat) {

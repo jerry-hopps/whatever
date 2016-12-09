@@ -19,7 +19,7 @@
 
 	<!-- ======================== 调度触发器 ======================== -->
 	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="cronExpression" value="0/15 * * * * ?"/>
+		<property name="cronExpression" value="0/${job.interval} * * * * ?"/>
 		<property name="jobDetail" ref="SpringQtzJobMethod"/>
 	</bean>
 

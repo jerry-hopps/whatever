@@ -1,21 +1,19 @@
 package net.nemo.whatever.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.mail.Message;
-
-import org.apache.log4j.Logger;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
+import net.nemo.whatever.converter.MailMessageConverter;
 import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;
 import net.nemo.whatever.util.DESCoder;
-import net.nemo.whatever.converter.MailMessageConverter;
+import org.apache.log4j.Logger;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.mail.Message;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ConversionService {
@@ -27,11 +25,7 @@ public class ConversionService {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private MessageService messageService;
-	@Autowired
 	private ChatService chatService;
-	@Autowired
-	private AttachmentService attachmentService;
 	@Autowired
 	private MailMessageConverter mailMessageConverter;
 	@Autowired
@@ -54,32 +48,21 @@ public class ConversionService {
 				
 				Message message = messages[i];
 				Chat chat = this.mailMessageConverter.fromMailMessage(message);
-				User receiver = this.userService.findUserById(this.userService.addUser(chat.getReceiver()));
-				chat.setReceiver(receiver);
-				
-				if(0 == receiver.getStatus()){
-					logger.info(String.format("This is the first time receiving this user's messages, sending registration email to this user(%s)", receiver.getEmail()));
-					
-					byte[] inputData = DESCoder.encrypt(receiver.getEmail().getBytes(), DESCoder.KEY);
-					this.sendRegisterEmail(receiver.getEmail(), receiver.getId(), DESCoder.encryptBASE64(inputData));
-					logger.info(String.format("Email sent successfully"));
-					
-					receiver.setStatus(1);
-					receiver.setPassword(DESCoder.KEY);
-					this.userService.update(receiver);
-				}
-				
-				chat.setId(this.chatService.addChat(chat));
-				for(net.nemo.whatever.entity.Message msg : chat.getMessages()){
-					msg.setReceiver(receiver);
+				chat.setReceiver(this.userService.addUser(chat.getReceiver()));
+
+                for(net.nemo.whatever.entity.Message msg : chat.getMessages()){
+					msg.setReceiver(chat.getReceiver());
 					msg.setChat(chat);
-					this.messageService.addMessage(msg);
 				}
 				for(Attachment attachment : chat.getAttachments()){
-					attachment.setChat(chat);
 					attachment.setPath(String.format("<img src='/assets/%s'>", attachment.getPath()));
-					this.attachmentService.addAttachement(attachment);
+                    attachment.setChat(chat);
 				}
+                this.chatService.addChat(chat);
+
+                if(User.STATUS_NEW.equals(chat.getReceiver().getStatus()))
+                    invokeRegistration(chat.getReceiver());
+
 				logger.info(String.format("***End processing message : %d of %d", i+1, messages.length));
 			}
 		}catch(Exception e){
@@ -90,6 +73,20 @@ public class ConversionService {
 		
 		logger.info("*****End conversion of message*****");
 	}
+
+	private void invokeRegistration(User receiver) throws Exception{
+        logger.info(String.format("This is the first time receiving this user's messages, sending registration email to this user(%s)", receiver.getEmail()));
+
+        String encryptedStr = null;
+        byte[] inputData = DESCoder.encrypt(receiver.getEmail().getBytes(), DESCoder.KEY);
+        encryptedStr = DESCoder.encryptBASE64(inputData);
+
+        this.sendRegisterEmail(receiver.getEmail(), receiver.getId(), encryptedStr);
+
+        receiver.setStatus(User.STATUS_NEW);
+        receiver.setPassword(DESCoder.KEY);
+        this.userService.update(receiver);
+    }
 	
 	private void sendRegisterEmail(String to, Integer id, String encryptedStr){
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -103,5 +100,7 @@ public class ConversionService {
 		queueMsg.put("template", "velocity/mail/registration.vm");
 		queueMsg.put("model", model);
 		emailAMQPTemplate.convertAndSend("email_queue_key", queueMsg);
+
+        logger.info(String.format("Email sent successfully"));
 	}
 }

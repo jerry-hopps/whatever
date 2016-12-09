@@ -1,11 +1,11 @@
 package net.nemo.whatever.service;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import org.apache.log4j.Logger;
 import net.nemo.whatever.db.mapper.AttachmentMapper;
 import net.nemo.whatever.entity.Attachment;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AttachmentService {
