@@ -6,7 +6,8 @@ public class Attachment {
 	private Chat chat;
 	private String fileName;
 	private String path;
-	
+
+    public Attachment() {}
 	public Attachment(Integer id) {
 		this.id = id;
 	}
@@ -14,6 +15,12 @@ public class Attachment {
 		this.fileName = name;
 		this.path = path;
 	}
+
+    public Attachment(Integer id, String name, String path) {
+        this.id = id;
+        this.fileName = name;
+        this.path = path;
+    }
 	
 	public Integer getId() {
 		return id;
@@ -24,9 +31,7 @@ public class Attachment {
 	public Chat getChat() {
 		return chat;
 	}
-	public void setChat(Chat chat) {
-		this.chat = chat;
-	}
+	public void setChat(Chat chat) { this.chat = chat;}
 	public String getFileName() {
 		return fileName;
 	}

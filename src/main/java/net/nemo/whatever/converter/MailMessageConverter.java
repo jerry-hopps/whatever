@@ -1,7 +1,5 @@
 package net.nemo.whatever.converter;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,12 +27,9 @@ import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.ChatMessageType;
 import net.nemo.whatever.entity.Message;
 import net.nemo.whatever.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 
 @Component
 public class MailMessageConverter {
@@ -46,18 +41,8 @@ public class MailMessageConverter {
 	public final static String GROUP_CHAT_TITLE_PATTERN = "微信群\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 	public final static String DIALOG_CHAT_TITLE_PATTERN = "\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"和\"([a-zA-Z0-9\u4e00-\u9fa5]+)\"的聊天记录";
 
-	@Autowired
-	private Environment env;
-
 	@Value("${app.assets.path}")
 	private String fileStorePath;
-
-	@Value("${app.domain.name}")
-	private String appDomainName;
-
-	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
-		return new PropertySourcesPlaceholderConfigurer();
-	}
 
 	public Chat fromMailMessage(javax.mail.Message message) {
 		Chat chat = new Chat();
@@ -135,7 +120,9 @@ public class MailMessageConverter {
 
 					time = null;
 					sender = null;
-				} else if (null != (matches = StringUtil.findFirstMatch(LINK_MSG_PATTERN, line))) {
+				}
+				// Link content of the message
+				else if (null != (matches = StringUtil.findFirstMatch(LINK_MSG_PATTERN, line))) {
 					Message chatMessage = new Message();
 					chatMessage.setContent(getLinkPreviewSegement(line));
 					chatMessage.setType(ChatMessageType.LINK);
@@ -210,30 +197,17 @@ public class MailMessageConverter {
 	}
 
 	private void saveFile(Attachment attachment, InputStream stream) throws Exception{
-		String assetsPath = getFileStorePath();
-		File dir = new File(assetsPath + System.getProperty("file.separator") + DateUtil.formatDate(new Date(), "yyyyMMdd"));
-		if(!dir.exists()){
+		File dir = new File(this.fileStorePath + System.getProperty("file.separator") + DateUtil.formatDate(new Date(), "yyyyMMdd"));
+		if(!dir.exists())
 			dir.mkdir();
-		}
 		
-		File storefile = new File(assetsPath + System.getProperty("file.separator") + attachment.getPath());
-		BufferedOutputStream bos = null;
-		BufferedInputStream bis = null;
+		File file = new File(dir.getAbsolutePath() + System.getProperty("file.separator") + attachment.getFileName());
 		try {
-			bos = new BufferedOutputStream(new FileOutputStream(storefile));
-			bis = new BufferedInputStream(stream);
-			int c;
-			while ((c = bis.read()) != -1) {
-				bos.write(c);
-				bos.flush();
-			}
-			System.out.println("File saved to : " + storefile.getAbsolutePath());
-		} catch (Exception exception) {
-			exception.printStackTrace();
+            FileCopyUtils.copy(stream, new FileOutputStream(file));
+			System.out.println("File saved to : " + file.getAbsolutePath());
+		} catch (IOException e) {
+			e.printStackTrace();
 			throw new Exception("文件保存失败!");
-		} finally {
-			bos.close();
-			bis.close();
 		}
 	}
 
@@ -260,8 +234,8 @@ public class MailMessageConverter {
 		String imgSrc = getLinkImage(aa[1]);
 		
 		String template = "<a class=\"fragment\" href=\"%s\">"
-				+ "<img src =\"%s\" width=\"116px\" height=\"116px\"/>"
-				+ "<h3>%s</h3>"
+				+ "<img src =\"%s\" class=\"thumbnail\""
+				+ "<div class=\"desc\">%s</div>"
 				+ "<p class=\"text\"></p></a>";
 		
 		return String.format(template, aa[1], imgSrc, aa[0]);
@@ -279,13 +253,9 @@ public class MailMessageConverter {
 					return src;
 				}
 			}
-			return "/assets/images/link.jpg";
+			return "/static/images/link.jpg";
 		} catch (IOException e) {
-			return "/assets/images/link.jpg";
+			return "/static/images/link.jpg";
 		}
-	}
-
-	private String getFileStorePath(){
-		return this.env.getProperty("FILE_STORE_PATH") == null ? this.fileStorePath : this.env.getProperty("FILE_STORE_PATH");
 	}
 }

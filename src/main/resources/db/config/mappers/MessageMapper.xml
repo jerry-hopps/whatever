@@ -7,9 +7,12 @@
 		values (#{sender}, #{receiver.id}, #{time}, #{chat.id}, #{type}, #{content})
 	</insert>
 	
-	<select id="findBy" resultType="net.nemo.whatever.entity.Message">
-		select id from messages
-		where sender=#{sender} and receiver_id = #{receiver.id} and content = '${content}'
+	<select id="findCount" resultType="int" parameterType="net.nemo.whatever.entity.Message">
+		select count(id)
+		from messages
+		where sender=#{msg.sender}
+		  and receiver_id = #{msg.receiver.id}
+		  and content = #{msg.content}
 	</select>
 	
 	<select id="findMessages" resultType="Map">

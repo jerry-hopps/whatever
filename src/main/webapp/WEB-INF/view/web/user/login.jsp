@@ -18,7 +18,7 @@
 		</nav>
 		<div class="row">
 			<div class="col-md-8">
-				<img src="http://www.ileqi.com.cn/static/images/cover.jpg" style="width: 100%;"/>
+				<img src="/static/images/cover.jpg" style="width: 100%;"/>
 			</div>
 			<div class="col-md-4">
 				<div class="panel panel-default">

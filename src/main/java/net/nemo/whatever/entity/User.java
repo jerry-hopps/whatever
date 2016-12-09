@@ -2,6 +2,9 @@ package net.nemo.whatever.entity;
 
 public class User {
 
+    public final static Integer STATUS_NEW = 1;
+    public final static Integer STATUS_APPROVED = 2;
+
 	private Integer id;
 	private String name;
 	private String email;
@@ -10,10 +13,20 @@ public class User {
 	private String avatar;
 	private Integer status = 0;
 
+    public User(){}
+
 	public User(String name, String email) {
 		this.email = email;
 		this.name = name;
 	}
+
+    public User(Integer id, String name, String email, Integer status) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.status = status;
+    }
 	
 	public User(Integer id, String name, String email, String password, Integer status) {
 		super();

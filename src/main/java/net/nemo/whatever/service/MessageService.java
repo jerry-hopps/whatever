@@ -23,17 +23,6 @@ public class MessageService {
 	private MessageMapper messageMapper;
 	@Autowired
 	private AttachmentMapper attachmentMapper;
-
-	public int addMessage(Message message){
-		Message m = this.messageMapper.findBy(message.getTime(), message.getSender(), message.getReceiver(), message.getContent());		
-		if(m==null){
-			this.messageMapper.insert(message);
-			logger.info(String.format("Inserted message into DB： [%s]", message.toString()));
-			m = message;
-		}
-		
-		return m.getId();
-	}
 	
 	public List<Map> findMessages(Integer chatId){
 		return this.messageMapper.findMessages(chatId);
