@@ -36,8 +36,8 @@ public class UserController {
 	
 	@Autowired
 	private WechatService wechatService;
-	
-	@RequestMapping("/")
+
+	@RequestMapping("/index.html")
 	public ModelAndView index() throws Exception {
 		ModelAndView  mav = new ModelAndView("redirect:/chat/list.html");
 		return mav;
