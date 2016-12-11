@@ -10,7 +10,8 @@ sudo service tomcat7 stop
 mvn clean
 git stash
 git fetch
-git reset --hard origin/$0
+git checkout $branch
+git reset --hard origin/$branch
 git stash apply
 mvn package
 sudo service tomcat7 start
