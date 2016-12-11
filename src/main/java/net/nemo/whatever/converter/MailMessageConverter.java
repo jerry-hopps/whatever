@@ -233,9 +233,9 @@ public class MailMessageConverter {
 		String[] aa = line.replace("[", "").replace("]", "").split(" : ");
 		String imgSrc = getLinkImage(aa[1]);
 		
-		String template = "<a class=\"fragment\" href=\"%s\">"
-				+ "<img src =\"%s\" class=\"thumbnail\""
-				+ "<div class=\"desc\">%s</div>"
+		String template = "<a target=\"_BLANK\" class=\"fragment\" href=\"%s\">"
+				+ "<img src =\"%s\" class=\"thumbnail\"/>"
+				+ "<span class=\"desc\">%s</span>"
 				+ "<p class=\"text\"></p></a>";
 		
 		return String.format(template, aa[1], imgSrc, aa[0]);

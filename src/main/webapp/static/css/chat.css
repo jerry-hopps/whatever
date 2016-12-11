@@ -39,3 +39,16 @@
     border:solid 8px;
     border-color:white #F8C301 white white ;
 }
+
+.fragment img{
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.fragment p{
+    font-size: 8pt;
+    color: gray;
+    margin: 0 0 0px!important;
+}
