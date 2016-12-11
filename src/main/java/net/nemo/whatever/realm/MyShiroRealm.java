@@ -40,7 +40,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 		Set<String> roleNames = new HashSet<String>();
 		Set<String> permissions = new HashSet<String>();
 		roleNames.add("administrator");
-		permissions.add("newPage.jhtml");
+		permissions.add("/**");
 		
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
 		info.setStringPermissions(permissions);
