@@ -1,6 +1,8 @@
 package net.nemo.whatever.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     public final static Integer STATUS_NEW = 1;
     public final static Integer STATUS_APPROVED = 2;
