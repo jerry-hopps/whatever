@@ -151,7 +151,7 @@ public class UserController {
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		Subject currentUser = SecurityUtils.getSubject();
 
-		token.setRememberMe(true);
+		token.setRememberMe(false);
 		currentUser.login(token);
 		User loginUser = userService.findByEmail(username);
 		currentUser.getSession().setAttribute("currentUser", loginUser);
