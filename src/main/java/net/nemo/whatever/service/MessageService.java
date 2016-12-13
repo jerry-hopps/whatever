@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.nemo.whatever.db.mapper.TagMapper;
+import net.nemo.whatever.entity.User;
 import org.apache.log4j.Logger;
 
 import net.nemo.whatever.db.mapper.AttachmentMapper;
@@ -23,7 +25,9 @@ public class MessageService {
 	private MessageMapper messageMapper;
 	@Autowired
 	private AttachmentMapper attachmentMapper;
-	
+    @Autowired
+    private TagMapper tagMapper;
+
 	public List<Map> findMessages(Integer chatId){
 		return this.messageMapper.findMessages(chatId);
 	}
@@ -39,4 +43,16 @@ public class MessageService {
 		}
 		return attachmentPaths;
 	}
+
+    public List<Message> findAllLinkMessages(User user){
+        return messageMapper.findLinkMessages(user.getId());
+    }
+
+    public List<String> findAllLinkTags(User user){
+        return this.tagMapper.findLinkTags(user.getId());
+    }
+
+    public List<Message> findLinkMessageByType(User user, String tagName){
+        return this.messageMapper.findTaggedLinkMessages(user.getId(), tagName);
+    }
 }
