@@ -16,8 +16,9 @@
 	</select>
 
 	<select id="findMessages" resultType="Map">
-		select m.timestamp as time, m.sender as name,
-			case when m.sender = u.name then 'sent' else 'received' end as type,
+		select m.id, m.timestamp as time, m.sender as name,
+		    case when m.type=2 then true else false end as islink,
+			case when m.sender = u.name then 'sent' else 'received' end as direction,
 			case when m.type=1 then a.path else m.content end as text
 		from messages m
 			join users u on m.receiver_id = u.id

@@ -8,4 +8,15 @@
         left join messages m on t.message_id = m.id
       where m.type = 2 and m.receiver_id = #{user_id};
     </select>
+
+    <insert id="addTag">
+      insert into tags (message_id, name)
+	  values(#{message_id},#{tag_name})
+    </insert>
+
+    <select id="findTags" parameterType="int" resultType="String">
+        select t.name
+        from tags t
+        where t.message_id = #{message_id}
+    </select>
 </mapper>
