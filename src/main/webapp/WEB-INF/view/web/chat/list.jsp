@@ -6,12 +6,16 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 		<link rel="stylesheet" href="/static/css/chat.css"/>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<script src="/static/lib/mustache.min.js"></script>
+        <link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css"/>
 		<script id="template" type="x-tmpl-mustache">
 			{{#messages}}
-				<div class="{{type}}"><div class="arrow"></div>{{&text}}</div>
+				<div class="{{direction}}">
+				    <div class="arrow"></div>
+				    {{&text}}
+				    {{#islink}}
+                    <input class="tagsinput" type="text" value="{{tags}}" data="{{id}}" data-role="tagsinput"/>
+				    {{/islink}}
+				</div>
 			{{/messages}}
 		</script>
         <script id="tag_template" type="x-tmpl-mustache">
@@ -19,7 +23,6 @@
             <li class="list-group-item tag-item" data="{{.}}">{{{.}}}</li>
             {{/tags}}
         </script>
-
         <script id="link_template" type="x-tmpl-mustache">
             {{#links}}
             <li class="list-group-item tag-item" data="{{id}}">{{{content}}}</li>
@@ -76,6 +79,10 @@
 				</div>
 			</div>
 		</div>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="/static/lib/mustache.min.js"></script>
+        <script src="/static/lib/bootstrap-tagsinput.js"></script>
 		<script language="JavaScript">
 			var activeItem = null;
 
@@ -97,6 +104,37 @@
 							var rendered = Mustache.render(template, {messages: data.messages});
                             $("#right-header").html("聊天记录");
 							$("#right-content").html(rendered);
+
+                            $(".tagsinput").each(function(idx, ele){
+                                $(ele).tagsinput('refresh');
+                            });
+
+                            $(".bootstrap-tagsinput").click(function(){
+                                var input = $($(this).find("input")[0]);
+                                input.show();
+                                input.focus();
+                            });
+
+                            $(".bootstrap-tagsinput input").blur(function(){
+                                $(this).hide();
+                            });
+
+                            $(".tagsinput").on("itemAdded", function(event){
+                                console.log("dsdsds");
+                                $.ajax({
+                                    type: "post",
+                                    url: "<%=request.getContextPath()%>/message/link/tags.json",
+                                    data: {message_id: $(this).attr("data"), tagname: event.item},
+                                    dataType: "json",
+                                    success: function(data){
+                                        console.log("itemAdded " + event.item + " for" + $(this).attr("data"));
+                                    }
+                                });
+                            });
+
+                            $(".tagsinput").on("itemRemoved", function(event){
+                                console.log("itemRemoved " + event.item + " for" + $(this).attr("data"));
+                            });
 						}
 					},
 					error: function(data) {

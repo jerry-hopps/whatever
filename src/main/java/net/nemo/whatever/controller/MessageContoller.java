@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tonyshi on 2016/12/13.
@@ -29,6 +30,12 @@ public class MessageContoller {
     public List<String> allMessages(HttpSession session){
         User currentUser = (User)session.getAttribute("currentUser");
         return this.messageService.findAllLinkTags(currentUser);
+    }
+
+    @RequestMapping(value="/link/tags.json", method = RequestMethod.POST)
+    @ResponseBody
+    public void addTagForMessage(@RequestParam("message_id") Integer messageId, @RequestParam("tagname") String tagName){
+        this.messageService.addTagForMessage(messageId, tagName);
     }
 
     @RequestMapping(value = "/links.json", method = RequestMethod.GET)

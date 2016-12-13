@@ -52,7 +52,15 @@ public class MessageService {
         return this.tagMapper.findLinkTags(user.getId());
     }
 
+    public List<String> findTags(Integer messageId){
+        return this.tagMapper.findTags(messageId);
+    }
+
     public List<Message> findLinkMessageByType(User user, String tagName){
         return this.messageMapper.findTaggedLinkMessages(user.getId(), tagName);
+    }
+
+    public void addTagForMessage(Integer messageId, String tagName){
+        this.tagMapper.addTag(messageId, tagName);
     }
 }

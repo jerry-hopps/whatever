@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,11 @@ public class ChatController {
 	@ResponseBody
 	public Map<String, Object> messages(@PathVariable("chat_id") Integer chatId) {
 		List<Map> messages = this.messageSercice.findMessages(chatId);
+
+        for(Map msg: messages){
+            Integer msgId = (Integer)msg.get("id");
+            msg.put("tags", StringUtils.join(this.messageSercice.findTags(msgId).toArray(), ","));
+        }
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("messages", messages);
