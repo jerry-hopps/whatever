@@ -36,4 +36,9 @@
         <property name="mapperInterface" value="net.nemo.whatever.db.mapper.AttachmentMapper" />
         <property name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
+
+    <bean id="tagMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="net.nemo.whatever.db.mapper.TagMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
 </beans>

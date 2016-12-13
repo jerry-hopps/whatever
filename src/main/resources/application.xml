@@ -10,7 +10,7 @@
 	<context:property-placeholder location="classpath:props/mail.properties, classpath:props/db.properties, classpath:props/rabbitmq.properties, classpath:props/application.properties" />
 	<context:component-scan base-package="net.nemo.whatever" />
 
-	<import resource="spring-job.xml" />
+	<!--<import resource="spring-job.xml" />-->
 	<import resource="spring-message.xml"/>
     <import resource="mybatis.xml"/>
 
