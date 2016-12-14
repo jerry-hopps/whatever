@@ -11,4 +11,5 @@ public interface TagMapper {
     List<String> findLinkTags(@Param("user_id") Integer userId);
     List<String> findTags(@Param("message_id") Integer messageId);
     void addTag(@Param("message_id") Integer msgId, @Param("tag_name") String tagName);
+    void deleteTag(@Param("message_id") Integer msgId, @Param("tag_name") String tagName);
 }

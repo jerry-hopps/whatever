@@ -63,4 +63,8 @@ public class MessageService {
     public void addTagForMessage(Integer messageId, String tagName){
         this.tagMapper.addTag(messageId, tagName);
     }
+
+    public void deleteTag(Integer messageId, String tagName){
+        this.tagMapper.deleteTag(messageId, tagName);
+    }
 }

@@ -14,6 +14,11 @@
 	  values(#{message_id},#{tag_name})
     </insert>
 
+    <delete id="deleteTag">
+        delete from tags
+        where message_id = #{message_id} and name = #{tag_name}
+    </delete>
+
     <select id="findTags" parameterType="int" resultType="String">
         select t.name
         from tags t
