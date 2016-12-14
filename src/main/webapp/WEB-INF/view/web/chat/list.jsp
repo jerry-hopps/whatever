@@ -132,6 +132,23 @@
                                 });
                             });
 
+                            $(".tagsinput").on("beforeItemRemove", function(event){
+                                if(!confirm("Want to delete tag \"" + event.item + "\"?" )){
+                                    event.cancel = true;
+                                }
+                                else{
+                                    $.ajax({
+                                        type: "delete",
+                                        url: "<%=request.getContextPath()%>/message/link/tags.json?" + $.param({message_id: $(this).attr("data"), tagname: event.item}),
+                                        dataType: "json",
+                                        success: function(data){
+                                            console.log("itemDeleted " + event.item + " for" + $(this).attr("data"));
+                                        }
+                                    });
+                                }
+
+                            });
+
                             $(".tagsinput").on("itemRemoved", function(event){
                                 console.log("itemRemoved " + event.item + " for" + $(this).attr("data"));
                             });
