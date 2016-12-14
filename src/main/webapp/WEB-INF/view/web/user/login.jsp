@@ -32,10 +32,13 @@
 							<label for="username">电子邮件</label>
 							<input type="email" class="form-control" id="username" placeholder="请输入电子邮件">
 						</div>
-						<div class="form-group">
-							<label for="password">密码</label>
-							<input type="password" class="form-control" id="password">
-						</div>
+                        <div class="form-group">
+                            <label for="password">密码</label>
+                            <input type="password" class="form-control" id="password">
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" id="rememberMe" style="display: inline">  <label for="rememberMe"> 下次自动登陆</label>
+                        </div>
 						<button type="submit" id="loginbtn" class="btn btn-default">登陆</button>
 					</div>
 				</div>
@@ -54,7 +57,8 @@ $('#loginbtn').click(function() {
     var param = {
     	openid: $("#openid").val(),
         username : $("#username").val(),
-        password : $("#password").val()
+        password : $("#password").val(),
+        rememberMe: $("#rememberMe").val()=="on"
     };
     $.ajax({ 
         type: "post", 
@@ -83,6 +87,21 @@ $(document).ready(function(){
 			if(data.status == true){
 				window.location.href = "<%=request.getContextPath()%>/chat/list.html";
 			}
+			else{
+                $.ajax({
+                    type: "POST",
+                    url: "<%=request.getContextPath()%>/autologin.json",
+                    dataType: "json",
+                    success: function(data){
+                        if(data.success == true){
+                            window.location.href = "<%=request.getContextPath()%>/chat/list.html";
+                        }
+                    },
+                    error: function(data) {
+                        alert("调用失败...."+data.responseText);
+                    }
+                });
+            }
 		},
 		error: function(data) {
 			alert("调用失败...."+data.responseText);
