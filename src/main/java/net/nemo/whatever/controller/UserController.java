@@ -1,30 +1,25 @@
 package net.nemo.whatever.controller;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import net.nemo.whatever.entity.User;
+import net.nemo.whatever.exception.BusinessException;
+import net.nemo.whatever.service.UserService;
+import net.nemo.whatever.service.WechatService;
+import net.nemo.whatever.util.DESCoder;
+import net.nemo.whatever.util.ShiroSecurityHelper;
+import net.nemo.whatever.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import net.nemo.whatever.entity.User;
-import net.nemo.whatever.exception.BusinessException;
-import net.nemo.whatever.service.UserService;
-import net.nemo.whatever.service.WechatService;
-import net.nemo.whatever.util.DESCoder;
-import net.nemo.whatever.util.StringUtil;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -42,6 +37,27 @@ public class UserController {
 		ModelAndView  mav = new ModelAndView("redirect:/chat/list.html");
 		return mav;
 	}
+
+    @RequestMapping(value = "/autologin.json", method = RequestMethod.POST)
+    @ResponseBody
+	public Map<String, Object> autoLogin() throws Exception {
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("success", false);
+
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.isRemembered()){
+            String username = ShiroSecurityHelper.getCurrentUsername();
+            User user = userService.findByEmail(username);
+            try {
+                login(user.getEmail(), user.getPassword(), true);
+                result.put("success", true);
+            }catch (Exception ex){
+                throw new BusinessException(ex.getMessage());
+            }
+        }
+
+        return result;
+    }
 
 	@RequestMapping("/login.html")
 	public ModelAndView login(HttpServletRequest request, @RequestParam(value="source", required=false) String source, @RequestParam(value="openid", required=false) String openid) throws Exception {
@@ -68,7 +84,7 @@ public class UserController {
 		User user = this.userService.findByOpenId(openId);
 		if(user!=null){
 			logger.info(String.format("Found user in DB, login automactically and then redirect to %s", "/chat/list.html"));
-			login(user.getEmail(), user.getPassword());
+			login(user.getEmail(), user.getPassword(), true);
 			mav.setViewName("redirect:/chat/list.html");
 		}
 		else{
@@ -80,8 +96,7 @@ public class UserController {
 
 	@RequestMapping("/logout.html")
 	public ModelAndView logout(HttpServletRequest request) {
-		Subject currentUser = SecurityUtils.getSubject();
-		currentUser.logout();
+        SecurityUtils.getSubject().logout();
 		ModelAndView mav = new ModelAndView(StringUtil.getUserAgentViewName(request,"user/login"));
 		return mav;
 	}
@@ -122,7 +137,6 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Object> loginStatus() throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
-
 		result.put("status", SecurityUtils.getSubject().isAuthenticated());
 
 		return result;
@@ -130,12 +144,12 @@ public class UserController {
 
 	@RequestMapping(value = "/checkLogin.json", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> checkLogin(String username, String password, String openid) throws Exception {
-		logger.info(String.format("Clien is trying to log in with username: %s, password: %s", username, password));
+	public Map<String, Object> checkLogin(String username, String password, boolean rememberMe, String openid) throws Exception {
+		logger.info(String.format("Client is trying to log in with username: %s, password: %s", username, password));
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		try{
-			User user = login(username, password);
+			User user = login(username, password, rememberMe);
 			if(null!=openid){
 				user.setOpenId(openid);
 				this.userService.update(user);
@@ -147,16 +161,17 @@ public class UserController {
 		return result;
 	}
 	
-	private User login(String username, String password) throws Exception{
+	private User login(String username, String password, boolean rememberMe) throws Exception{
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-		Subject currentUser = SecurityUtils.getSubject();
+        token.setRememberMe(rememberMe);
 
-		token.setRememberMe(true);
+		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.login(token);
+
 		User loginUser = userService.findByEmail(username);
 		currentUser.getSession().setAttribute("currentUser", loginUser);
+
 		logger.info(String.format("User logged in: ", loginUser));
-		
 		return loginUser;
 	}
 	
@@ -164,6 +179,5 @@ public class UserController {
 	    URL requestURL = new URL(request.getRequestURL().toString());
 	    String port = requestURL.getPort() == -1 ? "" : ":" + requestURL.getPort();
 	    return requestURL.getProtocol() + "://" + requestURL.getHost() + port;
-
 	}
 }
