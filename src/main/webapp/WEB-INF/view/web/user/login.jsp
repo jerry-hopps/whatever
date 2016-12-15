@@ -2,7 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Wecord</title>
+    <link rel="stylesheet" href="/static/css/chat.css"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="/static/lib/jquery-1.8.1.min.js"></script>
 </head>
@@ -24,7 +28,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">用户登陆</div>
 					<div class="panel-body">
-						<div class="form-group">
+						<div class="form-group" style="display: none;">
 							<label for="openid">OPENID</label>
 							<input type="text" class="form-control" id="openid" value="<c:out value="${openid}"/>">
 						</div>
@@ -47,10 +51,16 @@
 		<hr/>
 		<div class="row">
 			<div class="col-md-12 text-center">
-				Powered by www.ileqi.com.cn | copyright reserved © 1997-2016
+
 			</div>
 		</div>
 	</div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">Powered by www.ileqi.com.cn | copyright reserved © 1997-2016</p>
+        </div>
+    </footer>
 </body>
 <script type="text/javascript">
 $('#loginbtn').click(function() {
@@ -69,7 +79,7 @@ $('#loginbtn').click(function() {
             if(data.success == false){
                 alert(data.errorMsg);
             }else{
-                window.location.href = "<%=request.getContextPath()%>/chat/list.html";
+                window.location.href = "<%=request.getContextPath()%>/index.html";
             }
         },
         error: function(data) { 
@@ -85,7 +95,7 @@ $(document).ready(function(){
 		dataType: "json",
 		success: function(data){
 			if(data.status == true){
-				window.location.href = "<%=request.getContextPath()%>/chat/list.html";
+				window.location.href = "<%=request.getContextPath()%>/index.html";
 			}
 			else{
                 $.ajax({
@@ -94,7 +104,7 @@ $(document).ready(function(){
                     dataType: "json",
                     success: function(data){
                         if(data.success == true){
-                            window.location.href = "<%=request.getContextPath()%>/chat/list.html";
+                            window.location.href = "<%=request.getContextPath()%>/index.html";
                         }
                     },
                     error: function(data) {
