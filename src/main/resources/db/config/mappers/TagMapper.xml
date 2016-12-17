@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="net.nemo.whatever.db.mapper.TagMapper">
-    <select id="findLinkTags" parameterType="int" resultType="string">
+    <select id="findAllTags" resultType="string">
       select distinct t.name name
       from tags t
         left join messages m on t.message_id = m.id
-      where m.type = 2 and m.receiver_id = #{user_id};
+      where m.type = #{type} and m.receiver_id = #{user_id};
     </select>
 
     <insert id="addTag">

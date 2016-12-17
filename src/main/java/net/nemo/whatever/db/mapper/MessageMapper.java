@@ -14,5 +14,5 @@ public interface MessageMapper {
 	int findCount(@Param("msg") Message message);
 	List<Map> findMessages(@Param("chat_id") Integer chat_id);
     List<Message> findLinkMessages(@Param("user_id") Integer userId);
-    List<Message> findTaggedLinkMessages(@Param("user_id") Integer userId, @Param("tag_name") String tagName);
+    List<Message> findTaggedMessages(@Param("user_id") Integer userId, @Param("tag_name") String tagName, @Param("type") Integer type);
 }

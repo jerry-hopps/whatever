@@ -48,16 +48,16 @@ public class MessageService {
         return messageMapper.findLinkMessages(user.getId());
     }
 
-    public List<String> findAllLinkTags(User user){
-        return this.tagMapper.findLinkTags(user.getId());
+    public List<String> findAllTags(User user, Integer type){
+        return this.tagMapper.findAllTags(user.getId(), type);
     }
 
     public List<String> findTags(Integer messageId){
         return this.tagMapper.findTags(messageId);
     }
 
-    public List<Message> findLinkMessageByType(User user, String tagName){
-        return this.messageMapper.findTaggedLinkMessages(user.getId(), tagName);
+    public List<Message> findMessageByTypeAndType(User user, String tagName, Integer type){
+        return this.messageMapper.findTaggedMessages(user.getId(), tagName, type);
     }
 
     public void addTagForMessage(Integer messageId, String tagName){

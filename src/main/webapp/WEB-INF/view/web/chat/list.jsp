@@ -15,9 +15,9 @@
 				<div class="{{direction}}">
 				    <div class="arrow"></div>
 				    {{&text}}
-				    {{#islink}}
+				    {{#taggable}}
                     <input class="tagsinput" type="text" value="{{tags}}" data="{{id}}" data-role="tagsinput"/>
-				    {{/islink}}
+				    {{/taggable}}
 				</div>
 			{{/messages}}
 		</script>
@@ -27,9 +27,18 @@
             {{/tags}}
         </script>
         <script id="link_template" type="x-tmpl-mustache">
-            {{#links}}
+            {{#ary}}
             <li class="list-group-item tag-item" data="{{id}}">{{{content}}}</li>
-            {{/links}}
+            {{/ary}}
+        </script>
+        <script id="photo_template" type="x-tmpl-mustache">
+            {{#ary}}
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                  {{{content}}}
+                </a>
+            </div>
+            {{/ary}}
         </script>
 	</head>
 	<body>
@@ -50,7 +59,7 @@
                         <ul class="nav nav-tabs" role="tablist" id="tablist">
                             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">聊天</a></li>
                             <li role="presentation"><a href="#links" aria-controls="links" role="tab" data-toggle="tab">链接</a></li>
-                            <%--<li role="presentation"><a href="#photos" aria-controls="photos" role="tab" data-toggle="tab">Photos</a></li>--%>
+                            <li role="presentation"><a href="#photos" aria-controls="photos" role="tab" data-toggle="tab">图片</a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -66,10 +75,13 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="links">
-                                <ul class="list-group" id="taglist">
+                                <ul class="list-group" id="link-taglist">
                                 </ul>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="photos">3</div>
+                            <div role="tabpanel" class="tab-pane" id="photos">
+                                <ul class="list-group" id="photo-taglist">
+                                </ul>
+                            </div>
                         </div>
                     </div>
 				</div>
@@ -128,11 +140,10 @@
                             });
 
                             $(".tagsinput").on("itemAdded", function(event){
-                                console.log("dsdsds");
                                 $.ajax({
                                     type: "post",
-                                    url: "<%=request.getContextPath()%>/message/link/tags.json",
-                                    data: {message_id: $(this).attr("data"), tagname: event.item},
+                                    url: "<%=request.getContextPath()%>/message/tags.json",
+                                    data: {message_id: $(this).attr("data"), tagname: encodeURI(event.item)},
                                     dataType: "json",
                                     success: function(data){
                                         console.log("itemAdded " + event.item + " for" + $(this).attr("data"));
@@ -147,7 +158,7 @@
                                 else{
                                     $.ajax({
                                         type: "delete",
-                                        url: "<%=request.getContextPath()%>/message/link/tags.json?" + $.param({message_id: $(this).attr("data"), tagname: event.item}),
+                                        url: "<%=request.getContextPath()%>/message/tags.json?" + $.param({message_id: $(this).attr("data"), tagname: encodeURI(event.item)}),
                                         dataType: "json",
                                         success: function(data){
                                             console.log("itemDeleted " + event.item + " for" + $(this).attr("data"));
@@ -189,17 +200,17 @@
                 if(chatItems.length > 0 ) $(chatItems[0]).click();
             }
 
-            function links(){
+            function taggable(ep, type, title){
                 $.ajax({
                     type: "get",
-                    url: "<%=request.getContextPath()%>/message/link/tags.json",
+                    url: "<%=request.getContextPath()%>" + ep,
                     dataType: "json",
                     success: function(data){
                         var template = $('#tag_template').html();
                         var rendered = Mustache.render(template, {tags: data});
-                        $("#taglist").html(rendered);
+                        $("#" + type + "-taglist").html(rendered);
 
-                        $(".tag-item").click(function(){
+                        $("#" + type + "-taglist .tag-item").click(function(){
                             var tagName = $(this).attr('data');
 
                             if(activeTag != null && activeTag != undefined){
@@ -209,12 +220,12 @@
                             activeTag = $(this);
                             $.ajax({
                                 type: "get",
-                                url: "/message/links.json?tagname="+tagName,
+                                url: "<%=request.getContextPath()%>" + "/message/type.json?"+$.param({tagname: encodeURI(tagName), type: type}),
                                 dataType: "json",
                                 success: function(data){
-                                    var template = $('#link_template').html();
-                                    var rendered = Mustache.render(template, {links: data});
-                                    $("#right-header").html("链接");
+                                    var template = $("#" + type + "_template").html();
+                                    var rendered = Mustache.render(template, {ary: data});
+                                    $("#right-header").html(title);
                                     $("#right-content").html(rendered);
                                 },
                                 error: function(data) {
@@ -223,13 +234,21 @@
                             })
                         });
 
-                        var tagItems = $(".tag-item");
+                        var tagItems = $("#" + type + "-taglist .tag-item");
                         if(tagItems.length > 0 ) $(tagItems[0]).click();
                     },
                     error: function(){
                         alert("调用失败...."+data.responseText);
                     }
                 });
+            }
+            
+            function photos() {
+                taggable("/message/photo/tags.json", "photo", "图片");
+            }
+
+            function links(){
+                taggable("/message/link/tags.json", "link", "链接");
             }
 		</script>
 	</body>

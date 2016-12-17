@@ -17,7 +17,7 @@
 
 	<select id="findMessages" resultType="Map">
 		select m.id, m.timestamp as time, m.sender as name,
-		    case when m.type=2 then true else false end as islink,
+		    case when m.type=2 or m.type=1 then true else false end as taggable,
 			case when m.sender = u.name then 'sent' else 'received' end as direction,
 			case when m.type=1 then a.path else m.content end as text
 		from messages m
@@ -32,10 +32,13 @@
         where m.receiver_id = 1 and m.type = 2
     </select>
 
-    <select id="findTaggedLinkMessages" resultMap="linkListResult">
-        select m.id, m.timestamp, m.sender, m.content
-        from messages m inner join tags t on m.id = t.message_id
-        where t.name = #{tag_name} and m.receiver_id = #{user_id};
+    <select id="findTaggedMessages" resultMap="linkListResult">
+        select m.id, m.timestamp, m.sender,
+          case when m.type = 1 then a.path else m.content end as content
+        from messages m
+          inner join tags t on m.id = t.message_id
+          left join attachments a on m.content = a.file_name
+        where t.name = #{tag_name} and m.receiver_id = #{user_id} and m.type = #{type};
     </select>
 
     <resultMap id="linkListResult" type="net.nemo.whatever.entity.Message">
