@@ -2,17 +2,23 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:context="http://www.springframework.org/schema/context"
-	    xmlns:aop="http://www.springframework.org/schema/aop"
 	    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:property-placeholder location="classpath:props/mail.properties, classpath:props/application.properties" />
-	<context:component-scan base-package="net.nemo.whatever.config" />
+	<context:property-placeholder location="classpath:props/db.properties, classpath:props/mail.properties, classpath:props/application.properties" />
+	<context:component-scan base-package="net.nemo.whatever"/>
 
-	<!--<import resource="spring-job.xml" />-->
-	<import resource="spring-message.xml"/>
+	<!--<import resource="job.xml" />-->
+	<import resource="messaging.xml"/>
     <import resource="mybatis.xml"/>
+    <import resource="redis.xml"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${db.driverClassName}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${mail.server.smtp}" />
@@ -31,9 +37,7 @@
 		<property name="velocityProperties">
 			<props>
 				<prop key="resource.loader">class</prop>
-				<prop key="class.resource.loader.class">
-					org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-				</prop>
+				<prop key="class.resource.loader.class">org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader</prop>
 			</props>
 		</property>
 	</bean>
