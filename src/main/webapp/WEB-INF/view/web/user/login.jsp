@@ -46,6 +46,13 @@
 						<button type="submit" id="loginbtn" class="btn btn-default">登陆</button>
 					</div>
 				</div>
+                <div class="provider_signin">
+                    <form id="fb_signin" action="<c:url value="/signin/facebook"/>" method="POST">
+                        <button type="submit" class="submit">
+                            <img src="/static/images/fblogin.png"/>
+                        </button>
+                    </form>
+                </div>
 			</div>
 		</div>
 		<hr/>
