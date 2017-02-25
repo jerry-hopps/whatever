@@ -113,3 +113,19 @@ body {
 .header{
     width: 100%;
 }
+
+.provider_signin{
+    margin-top:10px;
+    text-align: center;
+}
+
+button.submit{
+    width: 70%;
+    border: 0px;
+    padding: 0;
+    border-radius: 10%;
+}
+
+button.submit img{
+    width:100%;
+}
