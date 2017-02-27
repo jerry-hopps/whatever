@@ -1,6 +1,6 @@
 package net.nemo.whatever.service;
 
-import net.nemo.whatever.converter.MailMessageConverter;
+import net.nemo.whatever.service.converter.MailMessageConverter;
 import net.nemo.whatever.entity.Attachment;
 import net.nemo.whatever.entity.Chat;
 import net.nemo.whatever.entity.User;

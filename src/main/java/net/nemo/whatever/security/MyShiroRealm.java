@@ -1,4 +1,4 @@
-package net.nemo.whatever.realm;
+package net.nemo.whatever.security;
 
 import java.util.HashSet;
 import java.util.Set;

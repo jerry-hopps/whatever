@@ -12,8 +12,12 @@
     <!-- 读取spring和shiro配置文件 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring-shiro.xml, classpath:application.xml</param-value>
+        <param-value>classpath:application.xml, classpath:spring-shiro.xml</param-value>
     </context-param>
+    <!--<context-param>-->
+        <!--<param-name>contextClass</param-name>-->
+        <!--<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>-->
+    <!--</context-param>-->
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>classpath:props/log4j.properties</param-value>
@@ -115,5 +119,9 @@
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
     </servlet-mapping>
 </web-app>
