@@ -46,13 +46,6 @@
 						<button type="submit" id="loginbtn" class="btn btn-default">登陆</button>
 					</div>
 				</div>
-                <div class="provider_signin">
-                    <form id="fb_signin" action="<c:url value="/signin/facebook"/>" method="POST">
-                        <button type="submit" class="submit">
-                            <img src="/static/images/fblogin.png"/>
-                        </button>
-                    </form>
-                </div>
 			</div>
 		</div>
 		<hr/>
@@ -86,7 +79,7 @@ $('#loginbtn').click(function() {
             if(data.success == false){
                 alert(data.errorMsg);
             }else{
-                window.location.href = "<%=request.getContextPath()%>/index.html";
+                window.location.href = "<%=request.getContextPath()%>/index.jsp";
             }
         },
         error: function(data) { 
@@ -102,7 +95,7 @@ $(document).ready(function(){
 		dataType: "json",
 		success: function(data){
 			if(data.status == true){
-				window.location.href = "<%=request.getContextPath()%>/index.html";
+				window.location.href = "<%=request.getContextPath()%>/index.jsp";
 			}
 			else{
                 $.ajax({
@@ -111,7 +104,7 @@ $(document).ready(function(){
                     dataType: "json",
                     success: function(data){
                         if(data.success == true){
-                            window.location.href = "<%=request.getContextPath()%>/index.html";
+                            window.location.href = "<%=request.getContextPath()%>/index.jsp";
                         }
                     },
                     error: function(data) {
