@@ -26,6 +26,7 @@
 		<property name="unauthorizedUrl" value="/error.html"></property>
 		<property name="filterChainDefinitions">
 			<value>
+                /api/** = anon
 			    /static/**.html = anon
 			    /wechat_callback.html = anon
 				/register/*/*.html = anon
@@ -37,6 +38,7 @@
 				/chat/*.json = anon
 				/loginsuccess.html = anon
 				/logout.json = anon
+                /signin/** = anon
 				/** = authc
 			</value>
 		</property>
