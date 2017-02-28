@@ -27,7 +27,6 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/api/** = anon
-				/todos/** = anon
 				/static/** = anon
 				/wechat_callback.html = anon
 				/register/*/*.html = anon

@@ -36,11 +36,14 @@
 		<div class="container">
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<div class="navbar-header header">
-						<a class="btn btn-default navbar-btn right" href="<%=request.getContextPath()%>/logout.html" role="button">登出</a>
-						<a class="navbar-brand" href="#">Wecord</a>
-					</div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <a class="navbar-brand" href="#">Wecord</a>
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="/chat/list.html">Chat</a></li>
+                            <li><a href="/todos/all">Todos</a></li>
+                        </ul>
+                        <a class="btn btn-default navbar-btn right" href="<%=request.getContextPath()%>/logout.html" role="button">登出</a>
+                    </div>
 				</div>
 			</nav>
 			<div class="row">

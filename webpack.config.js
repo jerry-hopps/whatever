@@ -3,14 +3,17 @@ var webpack = require('webpack');
 var StatsPlugin = require('stats-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var devServerPort = 3080;
+var production = process.env.NODE_ENV === 'production';
+
 module.exports = {
   entry: {
     'index': __dirname + "/src/main/webapp/todo-app/index.js"
   },
   output: {
     path: path.join(__dirname, '/src/main/webapp/static/build'),
-    publicPath: '/webpack/',
-    filename: "[name]-[hash].js"
+    publicPath: '/static/build/',
+    filename: production ? '[name]-[hash].js' : '[name].js'
   },
 
   module: {
@@ -34,7 +37,6 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin( '[name]-[hash].css' ),
     new StatsPlugin('manifest.json', {
-      // We only need assetsByChunkName
       chunkModules: false,
       source: false,
       chunks: false,
@@ -42,5 +44,10 @@ module.exports = {
       assets: true
     }),
     new webpack.BannerPlugin("Copyright Oracle SRM.")
-  ]
+  ],
+
+  devServer: {
+    port: devServerPort,
+    headers: { 'Access-Control-Allow-Origin': '*' }
+  }
 }
