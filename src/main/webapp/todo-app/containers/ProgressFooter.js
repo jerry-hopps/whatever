@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import Footer from '../components/Footer'
 
 const mapStateToProps = (state) => ({
-  isFetching: state.isFetching
+  activeType: state.visibilityFilter
 })
 
 const ProgressFooter = connect(

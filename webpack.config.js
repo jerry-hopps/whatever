@@ -29,13 +29,13 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?modules' })
+        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader'})
       }
     ]
   },
 
   plugins: [
-    new ExtractTextPlugin( '[name]-[hash].css' ),
+    new ExtractTextPlugin( production ? '[name]-[hash].css' : '[name].css' ),
     new StatsPlugin('manifest.json', {
       chunkModules: false,
       source: false,
@@ -49,5 +49,7 @@ module.exports = {
   devServer: {
     port: devServerPort,
     headers: { 'Access-Control-Allow-Origin': '*' }
-  }
+  },
+
+  devtool: 'source-map'
 }

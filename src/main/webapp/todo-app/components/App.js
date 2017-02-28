@@ -11,7 +11,6 @@ class App extends Component {
   constructor({props, params}){
     super(props)
     this.params = params
-    console.log(this.params)
   }
 
   componentDidMount(){
@@ -21,14 +20,13 @@ class App extends Component {
 
   componentWillReceiveProps({ params }){
     this.params = params
-    console.log(this.params)
   }
 
   render() {
     return (
       <div style={{margin: 0}}>
-        <LoadingBar style={{ backgroundColor: 'green' }}/>
-        <ProgressFooter />
+        <LoadingBar style={{ backgroundColor: 'green'}}/>
+        <ProgressFooter filter={this.params.filter || 'all'} />
         <AddTodoBlock />
         <VisibleTodoList filter={this.params.filter || 'all'}/>
       </div>

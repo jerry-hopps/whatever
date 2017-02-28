@@ -28,7 +28,7 @@ public class TodosController {
     @Autowired
     private Environment env;
 
-    private final String PUBLIC_PATH = "/static/build";
+    private final String PUBLIC_PATH = "static/build";
 
 
     @RequestMapping("/*")
@@ -52,7 +52,7 @@ public class TodosController {
         else{
             Map<String, List<String>> assetsByChunkName = (Map<String, List<String>>) jsonToMap("props/manifest.json").get("assetsByChunkName");
             for(String assets : assetsByChunkName.get(assetName)){
-                assetsPath.put(assets.split("\\.")[1], String.format("%s/%s", PUBLIC_PATH, assets));
+                assetsPath.put(assets.split("\\.")[1], String.format("/%s/%s", PUBLIC_PATH, assets));
             }
         }
 

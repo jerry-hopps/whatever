@@ -38,14 +38,12 @@ public class ApiController {
                     jedis.sadd("todos", String.valueOf(id));
                     break;
                 case "PUT":
-                    System.out.println("*************************");
                     if(id == null)
                         throw new IllegalArgumentException("parameter `id` is required");
                     boolean completed = Boolean.valueOf(jedisPool.getResource().hget(String.valueOf(id), "completed"));
                     jedis.hset(String.valueOf(id), "completed", String.valueOf(!completed));
                     break;
                 case "DELETE":
-                    System.out.println("*************************");
                     if(id == null)
                         throw new IllegalArgumentException("parameter `id` is required");
                     jedis.del(String.valueOf(id));
