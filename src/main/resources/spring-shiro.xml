@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!--suppress ALL -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-    xsi:schemaLocation="http://www.springframework.org/schema/beans   
-                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"  
-    default-lazy-init="true">  
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"  
+	default-lazy-init="true">  
 
 	<description>Shiro Configuration</description>
 	
@@ -26,19 +26,19 @@
 		<property name="unauthorizedUrl" value="/error.html"></property>
 		<property name="filterChainDefinitions">
 			<value>
-                /api/** = anon
-			    /static/**.html = anon
-			    /wechat_callback.html = anon
+				/api/** = anon
+				/static/** = anon
+				/wechat_callback.html = anon
 				/register/*/*.html = anon
 				/login.html = anon
 				/checkLogin.json = anon
-                /autologin.json = anon
+				/autologin.json = anon
 				/loginStatus.json = anon
 				/setPassword.json = anon
 				/chat/*.json = anon
 				/loginsuccess.html = anon
 				/logout.json = anon
-                /signin/** = anon
+				/signin/** = anon
 				/** = authc
 			</value>
 		</property>
